@@ -1,6 +1,6 @@
-import User from './models/User';
+import User from './models/User.js';
 import bcrypt from 'bcrypt';
-import connectToDatabase from './db/db';
+import connectToDatabase from './db/db.js';
 const userRegister = async ()=>{
     connectToDatabase()
     try{
