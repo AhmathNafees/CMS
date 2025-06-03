@@ -10,7 +10,7 @@ const AddBranch = () => {
   const navigate= useNavigate()
 
   const handleChange= (e)=>{
-    const {name, value} = e.traget;
+    const {name, value} = e.target;
     setBranch({...branch, [name]:value})
   }
   
@@ -21,7 +21,7 @@ const AddBranch = () => {
         headers:{"Authorization" : `Bearer ${localStorage.getItem("token")}`}
       })
       if(response.data.success){
-        navigate("/admin-dashboard/baranches")
+        navigate("/admin-dashboard/branches")
       }
     }catch(error){
       if(error.response && !error.response.data.success){
