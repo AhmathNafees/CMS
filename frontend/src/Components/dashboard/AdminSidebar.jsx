@@ -10,25 +10,25 @@ const AdminSidebar = () => {
         </div>
         <div>
             <NavLink to="/admin-dashboard"
-            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 block px-4 rounded`}end>
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaTachometerAlt/>
                 <span>Dashboard</span>
             </NavLink>
 
             <NavLink to="/admin-dashboard"
-            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 block px-4 rounded`}end>
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaUser/>
                 <span>Branch Admins</span>
             </NavLink>
 
             <NavLink to="/admin-dashboard/branches"
-            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 block px-4 rounded`}end>
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaBuilding/>
                 <span>Branches</span>
             </NavLink>
 
             <NavLink to="/admin-dashboard"
-            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5 block px-4 rounded`}end>
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaCogs/>
                 <span>Setting</span>
             </NavLink>
