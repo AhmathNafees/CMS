@@ -40,7 +40,7 @@ const AddBranch = () => {
           <label htmlFor="branch_name"
           className=' text-sm font-medium text-gray-700'>Branch Name</label>
           <input type="text" placeholder='Enter Branch Name' id='branch_name' className=' mt-1 w-full p-2 border border-gray-300 rounded-md' name='branch_name'
-          onChange={handleChange}/>
+          onChange={handleChange} required/>
         </div>
         <div className='mt-3'>
           <label htmlFor="desc" className=' block text-sm font-medium text-gray-700'>Description</label>
