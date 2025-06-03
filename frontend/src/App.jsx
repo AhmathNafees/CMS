@@ -8,6 +8,7 @@ import RoleBaseRoutes from "./utils/RoleBaseRoutes";
 import Summary from "./Components/dashboard/Summary";
 import BranchList from "./Components/branch/BranchList";
 import AddBranch from "./Components/branch/AddBranch";
+import EditBranch from "./Components/branch/EditBranch";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
             </Route>
             <Route path="/admin-dashboard/add-branch" element={<AddBranch/>}>
             </Route>
+            <Route path="/admin-dashboard/branch/:id" element={<EditBranch/>}></Route>
         </Route>
           
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />

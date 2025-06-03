@@ -24,7 +24,7 @@ const BranchList = () => {
               _id:branch._id,
               sno:sno++,
               branch_name:branch.branch_name,
-              action:(<BranchButtons/>)
+              action: (<BranchButtons _id={branch._id}/>),
             }
           ))
           setBranches(data)
@@ -53,7 +53,7 @@ const BranchList = () => {
           className=' px-4 py-0.5 ml-1 border rounded'/>
           <Link to="/admin-dashboard/add-branch" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Branch</Link>
         </div>
-        <div>
+        <div className='mt-5'>
           <DataTable
             columns={columns}
             data={branches}
