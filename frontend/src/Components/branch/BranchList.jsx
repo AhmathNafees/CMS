@@ -7,11 +7,33 @@ import axios from 'axios';
 const BranchList = () => {
   const [branches, setBranches]= useState([]);
   const [braLoading, setBraLoading] = useState(false)
+  const [filteredBranches, setFilteredBranches] = useState([])
 
-  const onBranchDelete =async(id)=>{
-    const data = branches.filter(branch=>branch._id !== id)
-    setBranches(data)
-  }
+ const onBranchDelete = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/api/branch', {
+        headers: {
+          "Authorization": `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      if (response.data.success) {
+        let sno = 1;
+        const data = response.data.branches.map((branch) => ({
+          _id: branch._id,
+          sno: sno++,
+          branch_name: branch.branch_name,
+          action: <BranchButtons _id={branch._id} onBranchDelete={onBranchDelete} />,
+        }));
+        setBranches(data);
+        setFilteredBranches(data);
+      }
+    } catch (error) {
+      if (error.response && !error.response.data.success) {
+        alert(error.response.data.error);
+      }
+    }
+  };
+
 
   useEffect(()=>{
     const fetchBranches = async()=>{
@@ -33,6 +55,7 @@ const BranchList = () => {
             }
           ))
           setBranches(data)
+          setFilteredBranches(data)
         }
       }catch(error){
         if(error.response && !error.response.data.success){
@@ -44,7 +67,11 @@ const BranchList = () => {
       }
     };
     fetchBranches();
-  },[])
+  },[]);
+  const filterBranch = (e) =>{
+    const records = branches.filter((bra)=>bra.branch_name.toLowerCase().includes(e.target.value.toLowerCase()))
+    setFilteredBranches(records)
+  }
   
   return (
     <>
@@ -55,13 +82,14 @@ const BranchList = () => {
         </div>
         <div className='flex justify-between items-center'>
           <input type="text" placeholder='Search By Branch Name' 
-          className=' px-4 py-0.5 ml-1 border rounded'/>
+          className=' px-4 py-0.5 ml-1 border rounded' 
+          onChange={filterBranch}/>
           <Link to="/admin-dashboard/add-branch" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Branch</Link>
         </div>
         <div className='mt-5'>
           <DataTable
             columns={columns}
-            data={branches}
+            data={filteredBranches}
           />
         </div>
       </div>}
