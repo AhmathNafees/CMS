@@ -46,4 +46,14 @@ const updateBranch = async(req,res)=>{
 
 }
 
-export {addBranch, getBranches, getBranch, updateBranch}
+const deleteBranch = async(req, res) =>{
+    try{
+        const {id} = req.params;
+        const deletebra = await Branch.findByIdAndDelete({_id:id})
+        return res.status(200).json({success:true, deletebra})
+    }catch(error){
+        return res.status(500).json({success: false, error:"Server Error in Delete Department"})
+    }
+}
+
+export {addBranch, getBranches, getBranch, updateBranch, deleteBranch}

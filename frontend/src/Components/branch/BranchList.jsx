@@ -8,6 +8,11 @@ const BranchList = () => {
   const [branches, setBranches]= useState([]);
   const [braLoading, setBraLoading] = useState(false)
 
+  const onBranchDelete =async(id)=>{
+    const data = branches.filter(branch=>branch._id !== id)
+    setBranches(data)
+  }
+
   useEffect(()=>{
     const fetchBranches = async()=>{
       setBraLoading(true)
@@ -24,7 +29,7 @@ const BranchList = () => {
               _id:branch._id,
               sno:sno++,
               branch_name:branch.branch_name,
-              action: (<BranchButtons _id={branch._id}/>),
+              action: (<BranchButtons _id={branch._id} onBranchDelete={onBranchDelete}/>),
             }
           ))
           setBranches(data)
