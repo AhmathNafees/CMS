@@ -90,6 +90,7 @@ const BranchList = () => {
           <DataTable
             columns={columns}
             data={filteredBranches}
+            pagination
           />
         </div>
       </div>}

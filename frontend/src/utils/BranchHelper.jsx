@@ -4,11 +4,13 @@ import axios from "axios";
 export const columns = [
   {
     name: "S No",
-    selector: (row)=> row.sno
+    selector: (row)=> row.sno,
+    sortable : true,
   },
   {
     name: "Department Name",//coloumn name
-    selector: (row)=> row.branch_name //in the jsx file name given
+    selector: (row)=> row.branch_name, //in the jsx file name given
+    sortable : true,
   },
   {
     name: "Action",
