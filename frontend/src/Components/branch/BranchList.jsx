@@ -76,7 +76,7 @@ const BranchList = () => {
   return (
     <>
       {braLoading ? <div>Loading...</div>:
-      <div className='p-5'>
+      <div className='p-5 flex-1'>
         <div className='text-center'>
           <h3 className=' text-2xl font-bold'>Manage Branches</h3>
         </div>

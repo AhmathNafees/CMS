@@ -9,6 +9,8 @@ import Summary from "./Components/dashboard/Summary";
 import BranchList from "./Components/branch/BranchList";
 import AddBranch from "./Components/branch/AddBranch";
 import EditBranch from "./Components/branch/EditBranch";
+import ListBranchAdmin from "./Components/branchAdmin/ListBranchAdmin";
+import AddBranchAdmin from "./Components/branchAdmin/AddBranchAdmin";
 
 function App() {
   return (
@@ -32,6 +34,9 @@ function App() {
             <Route path="/admin-dashboard/add-branch" element={<AddBranch/>}>
             </Route>
             <Route path="/admin-dashboard/branch/:id" element={<EditBranch/>}></Route>
+            <Route path="/admin-dashboard/branchadmins" element={<ListBranchAdmin/>}></Route>
+            <Route path="/admin-dashboard/add-branchAdmin" element={<AddBranchAdmin/>}></Route>
+
         </Route>
           
         <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
