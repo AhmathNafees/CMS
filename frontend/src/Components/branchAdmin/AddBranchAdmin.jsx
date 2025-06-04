@@ -1,6 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { fetchBranches } from '../../utils/BranchAdminHelper'
 
 const AddBranchAdmin = () => {
+    const  [branches, setBranches] = useState([])
+    useEffect(()=>{
+        const getBranches = async()=>{
+            const branches=await fetchBranches()
+            setBranches(branches)
+        }
+        getBranches()
+        
+    },[])
   return (
     <div className='max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md'>
         <h2 className=' text-2xl font-bold mb-6'>Add New Branch Admin</h2>
@@ -70,6 +80,9 @@ const AddBranchAdmin = () => {
                     </label>
                     <select  name='branch' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required>
                         <option value="">Select Branch</option>
+                        {branches.map(bra =>(
+                            <option key={bra._id} value={bra._id}>{bra.branch_name}</option>
+                        ))}
                         
                     </select>
                 </div>
