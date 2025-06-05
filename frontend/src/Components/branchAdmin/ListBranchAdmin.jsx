@@ -1,7 +1,54 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
+import { BranchAdminButtons, columns } from '../../utils/BranchAdminHelper';
+import DataTable from 'react-data-table-component';
+import axios from 'axios';
 
 const ListBranchAdmin = () => {
+  const [branchAdmins, setBranchAdmins]= useState([]);
+  const [baLoading, setBaLoading] = useState(false)
+  // const [filteredBranches, setFilteredBranches] = useState([])
+
+
+
+  useEffect(()=>{
+    const fetchbranchAdmins = async()=>{
+      setBaLoading(true)
+      try{
+        const response = await axios.get('http://localhost:3000/api/branchAdmin',{
+          headers: {
+            "Authorization" :`Bearer ${localStorage.getItem('token')}`
+          }
+        })
+        if(response.data.success){
+          let sno =1;
+          const data =await response.data.branchAdmins.map((bAdmin)=>(
+            {
+              _id:bAdmin._id,
+              sno:sno++,
+              branch_name:bAdmin.branch.branch_name,
+              name:bAdmin.userId.name,
+              dob: new Date (bAdmin.dob).toDateString,
+              profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${bAdmin.userId.profileImage}`}/>,
+              nic:bAdmin.nic,
+              action: (<BranchAdminButtons _id={bAdmin._id}/>),
+            }
+          ))
+          setBranchAdmins(data)
+          // setFilteredBranches(data)
+        }
+      }catch(error){
+        if(error.response && !error.response.data.success){
+        alert(error.response.data.error)
+        }
+
+      }finally{
+        setBaLoading(false)
+      }
+    };
+    fetchbranchAdmins();
+  },[]);
+
   return (
     <div className='p-5 flex-1'>
         <div className='text-center'>
@@ -13,13 +60,13 @@ const ListBranchAdmin = () => {
           />
           <Link to="/admin-dashboard/add-branchAdmin" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Branch Admin</Link>
         </div>
-        {/* <div className='mt-5'>
+        <div className='mt-5'>
           <DataTable
             columns={columns}
-            data={filteredBranches}
+            data={branchAdmins}
             pagination
           />
-        </div> */}
+        </div>
       </div>
   )
 }

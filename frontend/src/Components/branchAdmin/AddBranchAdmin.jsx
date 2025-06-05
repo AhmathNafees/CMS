@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { fetchBranches } from '../../utils/BranchAdminHelper'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const AddBranchAdmin = () => {
     const  [branches, setBranches] = useState([])
     const [formData, setFormData] =useState({})
+    const navigate = useNavigate()
+
     useEffect(()=>{
         const getBranches = async()=>{
             const branches=await fetchBranches()
