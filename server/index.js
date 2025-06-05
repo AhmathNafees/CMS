@@ -16,3 +16,8 @@ app.use('/api/branchAdmin',branchAdmin)
 app.listen(process.env.PORT,()=>{
     console.log(`Server is runnig on port ${process.env.PORT}`)
 })
+
+app.use((err, req, res, next) => {
+    console.error("Global error:", err.stack)
+    res.status(500).json({ success: false, error: "Server error" })
+})

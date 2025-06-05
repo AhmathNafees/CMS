@@ -16,7 +16,7 @@ const AddBranchAdmin = () => {
 
     const handleChange =(e)=>{
         const{name, value, files} =e.target
-        if(name === "image"){
+        if(name === "profileImage"){
             setFormData((prevData)=>({...prevData, [name]:files[0]}))
         }else{
             setFormData((prevData)=>({...prevData, [name]:value}))
@@ -56,7 +56,7 @@ const AddBranchAdmin = () => {
                     <label htmlFor="baName" className=' block text-sm font-medium text-gray-700'>
                         Name
                     </label>
-                    <input type="text" name='baName' id='baName' placeholder='Enter Name' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="text" name='name' id='baName' placeholder='Enter Name' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
                 </div>
 
                 {/* Email */}
@@ -64,15 +64,15 @@ const AddBranchAdmin = () => {
                     <label htmlFor="baEmail" className=' block text-sm font-medium text-gray-700'>
                         Email Address
                     </label>
-                    <input type="email" name='baEmail' id='baEmail' placeholder='Enter Email / Gmail' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} />
+                    <input type="email" name='email' id='baEmail' placeholder='Enter Email / Gmail' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} />
                 </div>
 
                 {/* Branch Admin ID */}
                 <div>
                     <label htmlFor="baID" className=' block text-sm font-medium text-gray-700'>
-                        Branch Admin ID
+                        Branch Admin ID (NIC)
                     </label>
-                    <input type="text" name='baID' id='baID' placeholder='Branch Admin ID' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="text" name='nic' id='baID' placeholder='NIC' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
                 </div>
 
                 {/* Date of Birth */}
@@ -80,7 +80,7 @@ const AddBranchAdmin = () => {
                     <label htmlFor="baDOB" className=' block text-sm font-medium text-gray-700'>
                         Date of Birth
                     </label>
-                    <input type="date" name='baDOB' id='baDOB' placeholder='DOB' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="date" name='dob' id='baDOB' placeholder='DOB' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
                 </div>
 
                 {/* Gender */}
@@ -88,7 +88,7 @@ const AddBranchAdmin = () => {
                     <label htmlFor="baGender" className=' block text-sm font-medium text-gray-700'>
                         Gender
                     </label>
-                    <select  name='baGender' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}>
+                    <select  name='gender' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}>
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -127,7 +127,7 @@ const AddBranchAdmin = () => {
                     <label htmlFor="baPassword" className=' block text-sm font-medium text-gray-700'>
                         Password
                     </label>
-                    <input type="password" name='baPassword' id='baPassword' placeholder='********' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="password" name='password' id='baPassword' placeholder='********' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
                 </div>
 
                 {/* Role */}
@@ -147,7 +147,7 @@ const AddBranchAdmin = () => {
                     <label htmlFor="baImage" className=' block text-sm font-medium text-gray-700'>
                         Upload Image
                     </label>
-                    <input type="file" name='baImage' id='baImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required accept='image/*' onChange={handleChange}/>
+                    <input type="file" name='profileImage' id='baImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required accept='image/*' onChange={handleChange}/>
                 </div>
             </div>
             <button className='w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md'>
