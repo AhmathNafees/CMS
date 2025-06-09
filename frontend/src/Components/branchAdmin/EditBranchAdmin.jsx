@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useNavigate, useParams } from 'react-router-dom'
+import { data, useNavigate, useParams } from 'react-router-dom'
 import { fetchBranches } from '../../utils/BranchAdminHelper'
 
 const EditBranchAdmin = () => {
@@ -37,7 +37,9 @@ const EditBranchAdmin = () => {
             "Authorization" :`Bearer ${localStorage.getItem('token')}`
           }
         })
+        // console.log(response.data)
         if(response.data.success){
+            
             const branchAdmin= response.data.branchAdmin
          setBranchAdmin((prev)=>({...prev, 
             name:branchAdmin.userId.name,
@@ -48,6 +50,7 @@ const EditBranchAdmin = () => {
             maritalStatus:branchAdmin.maritalStatus,
             branch:branchAdmin.branch ? branchAdmin.branch._id : '',
             role:branchAdmin.userId.role,
+            profileImage:branchAdmin.userId.profileImage,
             }))
         }
       }catch(error){
@@ -191,7 +194,7 @@ const EditBranchAdmin = () => {
                 <div className="mb-4">
                     <label className='block text-sm font-medium text-gray-700'>Current Profile Image</label>
                     <img
-                    src={`http://localhost:3000/uploads/${branchAdmin.profileImage}`}
+                    src={`http://localhost:3000/${branchAdmin.profileImage}`}
                     alt="Profile"
                     className="w-24 h-24 object-cover rounded-full"
                     />

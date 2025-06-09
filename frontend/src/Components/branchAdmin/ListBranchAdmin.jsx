@@ -7,7 +7,7 @@ import axios from 'axios';
 const ListBranchAdmin = () => {
   const [branchAdmins, setBranchAdmins]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
-  // const [filteredBranches, setFilteredBranches] = useState([])
+  const [filteredBranchAdmins, setFilteredBranchAdmins] = useState([])
 
 
 
@@ -35,7 +35,7 @@ const ListBranchAdmin = () => {
             }
           ))
           setBranchAdmins(data)
-          // setFilteredBranches(data)
+          setFilteredBranchAdmins(data)
         }
       }catch(error){
         if(error.response && !error.response.data.success){
@@ -49,6 +49,14 @@ const ListBranchAdmin = () => {
     fetchbranchAdmins();
   },[]);
 
+  const handleFilter = (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const records = branchAdmins.filter((bAdmin) =>
+    bAdmin.name.toLowerCase().includes(searchTerm)
+  );
+  setFilteredBranchAdmins(records);
+};
+
   return (
     <div className='p-5 flex-1'>
         <div className='text-center'>
@@ -56,14 +64,14 @@ const ListBranchAdmin = () => {
         </div>
         <div className='flex justify-between items-center'>
           <input type="text" placeholder='Search By Branch Admin Name' 
-          className=' px-4 py-0.5 ml-1 border rounded w-65' 
+          className=' px-4 py-0.5 ml-1 border rounded w-65' onChange={handleFilter}
           />
           <Link to="/admin-dashboard/add-branchAdmin" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Branch Admin</Link>
         </div>
         <div className='mt-5'>
           <DataTable
             columns={columns}
-            data={branchAdmins}
+            data={filteredBranchAdmins}
             pagination
           />
         </div>
