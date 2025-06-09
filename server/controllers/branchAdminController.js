@@ -69,4 +69,14 @@ const getBranchAdmins = async(req,res)=>{
     }
 }
 
-export {addBranchAdmin, upload, getBranchAdmins}
+const getBranchAdmin = async(req,res)=>{
+    const {id} = req.params;
+    try{
+        const branchAdmin = await BranchAdmin.findById({_id:id}).populate('userId',{password:0}).populate('branch') //password 0 means not taken
+        return res.status(200).json({success:true, branchAdmin})
+    }catch(error){
+        return res.status(500).json({success: false, error:"Server Error in get Branch Admins"})
+    }
+}
+
+export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin}

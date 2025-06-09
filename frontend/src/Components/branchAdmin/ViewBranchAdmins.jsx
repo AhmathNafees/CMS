@@ -3,13 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 
 const ViewBranchAdmins = () => {
-    const[branchAdmin, setBranchAdmin]=useState([])
+    const[branchAdmin, setBranchAdmin]=useState(null)
     const {id}=useParams()
 
     useEffect(()=>{
     const fetchBranchAdmin = async()=>{
       try{
-        const response = await axios.get(`http://localhost:3000/api/branchAdmins/${id}`,{
+        const response = await axios.get(`http://localhost:3000/api/branchAdmin/${id}`,{
           headers: {
             "Authorization" :`Bearer ${localStorage.getItem('token')}`
           }
@@ -27,7 +27,9 @@ const ViewBranchAdmins = () => {
   },[id]) // Added id as dependency
 
   return (
-    <div className=' max-w-3xl mx-auto mt-10 bg-white p-8 shadow-md'>
+    <>
+    {branchAdmin ? (
+      <div className=' max-w-3xl mx-auto mt-10 bg-white p-8 shadow-md'>
         <h2 className='text-2xl font-bold mb-8 text-center'>
             Branch Admin Details
         </h2>
@@ -39,12 +41,34 @@ const ViewBranchAdmins = () => {
                 <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Name:</p>
                     <p className=' font-medium'>{branchAdmin.userId.name}</p>
-
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Admin ID:</p>
+                    <p className=' font-medium'>{branchAdmin.nic}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Date of Birth:</p>
+                    <p className=' font-medium'>{new Date(branchAdmin.dob).toLocaleDateString()}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Gender:</p>
+                    <p className=' font-medium'>{branchAdmin.gender}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Branch:</p>
+                    <p className=' font-medium'>{branchAdmin.branch.branch_name}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Marital Status:</p>
+                    <p className=' font-medium'>{branchAdmin.maritalStatus}</p>
                 </div>
             </div>
         </div>
         
     </div>
+    ): <div>Loading...</div>}
+    </>
+    
   )
 }
 
