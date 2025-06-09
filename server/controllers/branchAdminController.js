@@ -3,6 +3,7 @@ import User from "../models/User.js"
 import bcrypt from "bcrypt"
 import multer from "multer"
 import path from "path"
+import branch from "../models/BranchModel.js"
 
 
 const storage = multer.diskStorage({
@@ -68,10 +69,11 @@ const getBranchAdmins = async(req,res)=>{
         return res.status(500).json({success: false, error:"Server Error in get Branch Admins"})
     }
 }
-
+// This is for edit function in got value
 const getBranchAdmin = async(req,res)=>{
     const {id} = req.params;
     try{
+        const updatedData = req.body;
         const branchAdmin = await BranchAdmin.findById({_id:id}).populate('userId',{password:0}).populate('branch') //password 0 means not taken
         return res.status(200).json({success:true, branchAdmin})
     }catch(error){
@@ -79,4 +81,60 @@ const getBranchAdmin = async(req,res)=>{
     }
 }
 
-export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin}
+const updateBranchAdmin = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // First, find the existing BranchAdmin document
+    const branchAdminDoc = await BranchAdmin.findById(id);
+    if (!branchAdminDoc) {
+      return res.status(404).json({ success: false, error: "Branch Admin Not Found" });
+    }
+    // Extract the User ID from the BranchAdmin document
+    const userId = branchAdminDoc.userId;
+
+    // Build an update object for the User.
+    // Here, if a new password is provided, hash it; otherwise, leave it unchanged.
+    const updateUserObj = {
+      name: req.body.name,
+      email: req.body.email,
+      role: req.body.role,
+    };
+    // If file upload is processed by multer, req.file will exist.
+    // If a new profileImage file is provided, update the profileImage field.
+    if (req.file) {
+      updateUserObj.profileImage = req.file.filename;
+    } else if(req.body.profileImage) {
+      // Alternatively, if the client sent a profileImage value via FormData
+      updateUserObj.profileImage = req.body.profileImage;
+    }
+
+    // Update the User document
+    const updatedUser = await User.findByIdAndUpdate(userId, updateUserObj, { new: true });
+
+    // Build an update object for BranchAdmin.
+    // Here, we assume that the client sends a branch field (which should be the branch _id)
+    const updateAdminObj = {
+      nic: req.body.nic,
+      dob: req.body.dob,
+      gender: req.body.gender,
+      maritalStatus: req.body.maritalStatus,
+      branch: req.body.branch, // Use branch _id—not branch_name
+    };
+
+    // Update the BranchAdmin document
+    const updatedAdmin = await BranchAdmin.findByIdAndUpdate(id, updateAdminObj, { new: true })
+      .populate("userId", { password: 0 })
+      .populate("branch");
+
+    if (!updatedUser || !updatedAdmin) {
+      return res.status(500).json({ success: false, error: "Document not found" });
+    }
+    return res.status(200).json({ success: true, message: "Branch Admin Updated", updatedAdmin });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ success: false, error: "Server Error in Update Branch Admins", details: error.message });
+  }
+};
+
+export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin}

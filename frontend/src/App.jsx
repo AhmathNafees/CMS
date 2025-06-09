@@ -12,6 +12,7 @@ import EditBranch from "./Components/branch/EditBranch";
 import ListBranchAdmin from "./Components/branchAdmin/ListBranchAdmin";
 import AddBranchAdmin from "./Components/branchAdmin/AddBranchAdmin";
 import ViewBranchAdmins from "./Components/branchAdmin/ViewBranchAdmins";
+import EditBranchAdmin from "./Components/branchAdmin/EditBranchAdmin";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/admin-dashboard/branchadmins" element={<ListBranchAdmin/>}></Route>
             <Route path="/admin-dashboard/add-branchAdmin" element={<AddBranchAdmin/>}></Route>
             <Route path="/admin-dashboard/branchadmins/:id" element={<ViewBranchAdmins/>}></Route>
+            <Route path="/admin-dashboard/branchAdmins/edit/:id" element={<EditBranchAdmin/>}></Route>
 
         </Route>
           
