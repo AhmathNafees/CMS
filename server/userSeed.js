@@ -8,7 +8,7 @@ const userRegister = async ()=>{
         const newUser= new User({
             name : "Admin",
             email : "admin@gmail.com",
-            Password : hashPassword,
+            password : hashPassword,
             role: "admin",
         })
         await newUser.save()
