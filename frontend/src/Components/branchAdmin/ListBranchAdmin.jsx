@@ -31,7 +31,7 @@ const ListBranchAdmin = () => {
               dob: new Date (bAdmin.dob).toDateString,
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${bAdmin.userId.profileImage}`}/>,
               nic:bAdmin.nic,
-              action: (<BranchAdminButtons _id={bAdmin._id}/>),
+              action: (<BranchAdminButtons _id={bAdmin._id} onDelete={fetchbranchAdmins}/>),
             }
           ))
           setBranchAdmins(data)

@@ -18,7 +18,7 @@ export const columns = [
     name: "Profile Image",
     selector: (row)=> row.profileImage,
     width:"130px",
-    center:true,
+    center:"true",
   },
   {
     name: "Branch",
@@ -34,7 +34,7 @@ export const columns = [
   {
     name: "Action",
     selector: (row)=> row.action,
-    center:true,
+    center:"true",
   },
 ]
 
@@ -58,9 +58,28 @@ export const fetchBranches = async()=>{
     return branches
 };
 
-export const BranchAdminButtons = ({_id})=>{
+export const BranchAdminButtons = ({ _id, onDelete }) => {
   const navigate = useNavigate();
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("Do you really want to delete this Branch Admin?");
+    if(confirmDelete) {
+      try {
+        const response = await axios.delete(`http://localhost:3000/api/branchAdmin/${_id}`, {
+          headers: {
+            "Authorization": `Bearer ${localStorage.getItem("token")}`
+          }
+        });
+        if(response.data.success) {
+          onDelete(); // Callback to update state if needed
+        }
+      } catch (error) {
+        if(error.response && !error.response.data.success){
+          alert(error.response.data.error);
+        }
+      }
+    }
+  };
   return(
     <div className=" flex space-x-3">
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
@@ -69,7 +88,7 @@ export const BranchAdminButtons = ({_id})=>{
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
       onClick={()=> navigate(`/admin-dashboard/branchAdmins/edit/${_id}`)}>Edit</button>
       <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer" >Customers</button>
-      <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" >Delete</button>
+      <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button>
     </div>
   )
 };

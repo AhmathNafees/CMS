@@ -137,4 +137,31 @@ const updateBranchAdmin = async (req, res) => {
   }
 };
 
-export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin}
+const deleteBranchAdmin = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Find the BranchAdmin document by id
+    const branchAdminDoc = await BranchAdmin.findById(id);
+    if (!branchAdminDoc) {
+      return res.status(404).json({ success: false, error: "Branch Admin not found" });
+    }
+    
+    // Optionally, if you want to delete the associated user record as well,
+    // extract userId from the branch admin document.
+    const userId = branchAdminDoc.userId;
+    
+    // Delete the BranchAdmin document
+    await BranchAdmin.findByIdAndDelete(id);
+    
+    // Optionally, delete the associated user document. Remove this block if you wish to keep the user record.
+    await User.findByIdAndDelete(userId);
+
+    return res.status(200).json({ success: true, message: "Branch Admin deleted successfully" });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ success: false, error: "Server error in deleting Branch Admin" });
+  }
+};
+
+
+export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin, deleteBranchAdmin}
