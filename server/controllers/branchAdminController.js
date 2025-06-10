@@ -4,6 +4,7 @@ import bcrypt from "bcrypt"
 import multer from "multer"
 import path from "path"
 import branch from "../models/BranchModel.js"
+import fs from "fs";
 
 
 const storage = multer.diskStorage({
@@ -90,6 +91,7 @@ const updateBranchAdmin = async (req, res) => {
     if (!branchAdminDoc) {
       return res.status(404).json({ success: false, error: "Branch Admin Not Found" });
     }
+    
     // Extract the User ID from the BranchAdmin document
     const userId = branchAdminDoc.userId;
 
@@ -140,21 +142,30 @@ const updateBranchAdmin = async (req, res) => {
 const deleteBranchAdmin = async (req, res) => {
   const { id } = req.params;
   try {
-    // Find the BranchAdmin document by id
-    const branchAdminDoc = await BranchAdmin.findById(id);
+    // Populate userId to access profileImage
+    const branchAdminDoc = await BranchAdmin.findById(id).populate("userId");
     if (!branchAdminDoc) {
       return res.status(404).json({ success: false, error: "Branch Admin not found" });
     }
-    
-    // Optionally, if you want to delete the associated user record as well,
-    // extract userId from the branch admin document.
-    const userId = branchAdminDoc.userId;
-    
-    // Delete the BranchAdmin document
+
+    const profileImage = branchAdminDoc.userId?.profileImage;
+    const userId = branchAdminDoc.userId._id;
+
+    // Delete BranchAdmin and User
     await BranchAdmin.findByIdAndDelete(id);
-    
-    // Optionally, delete the associated user document. Remove this block if you wish to keep the user record.
     await User.findByIdAndDelete(userId);
+
+    // Delete profile image from disk if it exists
+    if (profileImage) {
+      const imagePath = path.join(process.cwd(), "public", "uploads", profileImage);
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+          console.error("Error deleting profile image file:", err);
+        } else {
+          console.log(`Profile image ${profileImage} deleted successfully.`);
+        }
+      });
+    }
 
     return res.status(200).json({ success: true, message: "Branch Admin deleted successfully" });
   } catch (error) {
@@ -162,6 +173,7 @@ const deleteBranchAdmin = async (req, res) => {
     return res.status(500).json({ success: false, error: "Server error in deleting Branch Admin" });
   }
 };
+
 
 
 export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin, deleteBranchAdmin}
