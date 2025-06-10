@@ -2,7 +2,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import AdminDashboard from "./pages/AdminDashboard";
-import EmployeeDashboard from "./pages/EmployeeDashboard";
 import PrivateRoute from "./utils/PrivateRoute";
 import RoleBaseRoutes from "./utils/RoleBaseRoutes";
 import Summary from "./Components/dashboard/Summary";
@@ -14,6 +13,7 @@ import AddBranchAdmin from "./Components/branchAdmin/AddBranchAdmin";
 import ViewBranchAdmins from "./Components/branchAdmin/ViewBranchAdmins";
 import EditBranchAdmin from "./Components/branchAdmin/EditBranchAdmin";
 import ViewBranchByAdmins from "./Components/branchAdmin/ViewBranchByAdmins";
+import BranchAdminDashboard from "./pages/BranchAdminDashboard";
 
 function App() {
   return (
@@ -48,7 +48,13 @@ function App() {
 
         </Route>
           
-        <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
+        <Route path="/branchAdmin-dashboard" element={
+          <PrivateRoute>
+            <RoleBaseRoutes requiredRole={["admin","branchAdmin"]}>
+              <BranchAdminDashboard />
+            </RoleBaseRoutes>
+          </PrivateRoute>
+          } ></Route>
       </Routes>
     </BrowserRouter>
   );
