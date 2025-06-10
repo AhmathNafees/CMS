@@ -58,8 +58,6 @@ const addBranchAdmin =async (req, res)=>{
         console.log(error.message)
         return res.status(500).json({success:false, error:"server error in adding branch admin"})
     }
-
-    
 }
 
 const getBranchAdmins = async(req,res)=>{
@@ -72,10 +70,15 @@ const getBranchAdmins = async(req,res)=>{
 }
 // This is for edit function in got value
 const getBranchAdmin = async(req,res)=>{
+    let branchAdmin;
     const {id} = req.params;
     try{
         const updatedData = req.body;
-        const branchAdmin = await BranchAdmin.findById({_id:id}).populate('userId',{password:0}).populate('branch') //password 0 means not taken
+        branchAdmin = await BranchAdmin.findById({_id:id}).populate('userId',{password:0}).populate('branch') //password 0 means not taken
+        if(!branchAdmin){
+          const updatedData = req.body;
+          branchAdmin = await BranchAdmin.findOne({userId:id}).populate('userId',{password:0}).populate('branch') //password 0 means not taken
+        }
         return res.status(200).json({success:true, branchAdmin})
     }catch(error){
         return res.status(500).json({success: false, error:"Server Error in get Branch Admins"})
