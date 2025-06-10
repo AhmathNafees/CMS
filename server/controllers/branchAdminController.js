@@ -174,6 +174,18 @@ const deleteBranchAdmin = async (req, res) => {
   }
 };
 
+const getBranchAdminsByBranch = async (req, res) => {
+  const { branchId } = req.params;
 
+  try {
+    const branchAdmins = await BranchAdmin.find({ branch: branchId })
+      .populate("userId", { password: 0 })
+      .populate("branch");
 
-export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin, deleteBranchAdmin}
+    return res.status(200).json({ success: true, branchAdmins });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: "Error fetching branch admins" });
+  }
+};
+
+export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin, deleteBranchAdmin, getBranchAdminsByBranch}

@@ -46,6 +46,9 @@ export const BranchButtons = ({_id, onBranchDelete})=>{
 
   return(
     <div className=" flex space-x-3">
+      <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer"
+        onClick={()=> navigate(`/admin-dashboard/branchadmins/view/${_id}`)}
+      >View Admins</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/admin-dashboard/branch/${_id}`)}
       >Edit</button>
