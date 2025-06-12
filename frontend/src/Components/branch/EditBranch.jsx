@@ -40,7 +40,7 @@ const EditBranch = () => {
     e.preventDefault()
     try{
       const response = await axios.put(`http://localhost:3000/api/branch/${id}`, branch, {
-        headers:{"Authorization" : `Bearer ${localStorage.getItem("token")}`}
+        headers:{"Authorization" : `Bearer ${localStorage.getItem("accessToken")}`}
       })
       if(response.data.success){
         navigate("/admin-dashboard/branches")

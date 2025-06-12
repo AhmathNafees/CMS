@@ -35,7 +35,7 @@ const AddBranchAdmin = () => {
 
         try{
             const response = await axios.post('http://localhost:3000/api/branchAdmin/add', formDataObj, {
-                headers:{"Authorization" : `Bearer ${localStorage.getItem("token")}`}
+                headers:{"Authorization" : `Bearer ${localStorage.getItem("accessToken")}`}
             })
         if(response.data.success){
             navigate("/admin-dashboard/branchadmins")

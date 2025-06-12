@@ -34,7 +34,7 @@ const EditBranchAdmin = () => {
       try{
         const response = await axios.get(`http://localhost:3000/api/branchAdmin/${id}`,{
           headers: {
-            "Authorization" :`Bearer ${localStorage.getItem('token')}`
+            "Authorization" :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
         // console.log(response.data)
@@ -83,7 +83,7 @@ const EditBranchAdmin = () => {
 
         try{
             const response = await axios.put(`http://localhost:3000/api/branchAdmin/${id}`, formDataObj, {
-                headers:{"Authorization" : `Bearer ${localStorage.getItem("token")}`,"Content-Type": "multipart/form-data",}
+                headers:{"Authorization" : `Bearer ${localStorage.getItem("accessToken")}`,"Content-Type": "multipart/form-data",}
             })
         if(response.data.success){
             navigate("/admin-dashboard/branchadmins")

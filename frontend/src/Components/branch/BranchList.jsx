@@ -13,7 +13,7 @@ const BranchList = () => {
     try {
       const response = await axios.get('http://localhost:3000/api/branch', {
         headers: {
-          "Authorization": `Bearer ${localStorage.getItem('token')}`
+          "Authorization": `Bearer ${localStorage.getItem('accessToken')}`
         }
       });
       if (response.data.success) {
@@ -41,7 +41,7 @@ const BranchList = () => {
       try{
         const response = await axios.get('http://localhost:3000/api/branch',{
           headers: {
-            "Authorization" :`Bearer ${localStorage.getItem('token')}`
+            "Authorization" :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
         if(response.data.success){

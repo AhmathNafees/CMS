@@ -25,7 +25,7 @@ const refreshTokenController = async (req, res) => {
     const newAccessToken = jwt.sign(
       { _id: user._id, role: user.role },
       process.env.JWT_KEY,
-      { expiresIn: "15m" }
+      { expiresIn: "12h" }
     );
     const newRefreshToken = jwt.sign(
       { _id: user._id },

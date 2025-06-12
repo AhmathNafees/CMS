@@ -17,7 +17,7 @@ const ListBranchAdmin = () => {
       try{
         const response = await axios.get('http://localhost:3000/api/branchAdmin',{
           headers: {
-            "Authorization" :`Bearer ${localStorage.getItem('token')}`
+            "Authorization" :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
         if(response.data.success){

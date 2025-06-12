@@ -14,8 +14,10 @@ import ViewBranchAdmins from "./Components/branchAdmin/ViewBranchAdmins";
 import EditBranchAdmin from "./Components/branchAdmin/EditBranchAdmin";
 import ViewBranchByAdmins from "./Components/branchAdmin/ViewBranchByAdmins";
 import BranchAdminDashboard from "./pages/BranchAdminDashboard";
-import BranchAdminSummary from "./Components/BranchAdminDashboard/BranchAdminSummary";
+import BranchAdminSummary from "./Components/BranchAdminDashboard/BranchAdminSummaryCard";
 import Profile from "./Components/BranchAdminDashboard/profile";
+import BranchAdminSummaryCard from "./Components/BranchAdminDashboard/BranchAdminSummaryCard";
+
 
 function App() {
   return (
@@ -57,7 +59,7 @@ function App() {
             </RoleBaseRoutes>
           </PrivateRoute>
           } >
-            <Route index element={<BranchAdminSummary/>}></Route>
+            <Route index element={<BranchAdminSummaryCard/>}></Route>
             <Route
               path="/branchAdmin-dashboard/profile/:id"
               element={<ViewBranchAdmins />}></Route>

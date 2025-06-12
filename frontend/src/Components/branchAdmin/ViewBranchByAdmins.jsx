@@ -16,7 +16,7 @@ const ViewBranchByAdmins = () => {
         `http://localhost:3000/api/branchAdmin/by-branch/${branchId}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
           },
         }
       );
@@ -58,13 +58,12 @@ const ViewBranchByAdmins = () => {
   }, [branchId]);
 
   const columns = [
-    { name: "S No", selector: (row) => row.sno, sortable: true },
-    { name: "Name", selector: (row) => row.name, sortable: true },
+    { name: "S No", selector: (row) => row.sno, sortable: true,width:"75px", },
+    { name: "Name", selector: (row) => row.name, sortable: true, width:"100px", },
+    { name: "Profile", selector: (row) => row.profileImage,width:"75px", },
     { name: "NIC", selector: (row) => row.nic },
-    { name: "DOB", selector: (row) => row.dob },
     { name: "Branch", selector: (row) => row.branch_name },
-    { name: "Profile", selector: (row) => row.profileImage },
-    { name: "Action", selector: (row) => row.action },
+    { name: "Action", selector: (row) => row.action,center:true },
   ];
 
   return (

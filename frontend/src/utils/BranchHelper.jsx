@@ -27,7 +27,7 @@ export const BranchButtons = ({_id, onBranchDelete})=>{
       try{
         const response = await axios.delete(`http://localhost:3000/api/branch/${id}`,{
           headers: {
-            "Authorization" :`Bearer ${localStorage.getItem('token')}`
+            "Authorization" :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
         if(response.data.success){

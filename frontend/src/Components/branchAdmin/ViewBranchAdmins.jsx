@@ -7,23 +7,25 @@ const ViewBranchAdmins = () => {
     const {id}=useParams()
 
     useEffect(()=>{
-    const fetchBranchAdmin = async()=>{
-      try{
-        const response = await axios.get(`http://localhost:3000/api/branchAdmin/${id}`,{
-          headers: {
-            "Authorization" :`Bearer ${localStorage.getItem('token')}`
+      
+      const fetchBranchAdmin = async()=>{
+        try{
+          const response = await axios.get(`http://localhost:3000/api/branchAdmin/${id}`,{
+            headers: {
+              "Authorization" :`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
+
+          if(response.data.success){
+          setBranchAdmin(response.data.branchAdmin)
           }
-        })
-        if(response.data.success){
-         setBranchAdmin(response.data.branchAdmin)
+        }catch(error){
+          if(error.response && !error.response.data.success){
+          alert(error.response.data.error)
+          }
         }
-      }catch(error){
-        if(error.response && !error.response.data.success){
-        alert(error.response.data.error)
-        }
-      }
-    };
-    fetchBranchAdmin();
+      };
+      fetchBranchAdmin();
   },[id]) // Added id as dependency
 
   return (
