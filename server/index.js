@@ -4,6 +4,7 @@ import authRouter from './routes/auth.js';
 import connectToDatabase from './db/db.js';
 import branchRouter from './routes/branch.js'
 import branchAdmin from './routes/branchAdmin.js'
+import settingRouter from './routes/setting.js'
 
 connectToDatabase()
 const app = express()
@@ -13,6 +14,7 @@ app.use(express.static('public/uploads'))
 app.use('/api/auth', authRouter)
 app.use('/api/branch',branchRouter)
 app.use('/api/branchAdmin',branchAdmin)
+app.use('/api/setting',settingRouter)
 
 app.listen(process.env.PORT,()=>{
     console.log(`Server is runnig on port ${process.env.PORT}`)

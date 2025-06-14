@@ -15,8 +15,9 @@ import EditBranchAdmin from "./Components/branchAdmin/EditBranchAdmin";
 import ViewBranchByAdmins from "./Components/branchAdmin/ViewBranchByAdmins";
 import BranchAdminDashboard from "./pages/BranchAdminDashboard";
 import BranchAdminSummary from "./Components/BranchAdminDashboard/BranchAdminSummaryCard";
-import Profile from "./Components/BranchAdminDashboard/profile";
 import BranchAdminSummaryCard from "./Components/BranchAdminDashboard/BranchAdminSummaryCard";
+import ListCustomer from "./Components/customer/ListCustomer";
+import Setting from "./Components/BranchAdminDashboard/Setting";
 
 
 function App() {
@@ -48,6 +49,9 @@ function App() {
             <Route
               path="/admin-dashboard/branchadmins/view/:branchId"
               element={<ViewBranchByAdmins />}></Route>
+            <Route
+              path="/admin-dashboard/setting"
+              element={<Setting/>}></Route>
 
 
         </Route>
@@ -63,6 +67,12 @@ function App() {
             <Route
               path="/branchAdmin-dashboard/profile/:id"
               element={<ViewBranchAdmins />}></Route>
+            <Route
+              path="/branchAdmin-dashboard/customers"
+              element={<ListCustomer/>}></Route>
+            <Route
+              path="/branchAdmin-dashboard/setting"
+              element={<Setting/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
