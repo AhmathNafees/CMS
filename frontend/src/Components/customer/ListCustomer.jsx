@@ -20,7 +20,7 @@ const ListCustomer = () => {
             Authorization :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
-        console.log(response.data)
+
         if(response.data.success){
           let sno =1;
           const data =await response.data.customers.map((customer)=>(

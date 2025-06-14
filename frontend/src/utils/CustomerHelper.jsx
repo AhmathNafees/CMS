@@ -75,10 +75,10 @@ export const CustomerButtons = ({ _id}) => {
   return(
     <div className=" flex space-x-3">
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
-        onClick={()=> navigate(`/admin-dashboard/branchAdmins/${_id}`)}
+        onClick={()=> navigate(`/branchAdmin-dashboard/customer/${_id}`)}
       >View</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
-      onClick={()=> navigate(`/admin-dashboard/branchAdmins/edit/${_id}`)}>Edit</button>
+      onClick={()=> navigate(`/branchAdmin-dashboard/branchAdmins/edit/${_id}`)}>Edit</button>
       <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" >Delete</button>
     </div>
   )

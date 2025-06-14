@@ -1,6 +1,6 @@
 import express from 'express'
 import authMiddleware from '../middleware/authMiddleware.js'
-import { addCustomer, getCustomers } from '../controllers/customerController.js'
+import { addCustomer, getCustomers,getCustomer } from '../controllers/customerController.js'
 import multer from 'multer'
 import path from 'path'
 
@@ -16,6 +16,7 @@ const upload = multer({ storage });
 
 router.post('/add',authMiddleware,upload.single('profileImage'), addCustomer)
 router.get('/', authMiddleware, getCustomers);
+router.get('/:id', authMiddleware, getCustomer);
 
 
 export default router
