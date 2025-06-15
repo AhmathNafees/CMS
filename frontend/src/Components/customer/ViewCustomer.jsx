@@ -57,8 +57,16 @@ const ViewCustomer = () => {
                     <p className=' font-medium'>{customer.homeAdd}</p>
                 </div>
                 <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Purpose Descrption:</p>
+                    <p className=' font-medium'>{customer.desc}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>NIC:</p>
                     <p className=' font-medium'>{customer.nic}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Passport Number:</p>
+                    <p className=' font-medium'>{customer.passport}</p>
                 </div>
                 <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Date of Birth:</p>
@@ -72,6 +80,9 @@ const ViewCustomer = () => {
                 <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Marital Status:</p>
                     <p className=' font-medium'>{customer.maritalStatus}</p>
+                </div>
+                <div>
+                  <img src={`http://localhost:3000/${customer.passportImage}`} alt="" className=' rounded-full border w-72' />
                 </div>
                 <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Branch Admin:</p>

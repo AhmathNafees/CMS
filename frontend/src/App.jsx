@@ -20,6 +20,7 @@ import ListCustomer from "./Components/customer/ListCustomer";
 import Setting from "./Components/BranchAdminDashboard/Setting";
 import AddCustomer from "./Components/customer/AddCustomer";
 import ViewCustomer from "./Components/customer/ViewCustomer";
+import EditCustomer from "./Components/customer/EditCustomer";
 
 
 function App() {
@@ -81,6 +82,9 @@ function App() {
             <Route
               path="/branchAdmin-dashboard/customer/:id"
               element={<ViewCustomer/>}></Route>
+            <Route
+              path="/branchAdmin-dashboard/customer/edit/:id"
+              element={<EditCustomer/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

@@ -2,14 +2,13 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const AddCustomer = () => {
+const EditCustomer = () => {
     const [formData, setFormData] =useState({})
     const navigate = useNavigate()
 
     const handleChange =(e)=>{
         const{name, value, files} =e.target
-        // Check if the field is a file input (for profileImage or passportImage)
-        if ((name === "profileImage" || name === "passportImage") && files && files.length > 0) {
+        if(name === "profileImage"){
             setFormData((prevData)=>({...prevData, [name]:files[0]}))
         }else{
             setFormData((prevData)=>({...prevData, [name]:value}))
@@ -68,43 +67,19 @@ const AddCustomer = () => {
                 </div>
                 {/* Home Address */}
                 <div>
-                    <label htmlFor="homeAdd" className=' block text-sm font-medium text-gray-700'>
+                    <label htmlFor="desc" className=' block text-sm font-medium text-gray-700'>
                         Home Address
                     </label>
-                    <textarea name="homeAdd" id="homeAdd" placeholder='Home Address' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" required
+                    <textarea name="homeAdd" id="desc" placeholder='Home Address' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" required
                     onChange={handleChange}/>
                 </div>
-                {/* Purpose Description */}
-                <div>
-                    <label htmlFor="desc" className=' block text-sm font-medium text-gray-700'>
-                        Purpose Descrption
-                    </label>
-                    <textarea name="desc" id="desc" placeholder='Eg.Work Description' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" required
-                    onChange={handleChange}/>
-                </div>
-
 
                 {/* NIC */}
                 <div>
-                    <label htmlFor="nic" className=' block text-sm font-medium text-gray-700'>
-                        NIC
+                    <label htmlFor="baID" className=' block text-sm font-medium text-gray-700'>
+                        Customer (NIC)
                     </label>
-                    <input type="text" name='nic' id='nic' placeholder='NIC' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
-                </div>
-                
-                {/* Passport */}
-                <div>
-                    <label htmlFor="passport" className=' block text-sm font-medium text-gray-700'>
-                        Passport Number
-                    </label>
-                    <input type="text" name='passport' id='passport' placeholder='Passport Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
-                </div>
-                {/* Passport Upload */}
-                <div>
-                    <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
-                        Upload Passport By Image
-                    </label>
-                    <input type="file" name='passportImage' id='passportImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' accept='image/*' onChange={handleChange}/>
+                    <input type="text" name='nic' id='baID' placeholder='NIC' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
                 </div>
 
                 {/* Date of Birth */}
@@ -158,4 +133,4 @@ const AddCustomer = () => {
   )
 }
 
-export default AddCustomer
+export default EditCustomer
