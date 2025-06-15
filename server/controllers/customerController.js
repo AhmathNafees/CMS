@@ -66,7 +66,22 @@ const addCustomer = async (req, res) => {
 // for see all customers
 const getCustomers = async (req, res) => {
   try{
-        const customers = await Customer.find().populate('userId',{password:0}).populate('branchId') //password 0 means not taken
+        const userId = req.user.id; // ✅ From token (authMiddleware)
+        const branchAdmin = await BranchAdmin.findOne({ userId });
+
+        if (!branchAdmin) {
+          return res.status(404).json({ success: false, error: "Branch Admin not found" });
+        }
+
+        const branchId = branchAdmin.branch;
+
+        const customers = await Customer.find({
+          // userId,  ✅ Filter: added by this branch admin
+          branchId          // ✅ Filter: only customers from this branch
+        })
+        .populate('userId', { password: 0 })
+        .populate('branchId');
+
         return res.status(200).json({success:true, customers})
     }catch(error){
         return res.status(500).json({success: false, error:"Server Error in get Customers"})

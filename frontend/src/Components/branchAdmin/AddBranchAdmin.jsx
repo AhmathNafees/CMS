@@ -140,7 +140,7 @@ const AddBranchAdmin = () => {
                     </label>
                     <select  name='role' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}>
                         <option value="">Select Role</option>
-                        <option value="mainAdmin">Main Admin</option>
+                        <option value="admin">Main Admin</option>
                         <option value="branchAdmin">Branch Admin</option>
                     </select>
                 </div>

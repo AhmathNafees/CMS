@@ -20,6 +20,7 @@ const ListCustomer = () => {
             Authorization :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
+        console.log(response.data)
         if(response.data.success){
           let sno =1;
           const data =await response.data.customers.map((customer)=>(
@@ -39,7 +40,7 @@ const ListCustomer = () => {
             }
           ))
           setCustomers(data)
-          // setFilteredBranchAdmins(data)
+          setFilteredCustomers(data)
         }
       }catch(error){
         if(error.response && !error.response.data.success){
