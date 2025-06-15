@@ -7,7 +7,7 @@ import { CustomerButtons,columns } from '../../utils/CustomerHelper';
 const ListCustomer = () => {
   const [customers, setCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
-  // const [filteredBranchAdmins, setFilteredBranchAdmins] = useState([])
+  const [filteredCustomers, setFilteredCustomers] = useState([])
 
 
 
@@ -53,13 +53,13 @@ const ListCustomer = () => {
     fetchCustomers();
   },[]);
 
-  // const handleFilter = (e) => {
-  // const searchTerm = e.target.value.toLowerCase();
-  // const records = branchAdmins.filter((bAdmin) =>
-  //   bAdmin.name.toLowerCase().includes(searchTerm)
-  // );
-  // setFilteredBranchAdmins(records);
-  // };
+  const handleFilter = (e) => {
+  const searchTerm = e.target.value.toLowerCase();
+  const records = customers.filter((cus) =>
+    cus.name.toLowerCase().includes(searchTerm)
+  );
+  setFilteredCustomers(records);
+  };
 
   return (
     <div className='p-5 flex-1'>
@@ -68,14 +68,14 @@ const ListCustomer = () => {
         </div>
         <div className='flex justify-between items-center'>
           <input type="text" placeholder='Search By Customer Name' 
-          className=' px-4 py-0.5 ml-1 border rounded w-65'
+          className=' px-4 py-0.5 ml-1 border rounded w-65' onChange={handleFilter}
           />
           <Link to="/branchAdmin-dashboard/add-customer" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Customer</Link>
         </div>
         <div className='mt-5'>
           <DataTable
             columns={columns}
-            data={customers}
+            data={filteredCustomers}
             pagination
           />
         </div>
