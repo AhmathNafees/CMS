@@ -55,6 +55,9 @@ function App() {
             <Route
               path="/admin-dashboard/setting"
               element={<Setting/>}></Route>
+            <Route
+              path="/admin-dashboard/customers"
+              element={<ListCustomer/>}></Route>
 
 
         </Route>

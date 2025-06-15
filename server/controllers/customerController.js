@@ -1,5 +1,6 @@
 import BranchAdmin from "../models/BranchAdminModel.js"
 import Customer from "../models/customerModel.js"
+import User from "../models/User.js";
 import fs from "fs";
 import path from "path";
 
@@ -65,27 +66,46 @@ const addCustomer = async (req, res) => {
 };
 // for see all customers
 const getCustomers = async (req, res) => {
-  try{
-        const userId = req.user.id; // ✅ From token (authMiddleware)
-        const branchAdmin = await BranchAdmin.findOne({ userId });
+  try {
+    const userId = req.user.id;
 
-        if (!branchAdmin) {
-          return res.status(404).json({ success: false, error: "Branch Admin not found" });
-        }
+    // Get the logged-in user
+    const user = await User.findById(userId);
 
-        const branchId = branchAdmin.branch;
-
-        const customers = await Customer.find({
-          // userId,  ✅ Filter: added by this branch admin
-          branchId          // ✅ Filter: only customers from this branch
-        })
-        .populate('userId', { password: 0 })
-        .populate('branchId');
-
-        return res.status(200).json({success:true, customers})
-    }catch(error){
-        return res.status(500).json({success: false, error:"Server Error in get Customers"})
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
     }
+
+    let customers;
+
+    if (user.role === "admin") {
+      // ✅ Main Admin sees all customers
+      customers = await Customer.find()
+        .populate("userId", { password: 0 })
+        .populate("branchId");
+
+    } else if (user.role === "branchAdmin") {
+      // ✅ Branch Admin sees only their branch's customers
+      const branchAdmin = await BranchAdmin.findOne({ userId });
+
+      if (!branchAdmin) {
+        return res.status(404).json({ success: false, error: "Branch Admin not found" });
+      }
+
+      customers = await Customer.find({ branchId: branchAdmin.branch })
+        .populate("userId", { password: 0 })
+        .populate("branchId");
+
+    } else {
+      return res.status(403).json({ success: false, error: "Unauthorized role" });
+    }
+
+    return res.status(200).json({ success: true, customers });
+
+  } catch (error) {
+    console.error("Get Customers Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server Error in getCustomers" });
+  }
 };
 // for single coustomer view
 const getCustomer = async(req,res) =>{
