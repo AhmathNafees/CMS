@@ -38,8 +38,8 @@ export const columns = [
     width:"150px",
   },
   {
-    name: "NIC",
-    selector: (row)=> row.nic,
+    name: "Created",
+    selector: (row)=> row.createAt,
     width:"130px",
     
   },
@@ -50,28 +50,31 @@ export const columns = [
   },
 ]
 
-export const CustomerButtons = ({ _id}) => {
+export const CustomerButtons = ({ _id, onDelete }) => {
   const navigate = useNavigate();
 
-//   const handleDelete = async () => {
-//     const confirmDelete = window.confirm("Do you really want to delete this Branch Admin?");
-//     if(confirmDelete) {
-//       try {
-//         const response = await axios.delete(`http://localhost:3000/api/branchAdmin/${_id}`, {
-//           headers: {
-//             "Authorization": `Bearer ${localStorage.getItem("accessToken")}`
-//           }
-//         });
-//         if(response.data.success) {
-//           onDelete(); // Callback to update state if needed
-//         }
-//       } catch (error) {
-//         if(error.response && !error.response.data.success){
-//           alert(error.response.data.error);
-//         }
-//       }
-//     }
-//   };
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("Do you really want to delete this Customer?");
+    if(confirmDelete) {
+      try {
+        const response = await axios.delete(`http://localhost:3000/api/customer/${_id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+          }
+        });
+        if(response.data.success) {
+          onDelete(); // Callback to update state if needed
+        }
+      } catch (error) {
+        if(error.response && !error.response.data.success){
+          alert(error.response.data.error);
+        }
+      }
+    }else {
+      // Optional: notify cancel or just do nothing
+      console.log("Customer delete canceled");
+    }
+  };
   return(
     <div className=" flex space-x-3">
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
@@ -79,7 +82,7 @@ export const CustomerButtons = ({ _id}) => {
       >View</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
       onClick={()=> navigate(`/branchAdmin-dashboard/customer/edit/${_id}`)}>Edit</button>
-      <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" >Delete</button>
+      <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button>
     </div>
   )
 };

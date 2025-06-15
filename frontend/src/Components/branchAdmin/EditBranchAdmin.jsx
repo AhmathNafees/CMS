@@ -41,7 +41,7 @@ const EditBranchAdmin = () => {
         if(response.data.success){
             
             const branchAdmin= response.data.branchAdmin
-         setBranchAdmin((prev)=>({...prev, 
+            setBranchAdmin((prev)=>({...prev, 
             name:branchAdmin.userId.name,
             email:branchAdmin.userId.email,
             nic:branchAdmin.nic,
@@ -93,8 +93,6 @@ const EditBranchAdmin = () => {
                 alert(error.response.data.error)
             }
         }
-
-
     }
     
   return (

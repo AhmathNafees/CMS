@@ -1,6 +1,6 @@
 import express from 'express'
 import authMiddleware from '../middleware/authMiddleware.js'
-import { addCustomer, getCustomers,getCustomer } from '../controllers/customerController.js'
+import { addCustomer, getCustomers,getCustomer, editCustomer,deleteCustomer } from '../controllers/customerController.js'
 import multer from 'multer'
 import path from 'path'
 
@@ -29,6 +29,11 @@ router.post('/add',authMiddleware,upload.fields([
   ]), addCustomer)
 router.get('/', authMiddleware, getCustomers);
 router.get('/:id', authMiddleware, getCustomer);
+router.put('/:id',authMiddleware,upload.fields([
+    { name: 'profileImage', maxCount: 1 },
+    { name: 'passportImage', maxCount: 1 }
+  ]), editCustomer)
+router.delete("/:id", authMiddleware, deleteCustomer);
 
 
 export default router

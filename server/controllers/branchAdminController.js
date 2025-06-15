@@ -6,6 +6,22 @@ import path from "path"
 import branch from "../models/BranchModel.js"
 import fs from "fs";
 
+const deleteImage = (folder, filename) => {
+  if (!filename) return;
+
+  const filePath = path.resolve(folder, filename);
+  if (fs.existsSync(filePath)) {
+    try {
+      fs.unlinkSync(filePath);
+      console.log(`✅ Deleted previous image: ${filePath}`);
+    } catch (err) {
+      console.error(`❌ Error deleting file ${filePath}:`, err.message);
+    }
+  } else {
+    console.warn(`⚠️ File not found: ${filePath}`);
+  }
+};
+
 
 const storage = multer.diskStorage({
     destination: (req, file, cb)=>{
@@ -68,7 +84,7 @@ const getBranchAdmins = async(req,res)=>{
         return res.status(500).json({success: false, error:"Server Error in get Branch Admins"})
     }
 }
-// This is for edit function in got value
+// This is for view function in got value
 const getBranchAdmin = async(req,res)=>{
     let branchAdmin;
     const {id} = req.params;
@@ -97,6 +113,7 @@ const updateBranchAdmin = async (req, res) => {
     
     // Extract the User ID from the BranchAdmin document
     const userId = branchAdminDoc.userId;
+    const oldProfileImage = branchAdminDoc.userId.profileImage; // stored in User model
 
     // Build an update object for the User.
     // Here, if a new password is provided, hash it; otherwise, leave it unchanged.
@@ -108,6 +125,8 @@ const updateBranchAdmin = async (req, res) => {
     // If file upload is processed by multer, req.file will exist.
     // If a new profileImage file is provided, update the profileImage field.
     if (req.file) {
+      // 🗑️ Delete the old profile image from disk if it exists
+      deleteImage("public/uploads", oldProfileImage);
       updateUserObj.profileImage = req.file.filename;
     } else if(req.body.profileImage) {
       // Alternatively, if the client sent a profileImage value via FormData

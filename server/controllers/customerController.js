@@ -1,5 +1,27 @@
 import BranchAdmin from "../models/BranchAdminModel.js"
 import Customer from "../models/customerModel.js"
+import fs from "fs";
+import path from "path";
+
+const deleteImage = (folder, filename) => {
+  if (!filename) return;
+
+  const filePath = path.resolve("public", folder, filename);
+  if (fs.existsSync(filePath)) {
+    try {
+      fs.unlinkSync(filePath);
+      console.log(`✅ Deleted old ${folder} image:`, filename);
+    } catch (err) {
+      console.error(`❌ Error deleting ${filename}:`, err.message);
+    }
+  } else {
+    console.warn(`⚠️ File not found to delete: ${filePath}`);
+  }
+};
+
+
+
+
 
 const addCustomer = async (req, res) => {
   try {
@@ -61,4 +83,100 @@ const getCustomer = async(req,res) =>{
     }
 }
 
-export {addCustomer,getCustomers, getCustomer}
+const editCustomer = async (req, res) => {
+  try {
+    const { id } = req.params; // customer ID
+    const userId = req.user.id; // authenticated branch admin user ID
+
+    // Check branch admin
+    const branchAdmin = await BranchAdmin.findOne({ userId });
+    if (!branchAdmin) {
+      return res.status(404).json({ success: false, error: "Branch Admin not found" });
+    }
+
+    // Fetch existing customer to get old image filenames
+    const customer = await Customer.findById(id);
+    if (!customer) {
+      return res.status(404).json({ success: false, error: "Customer not found" });
+    }
+
+    // Extract fields from request
+    const {
+      name, pno, email, homeAdd, nic, dob,
+      gender, maritalStatus, passport, desc
+    } = req.body;
+
+    const updatedFields = {
+      name,
+      pno,
+      email,
+      homeAdd,
+      nic,
+      dob,
+      gender,
+      maritalStatus,
+      passport,
+      desc,
+      userId,
+      branchId: branchAdmin.branch,
+      UpdateAt: Date.now()
+    };
+
+    // Handle profile image update
+    if (req.files?.profileImage?.[0]) {
+      deleteImage("customers", customer.profileImage); // delete old image
+      updatedFields.profileImage = req.files.profileImage[0].filename;
+    }
+
+    // Handle passport image update
+    if (req.files?.passportImage?.[0]) {
+      deleteImage("passports", customer.passportImage); // delete old passport
+      updatedFields.passportImage = req.files.passportImage[0].filename;
+    }
+
+    // Update the customer in DB
+    const updatedCustomer = await Customer.findByIdAndUpdate(id, updatedFields, { new: true });
+
+    return res.status(200).json({
+      success: true,
+      message: "Customer updated successfully",
+      updatedCustomer
+    });
+
+  } catch (error) {
+    console.error("Edit Customer Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server error while updating customer" });
+  }
+};
+
+const deleteCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const customer = await Customer.findById(id);
+    if (!customer) {
+      return res.status(404).json({ success: false, error: "Customer not found" });
+    }
+
+    // Delete profile image if exists
+    if (customer.profileImage) {
+      deleteImage("customers", customer.profileImage);
+    }
+
+    // Delete passport image if exists
+    if (customer.passportImage) {
+      deleteImage("passports", customer.passportImage);
+    }
+
+    // Delete customer from database
+    await Customer.findByIdAndDelete(id);
+
+    return res.status(200).json({ success: true, message: "Customer deleted successfully" });
+  } catch (error) {
+    console.error("Delete Customer Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server error while deleting customer" });
+  }
+};
+
+
+export {addCustomer,getCustomers, getCustomer, editCustomer, deleteCustomer}

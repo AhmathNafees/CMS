@@ -20,7 +20,6 @@ const ListCustomer = () => {
             Authorization :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
-
         if(response.data.success){
           let sno =1;
           const data =await response.data.customers.map((customer)=>(
@@ -31,15 +30,12 @@ const ListCustomer = () => {
               Admin_name:customer.userId.name,
               name:customer.name,
               pno:customer.pno,
-              email:customer.email,
-              homeAdd:customer.homeAdd,
               nic:customer.nic,
-              dob: new Date (customer.dob).toDateString(),
-              gender:customer.gender,
-              maritalStatus:customer.maritalStatus,
+              createAt: new Date(customer.createAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
+              day: "numeric"}),
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
               
-              action: (<CustomerButtons _id={customer._id} />),
+              action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
             }
           ))
           setCustomers(data)
