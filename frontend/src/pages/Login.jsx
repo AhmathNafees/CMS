@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/api/auth/login", { email, password });
-      console.log(response.data)
+      // console.log(response.data)
       if (response.data.success) {
         login(response.data.user);
         localStorage.setItem("accessToken", response.data.accessToken);

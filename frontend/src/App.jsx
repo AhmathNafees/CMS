@@ -14,8 +14,7 @@ import ViewBranchAdmins from "./Components/branchAdmin/ViewBranchAdmins";
 import EditBranchAdmin from "./Components/branchAdmin/EditBranchAdmin";
 import ViewBranchByAdmins from "./Components/branchAdmin/ViewBranchByAdmins";
 import BranchAdminDashboard from "./pages/BranchAdminDashboard";
-import BranchAdminSummary from "./Components/BranchAdminDashboard/BranchAdminSummaryCard";
-import BranchAdminSummaryCard from "./Components/BranchAdminDashboard/BranchAdminSummaryCard";
+import BranchAdminSummary from "./Components/BranchAdminDashboard/BranchAdminSummary";
 import ListCustomer from "./Components/customer/ListCustomer";
 import Setting from "./Components/BranchAdminDashboard/Setting";
 import AddCustomer from "./Components/customer/AddCustomer";
@@ -61,33 +60,26 @@ function App() {
 
         </Route>
           
-        <Route path="/branchAdmin-dashboard" element={
-          <PrivateRoute>
-            <RoleBaseRoutes requiredRole={["admin","branchAdmin"]}>
-              <BranchAdminDashboard />
-            </RoleBaseRoutes>
-          </PrivateRoute>
-          } >
-            <Route index element={<BranchAdminSummaryCard/>}></Route>
-            <Route
-              path="/branchAdmin-dashboard/profile/:id"
-              element={<ViewBranchAdmins />}></Route>
-            <Route
-              path="/branchAdmin-dashboard/customers"
-              element={<ListCustomer/>}></Route>
-            <Route
-              path="/branchAdmin-dashboard/setting"
-              element={<Setting/>}></Route>
-            <Route
-              path="/branchAdmin-dashboard/add-customer"
-              element={<AddCustomer/>}></Route>
-            <Route
-              path="/branchAdmin-dashboard/customer/:id"
-              element={<ViewCustomer/>}></Route>
-            <Route
-              path="/branchAdmin-dashboard/customer/edit/:id"
-              element={<EditCustomer/>}></Route>
+        <Route
+          path="/branchAdmin-dashboard"
+          element={
+            <PrivateRoute>
+              <RoleBaseRoutes requiredRole={["admin","branchAdmin"]}>
+                <BranchAdminDashboard />
+              </RoleBaseRoutes>
+            </PrivateRoute>
+          }
+        >
+          {/* Nested routes use RELATIVE paths here */}
+          <Route index element={<BranchAdminSummary />} />
+          <Route path="profile/:id" element={<ViewBranchAdmins />} />
+          <Route path="customers" element={<ListCustomer />} />
+          <Route path="setting" element={<Setting />} />
+          <Route path="add-customer" element={<AddCustomer />} />
+          <Route path="customer/:id" element={<ViewCustomer />} />
+          <Route path="customer/edit/:id" element={<EditCustomer />} />
         </Route>
+
       </Routes>
     </BrowserRouter>
   );
