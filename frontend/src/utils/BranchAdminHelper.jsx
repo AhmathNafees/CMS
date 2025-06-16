@@ -87,7 +87,7 @@ export const BranchAdminButtons = ({ _id, onDelete }) => {
       >View</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
       onClick={()=> navigate(`/admin-dashboard/branchAdmins/edit/${_id}`)}>Edit</button>
-      <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer" >Customers</button>
+      <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer" onClick={()=> navigate(`/admin-dashboard/customers/${_id}`)} >Customers</button>
       <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button>
     </div>
   )

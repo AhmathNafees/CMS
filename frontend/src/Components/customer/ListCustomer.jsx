@@ -1,26 +1,41 @@
 import React, { useEffect, useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { CustomerButtons,columns } from '../../utils/CustomerHelper';
 
 const ListCustomer = () => {
+  const { branchAdminId } = useParams();
   const [customers, setCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
 
-
+  const userRole = localStorage.getItem("userRole");  // "admin" or "branchAdmin"
+  const userId = localStorage.getItem("userId");
+  // console.log(userRole)
 
   useEffect(()=>{
     const fetchCustomers = async()=>{
       setBaLoading(true)
       try{
-        const response = await axios.get('http://localhost:3000/api/customer/',{
+        let url = "";
+
+        if (userRole === "admin" && branchAdminId) {
+          // Main admin viewing a branch admin's customers
+          url = `http://localhost:3000/api/customer/byBranchAdmin/${branchAdminId}`;
+        } else if (userRole === "branchAdmin") {
+          // Branch admin logged in; show their own Branch customers
+          url = `http://localhost:3000/api/customer/`;
+        } else if (userRole === "admin") {
+          // Main admin viewing all
+          url = `http://localhost:3000/api/customer/`;
+        }
+        const response = await axios.get(url,{
           headers: {
             Authorization :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
-        console.log(response.data)
+        // console.log(response.data)
         if(response.data.success){
           let sno =1;
           const data =await response.data.customers.map((customer)=>(
@@ -62,6 +77,7 @@ const ListCustomer = () => {
   setFilteredCustomers(records);
   };
 
+
   return (
     <div className='p-5 flex-1'>
         <div className='text-center'>
@@ -71,7 +87,14 @@ const ListCustomer = () => {
           <input type="text" placeholder='Search By Customer Name' 
           className=' px-4 py-0.5 ml-1 border rounded w-65' onChange={handleFilter}
           />
-          <Link to="/branchAdmin-dashboard/add-customer" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Customer</Link>
+          {userRole === "branchAdmin" && (
+            <Link
+              to="/branchAdmin-dashboard/add-customer"
+              className="px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white"
+            >
+              Add New Customer
+            </Link>
+          )}
         </div>
         <div className='mt-5'>
           <DataTable

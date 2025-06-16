@@ -15,10 +15,14 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post("http://localhost:3000/api/auth/login", { email, password });
+      console.log(response.data)
       if (response.data.success) {
         login(response.data.user);
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("refreshToken", response.data.refreshToken);
+        localStorage.setItem("userRole", response.data.user.role);// "admin" or "branchAdmin"
+        localStorage.setItem("userId", response.data.user._id); // Needed to fetch user's customers
+
         if (response.data.user.role === "admin") {
           navigate('/admin-dashboard');
         } else {

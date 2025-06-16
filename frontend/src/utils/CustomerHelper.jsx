@@ -41,6 +41,7 @@ export const columns = [
     name: "Created",
     selector: (row)=> row.createAt,
     width:"130px",
+    sortable:true,
     
   },
   {
@@ -50,7 +51,7 @@ export const columns = [
   },
 ]
 
-export const CustomerButtons = ({ _id, onDelete }) => {
+export const CustomerButtons = ({ _id, onDelete, role}) => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -75,14 +76,20 @@ export const CustomerButtons = ({ _id, onDelete }) => {
       console.log("Customer delete canceled");
     }
   };
+  const userRole = localStorage.getItem("userRole");
+
   return(
     <div className=" flex space-x-3">
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/branchAdmin-dashboard/customer/${_id}`)}
       >View</button>
-      <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
-      onClick={()=> navigate(`/branchAdmin-dashboard/customer/edit/${_id}`)}>Edit</button>
-      <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button>
+      {userRole ==="branchAdmin" &&(
+        <>
+        <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
+        onClick={()=> navigate(`/branchAdmin-dashboard/customer/edit/${_id}`)}>Edit</button>
+        <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button></>
+      )}
+      
     </div>
   )
 };

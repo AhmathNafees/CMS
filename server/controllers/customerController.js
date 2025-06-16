@@ -212,6 +212,29 @@ const deleteCustomer = async (req, res) => {
     return res.status(500).json({ success: false, error: "Server error while deleting customer" });
   }
 };
+//for Main Admin
+const getCustomersByBranchAdmin = async (req, res) => {
+  try {
+    const { branchAdminId } = req.params;
+
+    const branchAdmin = await BranchAdmin.findById(branchAdminId);
+
+    if (!branchAdmin) {
+      return res.status(404).json({ success: false, error: "Branch Admin not found" });
+    }
+
+    const customers = await Customer.find({ branchId: branchAdmin.branch })
+      .populate("userId", { password: 0 })
+      .populate("branchId");
+
+    return res.status(200).json({ success: true, customers });
+
+  } catch (error) {
+    console.error("Error fetching customers by branch admin:", error.message);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
 
 
-export {addCustomer,getCustomers, getCustomer, editCustomer, deleteCustomer}
+
+export {addCustomer,getCustomers, getCustomer, editCustomer, deleteCustomer,getCustomersByBranchAdmin}

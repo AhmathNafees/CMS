@@ -40,6 +40,10 @@ const ViewCustomer = () => {
                 <img src={`http://localhost:3000/${customer.profileImage}`} alt="" className=' rounded-full border w-72' />
             </div>
             <div>
+              <p className=' text-lg font-bold'>Passport Image</p>
+              <img src={`http://localhost:3000/${customer.passportImage}`} alt="" className=' rounded-md w-72 border-2'  />
+            </div>
+            <div>
                 <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Name:</p>
                     <p className=' font-medium'>{customer.name}</p>
@@ -81,9 +85,7 @@ const ViewCustomer = () => {
                     <p className=' text-lg font-bold'>Marital Status:</p>
                     <p className=' font-medium'>{customer.maritalStatus}</p>
                 </div>
-                <div>
-                  <img src={`http://localhost:3000/${customer.passportImage}`} alt="" className=' rounded-full border w-72' />
-                </div>
+                
                 <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Branch Admin:</p>
                     <p className=' font-medium'>{customer.userId.name}</p>
@@ -93,6 +95,7 @@ const ViewCustomer = () => {
                     <p className=' font-medium'>{customer.branchId.branch_name}</p>
                 </div>
             </div>
+            
         </div>
         
     </div>
