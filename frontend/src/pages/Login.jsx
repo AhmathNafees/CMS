@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -37,7 +38,7 @@ const Login = () => {
       }
     }
   };
-
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className='flex flex-col items-center h-screen justify-center bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6'>
       <h2 className='font-signika text-3xl text-white'>Customer Management System</h2>
@@ -55,17 +56,24 @@ const Login = () => {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            
           </div>
-          <div className='mb-4'>
+          <div className='mb-4 relative'>
             <label htmlFor="password" className='block text-gray-700'>Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder='*******'
               id='password'
               className='w-full px-3 py-2 border rounded-md'
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <div
+              className="absolute inset-y-10 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+            </div>
           </div>
           <div className='mb-4 flex items-center justify-between'>
             <label className='inline-flex items-center'>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { fetchBranches } from '../../utils/BranchAdminHelper'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
 const AddBranchAdmin = () => {
     const  [branches, setBranches] = useState([])
@@ -48,7 +49,7 @@ const AddBranchAdmin = () => {
 
 
     }
-    
+    const [showPassword, setShowPassword] = useState(false);
   return (
     <div className='max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md'>
         <h2 className=' text-2xl font-bold mb-6'>Add New Branch Admin</h2>
@@ -126,11 +127,17 @@ const AddBranchAdmin = () => {
                 </div>
 
                 {/* Password */}
-                <div>
+                <div className=' relative'>
                     <label htmlFor="baPassword" className=' block text-sm font-medium text-gray-700'>
                         Password
                     </label>
-                    <input type="password" name='password' id='baPassword' placeholder='********' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type={showPassword ? "text" : "password"} name='password' id='baPassword' placeholder='********' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <div
+                        className="absolute inset-y-10 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+                    </div>
                 </div>
 
                 {/* Role */}

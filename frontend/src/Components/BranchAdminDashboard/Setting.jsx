@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthProvider';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import axios from 'axios';
 
 
@@ -46,7 +47,7 @@ const Setting = () => {
             }
         }
     }
-
+  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className='flex flex-col items-center h-screen justify-center bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6'>
       <h2 className='font-signika text-3xl text-white'>Customer Management System</h2>
@@ -54,10 +55,10 @@ const Setting = () => {
         <h2 className='text-2xl font-bold mb-4 text-center' >Change Password</h2>
         {error && <p className="text-red-600 text-center mb-4">{error}</p>}
         <form onSubmit={handelSubmit}>
-          <div className='mb-4'>
+          <div className='mb-4 relative'>
             <label htmlFor="oldPassword" className='block text-gray-700'>Old Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder='Old Password'
               id='oldPassword'
               name='oldPassword'
@@ -65,11 +66,17 @@ const Setting = () => {
               onChange={handleChange}
               required
             />
+            <div
+              className="absolute inset-y-10 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+            </div>
           </div>
-          <div className='mb-4'>
+          <div className='mb-4 relative'>
             <label htmlFor="newPassword" className='block text-gray-700'>New Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder='New Password'
               name='newPassword'
               id='newPassword'
@@ -77,11 +84,17 @@ const Setting = () => {
               onChange={handleChange}
               required
             />
+            <div
+              className="absolute inset-y-10 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+            </div>
           </div>
-          <div className='mb-4'>
+          <div className='mb-4 relative' >
             <label htmlFor="confirmPassword" className='block text-gray-700'>Confirm Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder='Confirm Password'
               name='confirmPassword'
               id='confirmPassword'
@@ -89,6 +102,12 @@ const Setting = () => {
               onChange={handleChange}
               required
             />
+            <div
+              className="absolute inset-y-10 right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <AiOutlineEye size={20} /> : <AiOutlineEyeInvisible size={20} />}
+            </div>
           </div>
 
           <div className='mb-4'>
