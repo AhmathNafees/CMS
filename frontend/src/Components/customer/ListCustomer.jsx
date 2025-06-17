@@ -2,17 +2,51 @@ import React, { useEffect, useState } from 'react'
 import {Link, useParams} from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
-import { CustomerButtons,columns } from '../../utils/CustomerHelper';
+import { CustomerButtons,columns as baseColumns} from '../../utils/CustomerHelper';
 
 const ListCustomer = () => {
   const { branchAdminId } = useParams();
   const [customers, setCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
+   const [selectedRowId, setSelectedRowId] = useState(null);
 
   const userRole = localStorage.getItem("userRole");  // "admin" or "branchAdmin"
   const userId = localStorage.getItem("userId");
   // console.log(userRole)
+
+  
+  const handleStatusChange = async (customerId, newStatus) => {
+    try {
+      const res = await axios.patch(
+        `http://localhost:3000/api/customer/${customerId}/status`,
+        { status: newStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      // Update state locally
+      setCustomers((prev) =>
+        prev.map((c) =>
+          c._id === customerId ? { ...c, status: newStatus } : c
+        )
+      );
+      setFilteredCustomers((prev) =>
+        prev.map((c) =>
+          c._id === customerId ? { ...c, status: newStatus } : c
+        )
+      );
+    } catch (error) {
+      alert("Failed to update status");
+      console.error(error);
+    }
+  };
+  // ✅ Call baseColumns with the handler
+  const dynamicColumns = baseColumns(handleStatusChange);
+
 
   useEffect(()=>{
     const fetchCustomers = async()=>{
@@ -47,6 +81,7 @@ const ListCustomer = () => {
               name:customer.name,
               pno:customer.pno,
               nic:customer.nic,
+              status: customer.status,
               createAt: new Date(customer.createAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
               day: "numeric"}),
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
@@ -77,6 +112,21 @@ const ListCustomer = () => {
   setFilteredCustomers(records);
   };
 
+  // Handler when a row is clicked; toggle selection
+  const handleRowClick = (row) => {
+    setSelectedRowId((prevId) => (prevId === row._id ? null : row._id));
+  };
+  // conditionalRowStyles for clicked (selected) row
+  const conditionalRowStyles = [
+    {
+      when: (row) => row._id === selectedRowId,
+      style: {
+        transition: 'all 1s ease-in-out',
+        height: '170px',
+        alignItems: 'flex-start',
+      },
+    },
+  ];
 
   return (
     <div className='p-5 flex-1'>
@@ -96,11 +146,32 @@ const ListCustomer = () => {
             </Link>
           )}
         </div>
-        <div className='mt-5'>
+        <div className='mt-5 '>
           <DataTable
-            columns={columns}
+            columns={dynamicColumns}
             data={filteredCustomers}
             pagination
+            onRowClicked={handleRowClick}
+            conditionalRowStyles={conditionalRowStyles}
+            customStyles={{
+              pagination: {
+                style: {
+                  backgroundColor: '#f1f5f9',
+                  borderTop: '1px solid #ccc',
+                },
+              },
+              rows: {
+                style: {
+                  minHeight: '72px', // adjust as needed
+                  marginTop:"10px",
+                  // '&:hover':{
+                  //   transition: 'all 1s ease-in-out',
+                  //   height: '170px',
+                  //   alignItems: 'flex-start', // pushes content to top
+                  // }
+                },
+              },
+            }}
           />
         </div>
       </div>

@@ -15,6 +15,10 @@ const customerSchema = new Schema({
     passportImage: { type: String },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
+    status: {
+    type: String,
+    enum: ['begin', 'processing', 'complete', 'reject'],
+    default: 'begin'},
     createAt:{type: Date, default:Date.now},
     UpdateAt:{type: Date, default:Date.now},
 

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CustomStatusDropdown from './CustomStatusDropdown';
 
-export const columns = [
+export const columns = (handleStatusChange) =>[
   {
     name: "S No",
     selector: (row)=> row.sno,
@@ -20,6 +21,19 @@ export const columns = [
     width:"130px",
     center:"true",
   },
+    {
+    name: 'Status',
+    cell: (row) => (
+      <CustomStatusDropdown
+        value={row.status}
+        rowId={row._id}
+        handleStatusChange={handleStatusChange}
+      />
+    ),
+    width: '170px',
+    center:"true",
+    
+  },
   {
     name: "Branch Admin",
     selector: (row)=> row.Admin_name,
@@ -32,11 +46,11 @@ export const columns = [
     sortable : true,
     width:"150px",
   },
-  {
-    name: "Phone Number",
-    selector: (row)=> row.pno,
-    width:"150px",
-  },
+  // {
+  //   name: "Phone Number",
+  //   selector: (row)=> row.pno,
+  //   width:"150px",
+  // },
   {
     name: "Created",
     selector: (row)=> row.createAt,
@@ -50,7 +64,7 @@ export const columns = [
     center:"true",
   },
 ]
-
+  
 export const CustomerButtons = ({ _id, onDelete, role}) => {
   const navigate = useNavigate();
 
