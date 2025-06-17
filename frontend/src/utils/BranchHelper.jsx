@@ -18,7 +18,7 @@ export const columns = [
   },
 ]
 
-export const BranchButtons = ({_id, onBranchDelete})=>{
+export const BranchButtons = ({_id, onBranchDelete, branchId})=>{
   const navigate = useNavigate();
 
   const handleDelete=async(id)=>{
@@ -49,6 +49,9 @@ export const BranchButtons = ({_id, onBranchDelete})=>{
       <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/admin-dashboard/branchadmins/view/${_id}`)}
       >View Admins</button>
+      <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
+        onClick={()=> navigate(`/admin-dashboard/customer/byBranch/${branchId}`)}
+      >View Customer</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/admin-dashboard/branch/${_id}`)}
       >Edit</button>

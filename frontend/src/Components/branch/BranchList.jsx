@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import { BranchButtons, columns } from '../../utils/BranchHelper';
 import axios from 'axios';
 
 const BranchList = () => {
+  const { branchId } = useParams // will now be defined
   const [branches, setBranches]= useState([]);
   const [braLoading, setBraLoading] = useState(false)
   const [filteredBranches, setFilteredBranches] = useState([])
@@ -51,7 +52,7 @@ const BranchList = () => {
               _id:branch._id,
               sno:sno++,
               branch_name:branch.branch_name,
-              action: (<BranchButtons _id={branch._id} onBranchDelete={onBranchDelete}/>),
+              action: (<BranchButtons _id={branch._id} onBranchDelete={onBranchDelete} branchId={branch._id}/>),
             }
           ))
           setBranches(data)

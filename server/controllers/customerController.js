@@ -1,6 +1,7 @@
 import BranchAdmin from "../models/BranchAdminModel.js"
 import Customer from "../models/customerModel.js"
 import User from "../models/User.js";
+import Branch from "../models/BranchModel.js"
 import fs from "fs";
 import path from "path";
 
@@ -216,14 +217,32 @@ const deleteCustomer = async (req, res) => {
 const getCustomersByBranchAdmin = async (req, res) => {
   try {
     const { branchAdminId } = req.params;
-
     const branchAdmin = await BranchAdmin.findById(branchAdminId);
 
     if (!branchAdmin) {
       return res.status(404).json({ success: false, error: "Branch Admin not found" });
     }
 
-    const customers = await Customer.find({ branchId: branchAdmin.branch })
+    const customers = await Customer.find({ userId: branchAdmin.userId })
+      .populate("userId", { password: 0 })
+      .populate("branchId");
+
+    return res.status(200).json({ success: true, customers });
+
+  } catch (error) {
+    console.error("Error fetching customers by branch admin:", error.message);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
+const getCustomersByBranch = async (req, res) => {
+  try {
+    const { branchId } = req.params;
+
+    if (!branchId) {
+      return res.status(404).json({ success: false, error: "Branch Admin not found" });
+    }
+
+    const customers = await Customer.find({ branchId})
       .populate("userId", { password: 0 })
       .populate("branchId");
 
@@ -237,4 +256,4 @@ const getCustomersByBranchAdmin = async (req, res) => {
 
 
 
-export {addCustomer,getCustomers, getCustomer, editCustomer, deleteCustomer,getCustomersByBranchAdmin}
+export {addCustomer,getCustomers, getCustomer, editCustomer, deleteCustomer,getCustomersByBranchAdmin, getCustomersByBranch}

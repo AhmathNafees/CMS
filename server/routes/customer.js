@@ -1,6 +1,6 @@
 import express from 'express'
 import authMiddleware from '../middleware/authMiddleware.js'
-import { addCustomer, getCustomers,getCustomer, editCustomer,deleteCustomer, getCustomersByBranchAdmin } from '../controllers/customerController.js'
+import { addCustomer, getCustomers,getCustomer, editCustomer,deleteCustomer, getCustomersByBranchAdmin, getCustomersByBranch } from '../controllers/customerController.js'
 import multer from 'multer'
 import path from 'path'
 import Customer from '../models/customerModel.js'
@@ -36,7 +36,9 @@ router.put('/:id',authMiddleware,upload.fields([
   ]), editCustomer)
 router.delete("/:id", authMiddleware, deleteCustomer);
 router.get('/byBranchAdmin/:branchAdminId', authMiddleware, getCustomersByBranchAdmin);
+router.get('/byBranch/:branchId', authMiddleware, getCustomersByBranch);
 
+//for Status Update
 router.patch('/:id/status', authMiddleware, async (req, res) => {
   try {
     const { status } = req.body;

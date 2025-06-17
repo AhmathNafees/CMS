@@ -5,7 +5,7 @@ import axios from 'axios';
 import { CustomerButtons,columns as baseColumns} from '../../utils/CustomerHelper';
 
 const ListCustomer = () => {
-  const { branchAdminId } = useParams();
+  const { branchAdminId,branchId } = useParams();
   const [customers, setCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
@@ -55,7 +55,6 @@ const ListCustomer = () => {
   // ✅ Call baseColumns with the handler
   const dynamicColumns = baseColumns(handleStatusChange);
 
-
   useEffect(()=>{
     const fetchCustomers = async()=>{
       setBaLoading(true)
@@ -65,7 +64,10 @@ const ListCustomer = () => {
         if (userRole === "admin" && branchAdminId) {
           // Main admin viewing a branch admin's customers
           url = `http://localhost:3000/api/customer/byBranchAdmin/${branchAdminId}`;
-        } else if (userRole === "branchAdmin") {
+        } else if (userRole === "admin" && branchId ) {
+          // Main admin logged in; show Branch's customers
+          url = `http://localhost:3000/api/customer/byBranch/${branchId}`;
+        }else if (userRole === "branchAdmin") {
           // Branch admin logged in; show their own Branch customers
           url = `http://localhost:3000/api/customer/`;
         } else if (userRole === "admin") {
@@ -110,6 +112,8 @@ const ListCustomer = () => {
       }
     };
     fetchCustomers();
+    
+
   },[]);
 
   const handleFilter = (e) => {
@@ -157,13 +161,17 @@ const ListCustomer = () => {
           <div className='text-center'>
             <h3 className=' text-2xl font-bold'>Manage Customers</h3>
           </div>
-          {userRole === "branchAdmin" && (
+          {userRole === "branchAdmin" ? (
             <Link
               to="/branchAdmin-dashboard/add-customer"
               className="px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white"
             >
               Add New Customer
             </Link>
+          ): (
+            <div className="text-sm text-gray-500">
+              {/* You are not authorized to add a customer. */}
+            </div>
           )}
         </div>
         <div className='items-start mt-5'>
