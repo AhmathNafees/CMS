@@ -9,7 +9,15 @@ const ListCustomer = () => {
   const [customers, setCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
-   const [selectedRowId, setSelectedRowId] = useState(null);
+  const [selectedRowId, setSelectedRowId] = useState(null);
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // HandleStatusFilter
+  const handleStatusFilter = (e) => {
+    setStatusFilter(e.target.value);
+  };
+
 
   const userRole = localStorage.getItem("userRole");  // "admin" or "branchAdmin"
   const userId = localStorage.getItem("userId");
@@ -105,11 +113,12 @@ const ListCustomer = () => {
   },[]);
 
   const handleFilter = (e) => {
-  const searchTerm = e.target.value.toLowerCase();
-  const records = customers.filter((cus) =>
-    cus.name.toLowerCase().includes(searchTerm)
-  );
-  setFilteredCustomers(records);
+    setSearchTerm(e.target.value);
+    const searchTerm = e.target.value.toLowerCase();
+    const records = customers.filter((cus) =>
+      cus.name.toLowerCase().includes(searchTerm)
+    );
+    setFilteredCustomers(records);
   };
 
   // Handler when a row is clicked; toggle selection
@@ -128,15 +137,26 @@ const ListCustomer = () => {
     },
   ];
 
+  // For Status Filter
+  useEffect(() => {
+    const filtered = customers.filter((cus) => {
+      const nameMatch = cus.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const statusMatch = statusFilter === "all" || cus.status === statusFilter;
+      return nameMatch && statusMatch;
+    });
+    setFilteredCustomers(filtered);
+  }, [customers, searchTerm, statusFilter]);
+
   return (
     <div className='p-5 flex-1'>
-        <div className='text-center'>
-          <h3 className=' text-2xl font-bold'>Manage Customers</h3>
-        </div>
+        
         <div className='flex justify-between items-center'>
           <input type="text" placeholder='Search By Customer Name' 
           className=' px-4 py-0.5 ml-1 border rounded w-65' onChange={handleFilter}
           />
+          <div className='text-center'>
+            <h3 className=' text-2xl font-bold'>Manage Customers</h3>
+          </div>
           {userRole === "branchAdmin" && (
             <Link
               to="/branchAdmin-dashboard/add-customer"
@@ -145,6 +165,19 @@ const ListCustomer = () => {
               Add New Customer
             </Link>
           )}
+        </div>
+        <div className='items-start mt-5'>
+          <select
+            className="border px-3 py-1 rounded"
+            value={statusFilter}
+            onChange={handleStatusFilter}
+          >
+            <option value="all">All Statuses</option>
+            <option value="begin">Begin</option>
+            <option value="processing">Processing</option>
+            <option value="complete">Complete</option>
+            <option value="reject">Reject</option>
+          </select>
         </div>
         <div className='mt-5 '>
           <DataTable
