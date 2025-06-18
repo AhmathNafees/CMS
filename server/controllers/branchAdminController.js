@@ -76,14 +76,26 @@ const addBranchAdmin =async (req, res)=>{
     }
 }
 
-const getBranchAdmins = async(req,res)=>{
-    try{
-        const branchAdmins = await BranchAdmin.find().populate('userId',{password:0}).populate('branch') //password 0 means not taken
-        return res.status(200).json({success:true, branchAdmins})
-    }catch(error){
-        return res.status(500).json({success: false, error:"Server Error in get Branch Admins"})
-    }
-}
+const getBranchAdmins = async (req, res) => {
+  try {
+    // Fetch all BranchAdmin documents with user populated only if role is "admin" or "branchAdmin"
+    const branchAdmins = await BranchAdmin.find()
+      .populate({
+        path: 'userId',
+        match: { role: { $in: ['admin', 'branchAdmin'] } }, // only include if role is admin or branchAdmin
+        select: '-password' // exclude password
+      })
+      .populate('branch');
+
+    // Remove any BranchAdmin where the populated userId is null (i.e., role didn't match).
+    const filteredAdmins = branchAdmins.filter(admin => admin.userId !== null);
+
+    return res.status(200).json({ success: true, branchAdmins: filteredAdmins });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: "Server Error in get Branch Admins" });
+  }
+};
+
 // This is for view function in got value
 const getBranchAdmin = async(req,res)=>{
     let branchAdmin;
@@ -210,4 +222,26 @@ const getBranchAdminsByBranch = async (req, res) => {
   }
 };
 
-export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin, deleteBranchAdmin, getBranchAdminsByBranch}
+//for customercare
+const getCustomerCareAdmins = async (req, res) => {
+  try {
+    const customerCareAdmins = await BranchAdmin.find()
+      .populate({
+        path: 'userId',
+        match: { role: 'customerCare' },  // <-- role is on the User document
+        select: '-password',              // <-- exclude password
+      })
+      .populate('branch');
+
+    // Remove BranchAdmins whose userId didn’t match (null due to failed match)
+    const filtered = customerCareAdmins.filter(admin => admin.userId !== null);
+
+    return res.status(200).json({ success: true, branchAdmins: filtered });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ success: false, error: "Server error fetching Customer Care admins" });
+  }
+};
+
+
+export {addBranchAdmin, upload, getBranchAdmins, getBranchAdmin, updateBranchAdmin, deleteBranchAdmin, getBranchAdminsByBranch, getCustomerCareAdmins}

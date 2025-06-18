@@ -24,6 +24,13 @@ export const columns = [
     name: "Branch",
     selector: (row)=> row.branch_name,
     sortable : true,
+    width:"130px",
+  },
+  {
+    name: "Role",
+    selector: (row)=> row.role,
+    sortable : true,
+    width:"130px",
   },
   {
     name: "NIC",

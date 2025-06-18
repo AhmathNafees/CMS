@@ -39,7 +39,15 @@ const AddBranchAdmin = () => {
                 headers:{"Authorization" : `Bearer ${localStorage.getItem("accessToken")}`}
             })
         if(response.data.success){
-            navigate("/admin-dashboard/branchadmins")
+            // Conditionally navigate based on role
+            // Check the role from formData.
+            // When you update the role field in your form via handleChange, it is stored in your formData.
+            if (formData.role === "customerCare") {
+                navigate("/admin-dashboard/customercares");
+            } else {
+                // For "branchAdmin" (or any role not equal to customerCare)
+                navigate("/admin-dashboard/branchadmins");
+            }
         }
         }catch(error){
             if(error.response && !error.response.data.success){
@@ -52,7 +60,7 @@ const AddBranchAdmin = () => {
     const [showPassword, setShowPassword] = useState(false);
   return (
     <div className='max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md'>
-        <h2 className=' text-2xl font-bold mb-6'>Add New Branch Admin</h2>
+        <h2 className=' text-2xl font-bold mb-6'>Add New Admin</h2>
         <form action="" onSubmit={handleSubmit}>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 {/* Name */}
@@ -68,7 +76,7 @@ const AddBranchAdmin = () => {
                     <label htmlFor="baEmail" className=' block text-sm font-medium text-gray-700'>
                         Email Address
                     </label>
-                    <input type="email" name='email' id='baEmail' placeholder='Enter Email / Gmail' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} />
+                    <input type="email" name='email' id='baEmail' placeholder='Enter Email (for login)' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} />
                 </div>
 
                 {/* Branch Admin ID */}
@@ -149,6 +157,7 @@ const AddBranchAdmin = () => {
                         <option value="">Select Role</option>
                         <option value="admin">Main Admin</option>
                         <option value="branchAdmin">Branch Admin</option>
+                        <option value="customerCare">Customer Care</option>
                     </select>
                 </div>
 
@@ -161,7 +170,7 @@ const AddBranchAdmin = () => {
                 </div>
             </div>
             <button className='w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md'>
-                Add Branch Admin
+                Add Admin
             </button>
         </form>
 

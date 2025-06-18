@@ -4,7 +4,7 @@ import { BranchAdminButtons, columns } from '../../utils/BranchAdminHelper';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 
-const ListBranchAdmin = ({ role }) => {
+const ListCustomerCare = () => {
   const [branchAdmins, setBranchAdmins]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredBranchAdmins, setFilteredBranchAdmins] = useState([])
@@ -15,16 +15,11 @@ const ListBranchAdmin = ({ role }) => {
     const fetchbranchAdmins = async()=>{
       setBaLoading(true)
       try{
-          const endpoint = role === 'customerCare'
-            ? 'http://localhost:3000/api/customerCare'
-            : 'http://localhost:3000/api/branchAdmin';
-
-          const response = await axios.get(endpoint, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            },
-          });
-          // console.log(response.data)
+        const response = await axios.get('http://localhost:3000/api/branchAdmin',{
+          headers: {
+            "Authorization" :`Bearer ${localStorage.getItem('accessToken')}`
+          }
+        })
         if(response.data.success){
           let sno =1;
           const data =await response.data.branchAdmins.map((bAdmin)=>(
@@ -33,8 +28,7 @@ const ListBranchAdmin = ({ role }) => {
               sno:sno++,
               branch_name:bAdmin.branch.branch_name,
               name:bAdmin.userId.name,
-              role:bAdmin.userId.role,
-              dob: new Date (bAdmin.dob).toDateString(),
+              dob: new Date (bAdmin.dob).toDateString,
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${bAdmin.userId.profileImage}`}/>,
               nic:bAdmin.nic,
               action: (<BranchAdminButtons _id={bAdmin._id} onDelete={fetchbranchAdmins}/>),
@@ -53,7 +47,7 @@ const ListBranchAdmin = ({ role }) => {
       }
     };
     fetchbranchAdmins();
-  },[role]);
+  },[]);
 
   const handleFilter = (e) => {
   const searchTerm = e.target.value.toLowerCase();
@@ -66,13 +60,13 @@ const ListBranchAdmin = ({ role }) => {
   return (
     <div className='p-5 flex-1'>
         <div className='text-center'>
-          <h3 className=' text-2xl font-bold'>{role === 'customerCare' ? 'Manage Customer Care Admins' : 'Manage Branch Admins'}</h3>
+          <h3 className=' text-2xl font-bold'>Manage Customer Care</h3>
         </div>
         <div className='flex justify-between items-center'>
-          <input type="text" placeholder='Search By Branch Admin Name' 
-          className=' px-4 py-0.5 ml-1 border rounded w-65' onChange={handleFilter}
+          <input type="text" placeholder='Search By Customer Care Name' 
+          className=' px-4 py-0.5 ml-1 border rounded w-65' 
           />
-          <Link to="/admin-dashboard/add-branchAdmin" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New {role === 'customerCare' ? 'Customer Care Admin' : 'Branch Admin'}</Link>
+          <Link to="/admin-dashboard/add-" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Customer Care</Link>
         </div>
         <div className='mt-5'>
           <DataTable
@@ -85,4 +79,4 @@ const ListBranchAdmin = ({ role }) => {
   )
 }
 
-export default ListBranchAdmin
+export default ListCustomerCare

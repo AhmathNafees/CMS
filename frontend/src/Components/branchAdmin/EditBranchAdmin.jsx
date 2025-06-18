@@ -86,7 +86,12 @@ const EditBranchAdmin = () => {
                 headers:{"Authorization" : `Bearer ${localStorage.getItem("accessToken")}`,"Content-Type": "multipart/form-data",}
             })
         if(response.data.success){
-            navigate("/admin-dashboard/branchadmins")
+            // Conditionally navigate based on role
+            if (branchAdmin.role === "customerCare") {
+                navigate("/admin-dashboard/customercares");
+            } else {
+                navigate("/admin-dashboard/branchadmins");
+            }
         }
         }catch(error){
             if(error.response && !error.response.data.success){
@@ -181,8 +186,9 @@ const EditBranchAdmin = () => {
                     </label>
                     <select  name='role' id='role' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={branchAdmin.role}>
                         <option value="">Select Role</option>
-                        <option value="mainAdmin">Main Admin</option>
+                        <option value="admin">Main Admin</option>
                         <option value="branchAdmin">Branch Admin</option>
+                        <option value="customerCare">Customer Care</option>
                     </select>
                 </div>
 
