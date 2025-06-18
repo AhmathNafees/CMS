@@ -86,6 +86,8 @@ function App() {
           <Route path="customer/edit/:id" element={<EditCustomer />} />
         </Route>
 
+
+          {/* {For Castomercare} */}
         <Route
           path="/customerCare-dashboard"
           element={
