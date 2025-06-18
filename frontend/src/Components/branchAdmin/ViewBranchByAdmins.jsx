@@ -26,6 +26,7 @@ const ViewBranchByAdmins = () => {
           _id: bAdmin._id,
           sno: sno++,
           name: bAdmin.userId.name,
+          role:bAdmin.userId.role,
           branch_name: bAdmin.branch.branch_name,
           dob: new Date(bAdmin.dob).toDateString(),
           profileImage: (
@@ -61,8 +62,9 @@ const ViewBranchByAdmins = () => {
     { name: "S No", selector: (row) => row.sno, sortable: true,width:"75px", },
     { name: "Name", selector: (row) => row.name, sortable: true, width:"100px", },
     { name: "Profile", selector: (row) => row.profileImage,width:"75px", },
-    { name: "NIC", selector: (row) => row.nic },
+    { name: "Role", selector: (row) => row.role },
     { name: "Branch", selector: (row) => row.branch_name },
+    { name: "NIC", selector: (row) => row.nic },
     { name: "Action", selector: (row) => row.action,center:true },
   ];
 

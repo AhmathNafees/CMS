@@ -20,7 +20,9 @@ import Setting from "./Components/BranchAdminDashboard/Setting";
 import AddCustomer from "./Components/customer/AddCustomer";
 import ViewCustomer from "./Components/customer/ViewCustomer";
 import EditCustomer from "./Components/customer/EditCustomer";
-import ListCustomerCare from "./Components/customerCare/ListCustomerCare";
+import CustomerCareDashboard from "./pages/CustomerCareDashboard";
+import ListIndexCustomer from "./Components/indexCustomer/ListIndexCustomer";
+import AddIndexCustomer from "./Components/indexCustomer/AddIndexCustomer";
 
 
 function App() {
@@ -63,7 +65,7 @@ function App() {
 
 
         </Route>
-          
+        
         <Route
           path="/branchAdmin-dashboard"
           element={
@@ -82,6 +84,27 @@ function App() {
           <Route path="add-customer" element={<AddCustomer />} />
           <Route path="customer/:id" element={<ViewCustomer />} />
           <Route path="customer/edit/:id" element={<EditCustomer />} />
+        </Route>
+
+        <Route
+          path="/customerCare-dashboard"
+          element={
+            <PrivateRoute>
+              <RoleBaseRoutes requiredRole={["admin","customerCare"]}>
+                <CustomerCareDashboard />
+              </RoleBaseRoutes>
+            </PrivateRoute>
+          }
+        >
+          {/* Nested routes use RELATIVE paths here */}
+          <Route index element={<BranchAdminSummary />} />
+          <Route path="profile/:id" element={<ViewBranchAdmins />} />
+          <Route path="setting" element={<Setting />} />
+          <Route path="indexCustomers" element={<ListIndexCustomer />} />
+          <Route path="add-indexCustomer" element={<AddIndexCustomer />} />
+          {/* 
+          <Route path="customer/:id" element={<ViewCustomer />} />
+          <Route path="customer/edit/:id" element={<EditCustomer />} /> */}
         </Route>
 
       </Routes>

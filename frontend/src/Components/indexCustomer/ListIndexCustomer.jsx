@@ -4,7 +4,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { CustomerButtons,columns as baseColumns} from '../../utils/CustomerHelper';
 
-const ListCustomer = () => {
+const ListIndexCustomer = () => {
   const { branchAdminId,branchId } = useParams();
   const [customers, setCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
@@ -218,4 +218,4 @@ const ListCustomer = () => {
   )
 }
 
-export default ListCustomer
+export default ListIndexCustomer

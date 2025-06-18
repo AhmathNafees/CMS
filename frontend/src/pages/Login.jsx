@@ -26,8 +26,10 @@ const Login = () => {
 
         if (response.data.user.role === "admin") {
           navigate('/admin-dashboard');
-        } else {
+        }else if(response.data.user.role === "branchAdmin"){
           navigate('/branchAdmin-dashboard');
+        }else {
+          navigate('/customerCare-dashboard');
         }
       }
     } catch (error) {

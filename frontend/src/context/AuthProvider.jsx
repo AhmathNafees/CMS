@@ -47,6 +47,8 @@ export const AuthProvider = ({ children }) => {
           }
         } else {
           setUser(null);
+          //new
+          setLoading(false)
         }
       } catch (error) {
         console.error(error);
