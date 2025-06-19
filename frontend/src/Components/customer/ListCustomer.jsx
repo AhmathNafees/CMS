@@ -162,7 +162,7 @@ const ListCustomer = () => {
           </div>
           {userRole === "branchAdmin" ? (
             <Link
-              to="/customerCare-dashboard/add-customer"
+              to="/branchAdmin-dashboard/add-customer"
               className="px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white"
             >
               Add New Customer

@@ -59,7 +59,7 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
     const confirmDelete = window.confirm("Do you really want to delete this Customer?");
     if(confirmDelete) {
       try {
-        const response = await axios.delete(`http://localhost:3000/api/customer/${_id}`, {
+        const response = await axios.delete(`http://localhost:3000/api/indexCustomer/${_id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`
           }
@@ -82,12 +82,12 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
   return(
     <div className=" flex space-x-3">
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
-        onClick={()=> navigate(`/branchAdmin-dashboard/customer/${_id}`)}
+        onClick={()=> navigate(`/customerCare-dashboard/indexCustomer/${_id}`)}
       >View</button>
-      {userRole ==="branchAdmin" &&(
+      {userRole ==="customerCare" &&(
         <>
         <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
-        onClick={()=> navigate(`/branchAdmin-dashboard/customer/edit/${_id}`)}>Edit</button>
+        onClick={()=> navigate(`/customerCare-dashboard/indexCustomer/edit/${_id}`)}>Edit</button>
         <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button></>
       )}
       

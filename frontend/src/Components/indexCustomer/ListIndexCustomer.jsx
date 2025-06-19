@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import {Link, useParams} from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
-import { CustomerButtons,columns as baseColumns} from '../../utils/IndexCustomerHelper';
+import { CustomerButtons,columns} from '../../utils/IndexCustomerHelper';
 
 const ListIndexCustomer = () => {
   const { branchAdminId,branchId } = useParams();
-  const [customers, setCustomers]= useState([]);
+  const [indexCustomers, setIndexCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
   const [searchTerm, setSearchTerm] = useState("");
@@ -24,26 +24,26 @@ const ListIndexCustomer = () => {
 
         if (userRole === "admin" && branchAdminId) {
           // Main admin viewing a branch admin's customers
-          url = `http://localhost:3000/api/customer/byBranchAdmin/${branchAdminId}`;
+          url = `http://localhost:3000/api/IndexCustomer/byBranchAdmin/${branchAdminId}`;
         } else if (userRole === "admin" && branchId ) {
           // Main admin logged in; show Branch's customers
-          url = `http://localhost:3000/api/customer/byBranch/${branchId}`;
+          url = `http://localhost:3000/api/IndexCustomer/byBranch/${branchId}`;
         }else if (userRole === "customerCare") {
           // Branch admin logged in; show their own Branch customers
-          url = `http://localhost:3000/api/customer/`;
+          url = `http://localhost:3000/api/IndexCustomer/`;
         } else if (userRole === "admin") {
           // Main admin viewing all
-          url = `http://localhost:3000/api/customer/`;
+          url = `http://localhost:3000/api/IndexCustomer/`;
         }
         const response = await axios.get(url,{
           headers: {
             Authorization :`Bearer ${localStorage.getItem('accessToken')}`
           }
         })
-        // console.log(response.data)
+        console.log(response.data)
         if(response.data.success){
           let sno =1;
-          const data =await response.data.customers.map((customer)=>(
+          const data =await response.data.indexCustomers.map((customer)=>(
             {
               _id:customer._id,
               sno:sno++,
@@ -51,8 +51,6 @@ const ListIndexCustomer = () => {
               Admin_name:customer.userId.name,
               name:customer.name,
               pno:customer.pno,
-              nic:customer.nic,
-              status: customer.status,
               createAt: new Date(customer.createAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
               day: "numeric"}),
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
@@ -60,7 +58,7 @@ const ListIndexCustomer = () => {
               action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
             }
           ))
-          setCustomers(data)
+          setIndexCustomers(data)
           setFilteredCustomers(data)
         }
       }catch(error){
@@ -80,7 +78,7 @@ const ListIndexCustomer = () => {
   const handleFilter = (e) => {
     setSearchTerm(e.target.value);
     const searchTerm = e.target.value.toLowerCase();
-    const records = customers.filter((cus) =>
+    const records = indexCustomers.filter((cus) =>
       cus.name.toLowerCase().includes(searchTerm)
     );
     setFilteredCustomers(records);
@@ -109,13 +107,13 @@ const ListIndexCustomer = () => {
             </div>
           )}
         </div>
-        {/* <div className='mt-5 '>
+        <div className='mt-5 '>
           <DataTable
-            columns={dynamicColumns}
+            columns={columns()}
             data={filteredCustomers}
             pagination
           />
-        </div> */}
+        </div>
       </div>
   )
 }

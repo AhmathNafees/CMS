@@ -14,7 +14,7 @@ const AdminSidebar = () => {
                 <FaTachometerAlt/>
                 <span>Dashboard</span>
             </NavLink>
-            <NavLink to=" "
+            <NavLink to="/admin-dashboard/indexCustomers"
             className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaUsers/>
                 <span>Index Customers</span>

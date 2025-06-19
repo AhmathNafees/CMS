@@ -58,59 +58,61 @@ const addIndexCustomer = async (req, res) => {
     return res.status(500).json({ success: false, error: "Server error" });
   }
 };
-// // for see all customers
-// const getCustomers = async (req, res) => {
-//   try {
-//     const userId = req.user.id;
+// for see all customers
+const getIndexCustomers = async (req, res) => {
+  try {
+    const userId = req.user.id;
 
-//     // Get the logged-in user
-//     const user = await User.findById(userId);
+    // Get the logged-in user
+    const user = await User.findById(userId);
 
-//     if (!user) {
-//       return res.status(404).json({ success: false, error: "User not found" });
-//     }
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User not found" });
+    }
 
-//     let customers;
+    let indexCustomers;
 
-//     if (user.role === "admin") {
-//       // ✅ Main Admin sees all customers
-//       customers = await Customer.find()
-//         .populate("userId", { password: 0 })
-//         .populate("branchId");
+    if (user.role === "admin") {
+      // ✅ Main Admin sees all customers
+      indexCustomers = await IndexCustomer.find()
+        .populate("userId", { password: 0 })
+        .populate("branchId");
 
-//     } else if (user.role === "branchAdmin") {
-//       // ✅ Branch Admin sees only their branch's customers
-//       const branchAdmin = await BranchAdmin.findOne({ userId });
+    } else if (user.role === "customerCare") {
+      // ✅ Branch Admin sees only their branch's customers
+      const branchAdmin = await BranchAdmin.findOne({ userId });
 
-//       if (!branchAdmin) {
-//         return res.status(404).json({ success: false, error: "Branch Admin not found" });
-//       }
+      if (!branchAdmin) {
+        return res.status(404).json({ success: false, error: "Branch Admin not found" });
+      }
 
-//       customers = await Customer.find({ branchId: branchAdmin.branch })
-//         .populate("userId", { password: 0 })
-//         .populate("branchId");
+      indexCustomers = await IndexCustomer.find({ branchId: branchAdmin.branch })
+        .populate("userId", { password: 0 })
+        .populate("branchId");
 
-//     } else {
-//       return res.status(403).json({ success: false, error: "Unauthorized role" });
-//     }
+    } else {
+      return res.status(403).json({ success: false, error: "Unauthorized role" });
+    }
 
-//     return res.status(200).json({ success: true, customers });
+    return res.status(200).json({ success: true, indexCustomers });
 
-//   } catch (error) {
-//     console.error("Get Customers Error:", error.message);
-//     return res.status(500).json({ success: false, error: "Server Error in getCustomers" });
-//   }
-// };
-// // for single coustomer view
-// const getCustomer = async(req,res) =>{
-//   const {id} = req.params;
-//   try{
-//       const customer = await Customer.findById({_id:id}).populate('userId',{password:0}).populate('branchId') //password 0 means not taken
-//       return res.status(200).json({success:true, customer})
-//     }catch(error){
-//       return res.status(500).json({success: false, error:"Server Error in get Customer"})
-//     }
-// }
+  } catch (error) {
+    console.error("Get Customers Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server Error in getCustomers" });
+  }
+};
+
+
+// for single coustomer view
+const getCustomer = async(req,res) =>{
+  const {id} = req.params;
+  try{
+      const customer = await Customer.findById({_id:id}).populate('userId',{password:0}).populate('branchId') //password 0 means not taken
+      return res.status(200).json({success:true, customer})
+    }catch(error){
+      return res.status(500).json({success: false, error:"Server Error in get Customer"})
+    }
+}
 
 // const editCustomer = async (req, res) => {
 //   try {
@@ -249,4 +251,4 @@ const addIndexCustomer = async (req, res) => {
 
 
 
-export {addIndexCustomer}
+export {addIndexCustomer, getIndexCustomers}

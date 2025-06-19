@@ -62,6 +62,7 @@ function App() {
             <Route path="/admin-dashboard/customer/byBranch/:branchId" element={<ListCustomer />}></Route>
             <Route path="/admin-dashboard/customercares" element={<ListBranchAdmin role="customerCare"/>}/>
             <Route path="/admin-dashboard/add-customerCare" element={<AddBranchAdmin />}/>
+            <Route path="/admin-dashboard/indexCustomers" element={<ListIndexCustomer />} />
 
 
         </Route>

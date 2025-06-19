@@ -40,7 +40,7 @@ const addCustomer = async (req, res) => {
     // Multer handles multiple files via req.files when using upload.fields
     const profileImage = req.files?.profileImage?.[0]?.filename  || "";
     const passportImage = req.files?.passportImage?.[0]?.filename  || "";
-     console.log("Uploaded Files:", req.files);
+    //  console.log("Uploaded Files:", req.files);
     const newCustomer = new Customer({
       name,
       pno,
@@ -57,7 +57,7 @@ const addCustomer = async (req, res) => {
       passport, 
       desc,
     });
-    console.log("Uploaded Files:", req.files);
+    // console.log("Uploaded Files:", req.files);
     await newCustomer.save();
     return res.status(201).json({ success: true, message: "Customer added successfully" });
   } catch (error) {
