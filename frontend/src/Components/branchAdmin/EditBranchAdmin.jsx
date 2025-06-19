@@ -22,13 +22,13 @@ const EditBranchAdmin = () => {
     const {id} = useParams()
 
     useEffect(()=>{
-            const getBranches = async()=>{
-                const branches=await fetchBranches()
-                setBranches(branches)
-            }
-            getBranches()
-            
-        },[])
+        const getBranches = async()=>{
+            const branches=await fetchBranches()
+            setBranches(branches)
+        }
+        getBranches()
+        
+    },[])
 
     useEffect(()=>{
         const fetchBranchAdmin = async()=>{
@@ -180,8 +180,8 @@ const EditBranchAdmin = () => {
                     <label htmlFor="branch" className=' block text-sm font-medium text-gray-700'>
                         Select Branch
                     </label>
-                    <select  name='branch' id='branch' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={branchAdmin.branch_name}>
-                        <option value="">Select Branch</option>
+                    <select  name='branch' id='branch' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={branchAdmin.branch}>
+                        <option value="" >Select Branch</option>
                         {branches.map(bra =>(
                             <option  key={bra._id} value={bra._id}>{bra.branch_name}</option>
                         ))}

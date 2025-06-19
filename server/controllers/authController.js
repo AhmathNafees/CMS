@@ -20,7 +20,7 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
       { _id: user._id, role: user.role },
       process.env.JWT_KEY,
-      { expiresIn: "15m" } // Access token expires in 15 minutes
+      { expiresIn: "8h" } // Access token expires in 8h
     );
     const refreshToken = jwt.sign(
       { _id: user._id },
