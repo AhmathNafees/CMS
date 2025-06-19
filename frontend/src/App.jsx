@@ -23,6 +23,7 @@ import EditCustomer from "./Components/customer/EditCustomer";
 import CustomerCareDashboard from "./pages/CustomerCareDashboard";
 import ListIndexCustomer from "./Components/indexCustomer/ListIndexCustomer";
 import AddIndexCustomer from "./Components/indexCustomer/AddIndexCustomer";
+import ViewIndexCustomer from "./Components/indexCustomer/ViewIndexCustomer";
 
 
 function App() {
@@ -63,6 +64,8 @@ function App() {
             <Route path="/admin-dashboard/customercares" element={<ListBranchAdmin role="customerCare"/>}/>
             <Route path="/admin-dashboard/add-customerCare" element={<AddBranchAdmin />}/>
             <Route path="/admin-dashboard/indexCustomers" element={<ListIndexCustomer />} />
+            <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
+            <Route path="customer/:id" element={<ViewCustomer />} />
 
 
         </Route>
@@ -105,8 +108,9 @@ function App() {
           <Route path="setting" element={<Setting />} />
           <Route path="indexCustomers" element={<ListIndexCustomer />} />
           <Route path="add-indexCustomer" element={<AddIndexCustomer />} />
+          <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
           {/* 
-          <Route path="customer/:id" element={<ViewCustomer />} />
+          
           <Route path="customer/edit/:id" element={<EditCustomer />} /> */}
         </Route>
 

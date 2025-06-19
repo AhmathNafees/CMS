@@ -3,7 +3,7 @@ import authMiddleware from '../middleware/authMiddleware.js'
 import multer from 'multer'
 import path from 'path'
 import indexCustomer from '../models/indexCustomerModel.js'
-import { addIndexCustomer ,getIndexCustomers} from '../controllers/IndexCustomerController.js'
+import { addIndexCustomer ,getIndexCustomers, getIndexCustomer} from '../controllers/IndexCustomerController.js'
 
 const router =express.Router()
 // Set up Multer Dynamic storage
@@ -29,7 +29,7 @@ router.post('/add-indexCustomer',authMiddleware,upload.fields([
     { name: 'passportImage', maxCount: 1 }
   ]), addIndexCustomer)
 router.get('/', authMiddleware, getIndexCustomers);
-// router.get('/:id', authMiddleware, getCustomer);
+router.get('/:id', authMiddleware, getIndexCustomer);
 // router.put('/:id',authMiddleware,upload.fields([
 //     { name: 'profileImage', maxCount: 1 },
 //     { name: 'passportImage', maxCount: 1 }

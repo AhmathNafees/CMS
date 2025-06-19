@@ -52,9 +52,9 @@ const addIndexCustomer = async (req, res) => {
     });
     // console.log("Uploaded Files:", req.files);
     await newIndexCustomer.save();
-    return res.status(201).json({ success: true, message: "Customer added successfully" });
+    return res.status(201).json({ success: true, message: "Index Customer added successfully" });
   } catch (error) {
-    console.error("Add Customer Error:", error);
+    console.error("Add Index Customer Error:", error);
     return res.status(500).json({ success: false, error: "Server error" });
   }
 };
@@ -98,19 +98,19 @@ const getIndexCustomers = async (req, res) => {
 
   } catch (error) {
     console.error("Get Customers Error:", error.message);
-    return res.status(500).json({ success: false, error: "Server Error in getCustomers" });
+    return res.status(500).json({ success: false, error: "Server Error in getIndexCustomers" });
   }
 };
 
 
 // for single coustomer view
-const getCustomer = async(req,res) =>{
+const getIndexCustomer = async(req,res) =>{
   const {id} = req.params;
   try{
-      const customer = await Customer.findById({_id:id}).populate('userId',{password:0}).populate('branchId') //password 0 means not taken
-      return res.status(200).json({success:true, customer})
+      const indexCustomer = await IndexCustomer.findById({_id:id}).populate('userId',{password:0}).populate('branchId') //password 0 means not taken
+      return res.status(200).json({success:true, indexCustomer})
     }catch(error){
-      return res.status(500).json({success: false, error:"Server Error in get Customer"})
+      return res.status(500).json({success: false, error:"Server Error in get indexCustomer"})
     }
 }
 
@@ -251,4 +251,4 @@ const getCustomer = async(req,res) =>{
 
 
 
-export {addIndexCustomer, getIndexCustomers}
+export {addIndexCustomer, getIndexCustomers, getIndexCustomer}

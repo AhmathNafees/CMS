@@ -81,9 +81,18 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
 
   return(
     <div className=" flex space-x-3">
-      <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
+      {userRole ==='customerCare' ?(
+        <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/customerCare-dashboard/indexCustomer/${_id}`)}
       >View</button>
+      ):(
+        <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
+        onClick={()=> navigate(`/admin-dashboard/indexCustomer/${_id}`)}
+      >View</button>
+      )
+
+      }
+      
       {userRole ==="customerCare" &&(
         <>
         <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
