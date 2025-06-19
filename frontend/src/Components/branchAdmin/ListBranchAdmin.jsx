@@ -31,6 +31,7 @@ const ListBranchAdmin = ({ role }) => {
             {
               _id:bAdmin._id,
               sno:sno++,
+              pno:bAdmin.userId.pno,
               branch_name:bAdmin.branch.branch_name,
               name:bAdmin.userId.name,
               role:bAdmin.userId.role,

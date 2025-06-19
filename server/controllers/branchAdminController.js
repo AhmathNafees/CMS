@@ -39,7 +39,7 @@ const addBranchAdmin =async (req, res)=>{
     try{
         const {
             name,email,password,role,nic,dob,
-            gender,maritalStatus,branch,
+            gender,maritalStatus,branch,pno,
         }=req.body;
 
         const user =await User.findOne({email})
@@ -51,6 +51,7 @@ const addBranchAdmin =async (req, res)=>{
 
         const newUser = new User({
             name,
+            pno,
             email,
             password:hashPassword,
             role,
@@ -133,6 +134,8 @@ const updateBranchAdmin = async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       role: req.body.role,
+      pno: req.body.pno,
+      updateAt: Date.now(), // ✅ Manually set updateAt
     };
     // If file upload is processed by multer, req.file will exist.
     // If a new profileImage file is provided, update the profileImage field.
@@ -156,6 +159,7 @@ const updateBranchAdmin = async (req, res) => {
       gender: req.body.gender,
       maritalStatus: req.body.maritalStatus,
       branch: req.body.branch, // Use branch _id—not branch_name
+      updateAt: Date.now(), // ✅ Manually set updateAt
     };
 
     // Update the BranchAdmin document

@@ -33,8 +33,8 @@ export const columns = [
     width:"130px",
   },
   {
-    name: "NIC",
-    selector: (row)=> row.nic,
+    name: "Phone",
+    selector: (row)=> row.pno,
     width:"130px",
     
   },

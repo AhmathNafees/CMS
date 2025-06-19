@@ -78,6 +78,13 @@ const AddBranchAdmin = () => {
                     </label>
                     <input type="email" name='email' id='baEmail' placeholder='Enter Email (for login)' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} />
                 </div>
+                {/* Phone Number */}
+                <div>
+                    <label htmlFor="pno" className=' block text-sm font-medium text-gray-700'>
+                        Phone Number
+                    </label>
+                    <input type="tel" name='pno' id='pno' placeholder='Enter Phone Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} />
+                </div>
 
                 {/* Branch Admin ID */}
                 <div>

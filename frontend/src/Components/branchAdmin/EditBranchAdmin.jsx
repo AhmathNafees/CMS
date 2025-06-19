@@ -9,6 +9,7 @@ const EditBranchAdmin = () => {
         email:'',
         nic:'',
         dob:'',
+        pno:'',
         gender:'',
         maritalStatus:'',
         branch:'',
@@ -45,6 +46,7 @@ const EditBranchAdmin = () => {
             name:branchAdmin.userId.name,
             email:branchAdmin.userId.email,
             nic:branchAdmin.nic,
+            pno:branchAdmin.userId.pno,
             dob: branchAdmin.dob ? new Date(branchAdmin.dob).toISOString().split('T')[0] : "",
             gender:branchAdmin.gender,
             maritalStatus:branchAdmin.maritalStatus,
@@ -122,6 +124,14 @@ const EditBranchAdmin = () => {
                     </label>
                     <input type="email" name='email' id='baEmail' placeholder='Enter Email / Gmail' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}
                     value={branchAdmin.email} />
+                </div>
+                {/* Phone Number */}
+                <div>
+                    <label htmlFor="pno" className=' block text-sm font-medium text-gray-700'>
+                        Phone Number
+                    </label>
+                    <input type="tel" name='pno' id='pno' placeholder='Enter Phone Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}
+                    value={branchAdmin.pno} />
                 </div>
 
                 {/* Branch Admin ID */}

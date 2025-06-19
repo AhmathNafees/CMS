@@ -25,6 +25,7 @@ const ViewBranchByAdmins = () => {
         const data = response.data.branchAdmins.map((bAdmin) => ({
           _id: bAdmin._id,
           sno: sno++,
+          pno:bAdmin.userId.pno,
           name: bAdmin.userId.name,
           role:bAdmin.userId.role,
           branch_name: bAdmin.branch.branch_name,
@@ -64,7 +65,7 @@ const ViewBranchByAdmins = () => {
     { name: "Profile", selector: (row) => row.profileImage,width:"75px", },
     { name: "Role", selector: (row) => row.role },
     { name: "Branch", selector: (row) => row.branch_name },
-    { name: "NIC", selector: (row) => row.nic },
+    { name: "Phone", selector: (row) => row.pno },
     { name: "Action", selector: (row) => row.action,center:true },
   ];
 

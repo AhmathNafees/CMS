@@ -45,6 +45,14 @@ const ViewBranchAdmins = () => {
                     <p className=' font-medium'>{branchAdmin.userId.name}</p>
                 </div>
                 <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Email:</p>
+                    <p className=' font-medium'>{branchAdmin.userId.email}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Phone Number:</p>
+                    <p className=' font-medium'>{branchAdmin.userId.pno}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Admin ID:</p>
                     <p className=' font-medium'>{branchAdmin.nic}</p>
                 </div>
@@ -63,6 +71,14 @@ const ViewBranchAdmins = () => {
                 <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Marital Status:</p>
                     <p className=' font-medium'>{branchAdmin.maritalStatus}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Profile Created:</p>
+                    <p className=' font-medium'>{new Date(branchAdmin.userId.createAt).toLocaleDateString("en-GB")}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Profile Updated:</p>
+                    <p className=' font-medium'>{new Date(branchAdmin.userId.updateAt).toLocaleDateString("en-GB")}</p>
                 </div>
             </div>
         </div>
