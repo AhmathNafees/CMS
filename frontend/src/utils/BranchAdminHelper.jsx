@@ -87,6 +87,7 @@ export const BranchAdminButtons = ({ _id, onDelete }) => {
       }
     }
   };
+ 
   return(
     <div className=" flex space-x-3">
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"

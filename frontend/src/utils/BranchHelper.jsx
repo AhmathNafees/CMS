@@ -6,15 +6,18 @@ export const columns = [
     name: "S No",
     selector: (row)=> row.sno,
     sortable : true,
+    width:"100px"
   },
   {
     name: "Department Name",//coloumn name
     selector: (row)=> row.branch_name, //in the jsx file name given
     sortable : true,
+    width:"150px"
   },
   {
     name: "Action",
-    selector: (row)=> row.action
+    selector: (row)=> row.action,
+    center:true,
   },
 ]
 
@@ -52,6 +55,9 @@ export const BranchButtons = ({_id, onBranchDelete, branchId})=>{
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/admin-dashboard/customer/byBranch/${branchId}`)}
       >View Customer</button>
+      <button className=" px-3 py-1 bg-yellow-600 text-white rounded-md cursor-pointer"
+        onClick={()=> navigate(`/admin-dashboard/indexCustomer/byBranch/${branchId}`)}
+      >View Index Customer</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/admin-dashboard/branch/${_id}`)}
       >Edit</button>

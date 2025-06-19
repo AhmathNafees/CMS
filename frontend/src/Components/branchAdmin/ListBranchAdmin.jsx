@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import {Link} from 'react-router-dom'
 import { BranchAdminButtons, columns } from '../../utils/BranchAdminHelper';
+import { CustomerCareButtons,customerCarecolumns } from '../../utils/CustomerCareHelper';
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
 
@@ -38,7 +39,7 @@ const ListBranchAdmin = ({ role }) => {
               dob: new Date (bAdmin.dob).toDateString(),
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${bAdmin.userId.profileImage}`}/>,
               nic:bAdmin.nic,
-              action: (<BranchAdminButtons _id={bAdmin._id} onDelete={fetchbranchAdmins}/>),
+              action: role ==='branchAdmin' ?(<BranchAdminButtons _id={bAdmin._id} onDelete={fetchbranchAdmins}/>):(<CustomerCareButtons _id={bAdmin._id} onDelete={fetchbranchAdmins}/>),
             }
           ))
           setBranchAdmins(data)
@@ -76,11 +77,19 @@ const ListBranchAdmin = ({ role }) => {
           <Link to="/admin-dashboard/add-branchAdmin" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New {role === 'customerCare' ? 'Customer Care Admin' : 'Branch Admin'}</Link>
         </div>
         <div className='mt-5'>
-          <DataTable
-            columns={columns}
-            data={filteredBranchAdmins}
-            pagination
-          />
+          {role === 'branchAdmin' ?(
+            <DataTable
+              columns={columns}
+              data={filteredBranchAdmins}
+              pagination
+            />
+          ):(<DataTable
+              columns={customerCarecolumns}
+              data={filteredBranchAdmins}
+              pagination
+            />)
+          }
+          
         </div>
       </div>
   )

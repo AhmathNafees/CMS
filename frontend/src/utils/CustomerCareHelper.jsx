@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export const columns = [
+export const customerCarecolumns = [
   {
     name: "S No",
     selector: (row)=> row.sno,
@@ -24,10 +24,17 @@ export const columns = [
     name: "Branch",
     selector: (row)=> row.branch_name,
     sortable : true,
+    width:"130px",
   },
   {
-    name: "NIC",
-    selector: (row)=> row.nic,
+    name: "Role",
+    selector: (row)=> row.role,
+    sortable : true,
+    width:"130px",
+  },
+  {
+    name: "Phone",
+    selector: (row)=> row.pno,
     width:"130px",
     
   },
@@ -58,7 +65,7 @@ export const fetchBranches = async()=>{
     return branches
 };
 
-export const BranchAdminButtons = ({ _id, onDelete }) => {
+export const CustomerCareButtons = ({ _id, onDelete }) => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -80,6 +87,7 @@ export const BranchAdminButtons = ({ _id, onDelete }) => {
       }
     }
   };
+ 
   return(
     <div className=" flex space-x-3">
       <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
@@ -87,7 +95,7 @@ export const BranchAdminButtons = ({ _id, onDelete }) => {
       >View</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
       onClick={()=> navigate(`/admin-dashboard/branchAdmins/edit/${_id}`)}>Edit</button>
-      <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer" onClick={()=> navigate(`/admin-dashboard/customers/${_id}`)} >Customers</button>
+      <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer" onClick={()=> navigate(`/admin-dashboard/indexCustomers/${_id}`)} >Index Customers</button>
       <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button>
     </div>
   )

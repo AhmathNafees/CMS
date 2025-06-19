@@ -202,47 +202,47 @@ const deleteIndexCustomer = async (req, res) => {
     return res.status(500).json({ success: false, error: "Server error while deleting indexCustomer" });
   }
 };
-// //for Main Admin
-// const getCustomersByBranchAdmin = async (req, res) => {
-//   try {
-//     const { branchAdminId } = req.params;
-//     const branchAdmin = await BranchAdmin.findById(branchAdminId);
+//for Main Admin
+const getIndexCustomersByBranchAdmin = async (req, res) => {
+  try {
+    const { branchAdminId } = req.params;
+    const branchAdmin = await BranchAdmin.findById(branchAdminId);
 
-//     if (!branchAdmin) {
-//       return res.status(404).json({ success: false, error: "Branch Admin not found" });
-//     }
+    if (!branchAdmin) {
+      return res.status(404).json({ success: false, error: "Branch Admin not found" });
+    }
 
-//     const customers = await Customer.find({ userId: branchAdmin.userId })
-//       .populate("userId", { password: 0 })
-//       .populate("branchId");
+    const indexCustomers = await IndexCustomer.find({ userId: branchAdmin.userId })
+      .populate("userId", { password: 0 })
+      .populate("branchId");
 
-//     return res.status(200).json({ success: true, customers });
+    return res.status(200).json({ success: true, indexCustomers });
 
-//   } catch (error) {
-//     console.error("Error fetching customers by branch admin:", error.message);
-//     res.status(500).json({ success: false, error: "Server Error" });
-//   }
-// };
-// const getCustomersByBranch = async (req, res) => {
-//   try {
-//     const { branchId } = req.params;
+  } catch (error) {
+    console.error("Error fetching customers by branch admin:", error.message);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
+const getIndexCustomersByBranch = async (req, res) => {
+  try {
+    const { branchId } = req.params;
 
-//     if (!branchId) {
-//       return res.status(404).json({ success: false, error: "Branch Admin not found" });
-//     }
+    if (!branchId) {
+      return res.status(404).json({ success: false, error: "Branch  not found" });
+    }
 
-//     const customers = await Customer.find({ branchId})
-//       .populate("userId", { password: 0 })
-//       .populate("branchId");
+    const indexCustomers = await IndexCustomer.find({ branchId})
+      .populate("userId", { password: 0 })
+      .populate("branchId");
 
-//     return res.status(200).json({ success: true, customers });
+    return res.status(200).json({ success: true, indexCustomers });
 
-//   } catch (error) {
-//     console.error("Error fetching customers by branch admin:", error.message);
-//     res.status(500).json({ success: false, error: "Server Error" });
-//   }
-// };
+  } catch (error) {
+    console.error("Error fetching customers by branch admin:", error.message);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
 
 
 
-export {addIndexCustomer, getIndexCustomers, getIndexCustomer, editIndexCustomer, deleteIndexCustomer}
+export {addIndexCustomer, getIndexCustomers, getIndexCustomer, editIndexCustomer, deleteIndexCustomer, getIndexCustomersByBranchAdmin, getIndexCustomersByBranch}

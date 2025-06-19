@@ -239,7 +239,7 @@ const getCustomersByBranch = async (req, res) => {
     const { branchId } = req.params;
 
     if (!branchId) {
-      return res.status(404).json({ success: false, error: "Branch Admin not found" });
+      return res.status(404).json({ success: false, error: "Branch not found" });
     }
 
     const customers = await Customer.find({ branchId})

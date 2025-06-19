@@ -67,6 +67,9 @@ function App() {
             <Route path="/admin-dashboard/indexCustomers" element={<ListIndexCustomer />} />
             <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
             <Route path="customer/:id" element={<ViewCustomer />} />
+            <Route path="/admin-dashboard/indexCustomers/:branchAdminId" element={<ListIndexCustomer />} />
+            <Route path="/admin-dashboard/indexCustomer/byBranch/:branchId" element={<ListIndexCustomer />} />
+            
 
 
         </Route>
