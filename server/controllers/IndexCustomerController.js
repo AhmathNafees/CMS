@@ -174,34 +174,34 @@ const editIndexCustomer = async (req, res) => {
   }
 };
 
-// const deleteCustomer = async (req, res) => {
-//   try {
-//     const { id } = req.params;
+const deleteIndexCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-//     const customer = await Customer.findById(id);
-//     if (!customer) {
-//       return res.status(404).json({ success: false, error: "Customer not found" });
-//     }
+    const indexCustomer = await IndexCustomer.findById(id);
+    if (!indexCustomer) {
+      return res.status(404).json({ success: false, error: "indexCustomer not found" });
+    }
 
-//     // Delete profile image if exists
-//     if (customer.profileImage) {
-//       deleteImage("customers", customer.profileImage);
-//     }
+    // Delete profile image if exists
+    if (indexCustomer.profileImage) {
+      deleteImage("indexCustomers", indexCustomer.profileImage);
+    }
 
-//     // Delete passport image if exists
-//     if (customer.passportImage) {
-//       deleteImage("passports", customer.passportImage);
-//     }
+    // Delete passport image if exists
+    if (indexCustomer.passportImage) {
+      deleteImage("indexCustomerCV", indexCustomer.passportImage);
+    }
 
-//     // Delete customer from database
-//     await Customer.findByIdAndDelete(id);
+    // Delete customer from database
+    await IndexCustomer.findByIdAndDelete(id);
 
-//     return res.status(200).json({ success: true, message: "Customer deleted successfully" });
-//   } catch (error) {
-//     console.error("Delete Customer Error:", error.message);
-//     return res.status(500).json({ success: false, error: "Server error while deleting customer" });
-//   }
-// };
+    return res.status(200).json({ success: true, message: "indexCustomer deleted successfully" });
+  } catch (error) {
+    console.error("Delete indexCustomer Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server error while deleting indexCustomer" });
+  }
+};
 // //for Main Admin
 // const getCustomersByBranchAdmin = async (req, res) => {
 //   try {
@@ -245,4 +245,4 @@ const editIndexCustomer = async (req, res) => {
 
 
 
-export {addIndexCustomer, getIndexCustomers, getIndexCustomer, editIndexCustomer}
+export {addIndexCustomer, getIndexCustomers, getIndexCustomer, editIndexCustomer, deleteIndexCustomer}
