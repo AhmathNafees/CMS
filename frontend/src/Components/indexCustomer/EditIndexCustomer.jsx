@@ -1,10 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-const AddIndexCustomer = () => {
+const EditIndexCustomer = () => {
+    const  [indexCustomer, setIndexCustomer] = useState({
+        name:'',
+        pno:'',
+        location:'',
+        gender:'',
+        profileImage:'',
+        passportImage:'',
+        desc:'',
+    })
+
     const [formData, setFormData] =useState({})
     const navigate = useNavigate()
+    const {id} = useParams()
+    useEffect(()=>{
+      
+      const fetchCustomer = async()=>{
+        try{
+          const response = await axios.get(`http://localhost:3000/api/indexCustomer/${id}`,{
+            headers: {
+              Authorization :`Bearer ${localStorage.getItem('accessToken')}`
+            }
+          })
+
+          if(response.data.success){
+          setIndexCustomer(response.data.indexCustomer)
+            const indexCustomer= response.data.indexCustomer
+            setIndexCustomer((prev)=>({...prev, 
+            name:indexCustomer.name,
+            gender:indexCustomer.gender,
+            pno:indexCustomer.pno,
+            location:indexCustomer.location,
+            desc:indexCustomer.desc,
+            profileImage:indexCustomer.profileImage,
+            passportImage:indexCustomer.passportImage,
+            }))
+          }
+        }catch(error){
+          if(error.response && !error.response.data.success){
+          alert(error.response.data.error)
+          }
+        }
+      };
+      fetchCustomer();
+  },[id]) // Added id as dependency
 
     const handleChange =(e)=>{
         const{name, value, files} =e.target
@@ -12,6 +54,7 @@ const AddIndexCustomer = () => {
         if ((name === "profileImage" || name === "passportImage") && files && files.length > 0) {
             setFormData((prevData)=>({...prevData, [name]:files[0]}))
         }else{
+            setIndexCustomer((prevData)=>({...prevData, [name]:value}))
             setFormData((prevData)=>({...prevData, [name]:value}))
         }
     }
@@ -24,11 +67,11 @@ const AddIndexCustomer = () => {
         })
 
         try{
-            const response = await axios.post('http://localhost:3000/api/indexCustomer/add-indexCustomer', formDataObj, {
+            const response = await axios.put(`http://localhost:3000/api/indexCustomer/edit/${id}`, formDataObj, {
                 headers:{"Authorization" : `Bearer ${localStorage.getItem("accessToken")}`}
             })
         if(response.data.success){
-            navigate("/customerCare-dashboard/IndexCustomers")
+            navigate("/customerCare-dashboard/indexCustomers")
         }
         }catch(error){
             if(error.response && !error.response.data.success){
@@ -40,8 +83,10 @@ const AddIndexCustomer = () => {
     }
     
   return (
-    <div className='max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md'>
-        <h2 className=' text-2xl font-bold mb-6'>Add New Customer</h2>
+    <>
+        {indexCustomer?(
+            <div className='max-w-4xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md'>
+        <h2 className=' text-2xl font-bold mb-6'>Edit Customer</h2>
         <form action="" onSubmit={handleSubmit}>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 {/* Name */}
@@ -49,14 +94,14 @@ const AddIndexCustomer = () => {
                     <label htmlFor="baName" className=' block text-sm font-medium text-gray-700'>
                         Name
                     </label>
-                    <input type="text" name='name' id='baName' placeholder='Enter Name' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="text" name='name' id='baName' placeholder='Enter Name' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={indexCustomer.name}/>
                 </div>
                 {/* Phone Number */}
                 <div>
                     <label htmlFor="pno" className=' block text-sm font-medium text-gray-700'>
                         Mobile Number
                     </label>
-                    <input type="tel" name='pno' id='pno' placeholder='Mobile Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="tel" name='pno' id='pno' placeholder='Mobile Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={indexCustomer.pno}/>
                 </div>
 
                 {/* Location */}
@@ -64,8 +109,8 @@ const AddIndexCustomer = () => {
                     <label htmlFor="homeAdd" className=' block text-sm font-medium text-gray-700'>
                         Location
                     </label>
-                    <textarea name="location" id="homeAdd" placeholder='Customer Location' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4"
-                    onChange={handleChange}/>
+                    <textarea name="location" id="homeAdd" placeholder='Customer Location' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" 
+                    onChange={handleChange} value={indexCustomer.location}/>
                 </div>
                 {/* Purpose Description */}
                 <div>
@@ -73,10 +118,20 @@ const AddIndexCustomer = () => {
                         Purpose Descrption
                     </label>
                     <textarea name="desc" id="desc" placeholder='Eg.Work Description' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" required
-                    onChange={handleChange}/>
+                    onChange={handleChange} value={indexCustomer.desc}/>
                 </div>
-                
+
                 {/* Passport Upload */}
+                {indexCustomer.passportImage && (
+                <div className="mb-4">
+                    <label className='block text-sm font-medium text-gray-700'>Current Profile Image</label>
+                    <img
+                    src={`http://localhost:3000/${indexCustomer.passportImage}`}
+                    alt="Profile"
+                    className="w-24 h-24 object-cover rounded-full"
+                    />
+                </div>
+                )}
                 <div>
                     <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
                         Upload Passport By Image
@@ -89,7 +144,7 @@ const AddIndexCustomer = () => {
                     <label htmlFor="baGender" className=' block text-sm font-medium text-gray-700'>
                         Gender
                     </label>
-                    <select  name='gender' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}>
+                    <select  name='gender' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={indexCustomer.gender}>
                         <option value="">Select Gender</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
@@ -98,6 +153,16 @@ const AddIndexCustomer = () => {
                 </div>
 
                 {/* Image Upload */}
+                {indexCustomer.profileImage && (
+                <div className="mb-4">
+                    <label className='block text-sm font-medium text-gray-700'>Current Profile Image</label>
+                    <img
+                    src={`http://localhost:3000/${indexCustomer.profileImage}`}
+                    alt="Profile"
+                    className="w-24 h-24 object-cover rounded-full"
+                    />
+                </div>
+                )}
                 <div>
                     <label htmlFor="baImage" className=' block text-sm font-medium text-gray-700'>
                         Upload Image
@@ -106,12 +171,15 @@ const AddIndexCustomer = () => {
                 </div>
             </div>
             <button className='w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-md'>
-                Add Customer
+                Update Customer
             </button>
         </form>
 
     </div>
+        ):<div>Loading...</div>}
+    </>
+    
   )
 }
 
-export default AddIndexCustomer
+export default EditIndexCustomer

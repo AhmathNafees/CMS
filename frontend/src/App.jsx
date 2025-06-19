@@ -24,6 +24,7 @@ import CustomerCareDashboard from "./pages/CustomerCareDashboard";
 import ListIndexCustomer from "./Components/indexCustomer/ListIndexCustomer";
 import AddIndexCustomer from "./Components/indexCustomer/AddIndexCustomer";
 import ViewIndexCustomer from "./Components/indexCustomer/ViewIndexCustomer";
+import EditIndexCustomer from "./Components/indexCustomer/EditIndexCustomer";
 
 
 function App() {
@@ -109,9 +110,8 @@ function App() {
           <Route path="indexCustomers" element={<ListIndexCustomer />} />
           <Route path="add-indexCustomer" element={<AddIndexCustomer />} />
           <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
-          {/* 
-          
-          <Route path="customer/edit/:id" element={<EditCustomer />} /> */}
+          <Route path="indexCustomer/edit/:id" element={<EditIndexCustomer />} />
+
         </Route>
 
       </Routes>

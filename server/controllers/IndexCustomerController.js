@@ -114,71 +114,65 @@ const getIndexCustomer = async(req,res) =>{
     }
 }
 
-// const editCustomer = async (req, res) => {
-//   try {
-//     const { id } = req.params; // customer ID
-//     const userId = req.user.id; // authenticated branch admin user ID
+const editIndexCustomer = async (req, res) => {
+  try {
+    const { id } = req.params; // customer ID
+    const userId = req.user.id; // authenticated branch admin user ID
 
-//     // Check branch admin
-//     const branchAdmin = await BranchAdmin.findOne({ userId });
-//     if (!branchAdmin) {
-//       return res.status(404).json({ success: false, error: "Branch Admin not found" });
-//     }
+    // Check branch admin
+    const branchAdmin = await BranchAdmin.findOne({ userId });
+    if (!branchAdmin) {
+      return res.status(404).json({ success: false, error: "Branch Admin not found" });
+    }
 
-//     // Fetch existing customer to get old image filenames
-//     const customer = await Customer.findById(id);
-//     if (!customer) {
-//       return res.status(404).json({ success: false, error: "Customer not found" });
-//     }
+    // Fetch existing customer to get old image filenames
+    const indexCustomer = await IndexCustomer.findById(id);
+    if (!indexCustomer) {
+      return res.status(404).json({ success: false, error: "Index Customer not found" });
+    }
 
-//     // Extract fields from request
-//     const {
-//       name, pno, email, homeAdd, nic, dob,
-//       gender, maritalStatus, passport, desc
-//     } = req.body;
+    // Extract fields from request
+    const {
+      name, pno,location,gender,desc
+    } = req.body;
 
-//     const updatedFields = {
-//       name,
-//       pno,
-//       email,
-//       homeAdd,
-//       nic,
-//       dob,
-//       gender,
-//       maritalStatus,
-//       passport,
-//       desc,
-//       userId,
-//       branchId: branchAdmin.branch,
-//       UpdateAt: Date.now()
-//     };
+    const updatedFields = {
+      name,
+      pno,
+      location,
+      gender,
+      desc,
+      userId,
+      branchId: branchAdmin.branch,
+      UpdateAt: Date.now()
+    };
 
-//     // Handle profile image update
-//     if (req.files?.profileImage?.[0]) {
-//       deleteImage("customers", customer.profileImage); // delete old image
-//       updatedFields.profileImage = req.files.profileImage[0].filename;
-//     }
+    // Handle profile image update
+    if (req.files?.profileImage?.[0]) {
+      deleteImage("indexCustomers", indexCustomer.profileImage); // delete old image
+      updatedFields.profileImage = req.files.profileImage[0].filename;
+    }
 
-//     // Handle passport image update
-//     if (req.files?.passportImage?.[0]) {
-//       deleteImage("passports", customer.passportImage); // delete old passport
-//       updatedFields.passportImage = req.files.passportImage[0].filename;
-//     }
+    // Handle passport image update
+    if (req.files?.passportImage?.[0]) {
+      deleteImage("indexCustomerCV", indexCustomer.passportImage); // delete old passport
+      updatedFields.passportImage = req.files.passportImage[0].filename;
+    }
 
-//     // Update the customer in DB
-//     const updatedCustomer = await Customer.findByIdAndUpdate(id, updatedFields, { new: true });
+    // Update the customer in DB
+    const updatedCustomer = await IndexCustomer.findByIdAndUpdate(id, updatedFields, { new: true });
 
-//     return res.status(200).json({
-//       success: true,
-//       message: "Customer updated successfully",
-//       updatedCustomer
-//     });
+    return res.status(200).json({
+      success: true,
+      message: "Customer updated successfully",
+      updatedCustomer
+    });
 
-//   } catch (error) {
-//     console.error("Edit Customer Error:", error.message);
-//     return res.status(500).json({ success: false, error: "Server error while updating customer" });
-//   }
-// };
+  } catch (error) {
+    console.error("Edit Customer Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server error while updating Index customer" });
+  }
+};
 
 // const deleteCustomer = async (req, res) => {
 //   try {
@@ -251,4 +245,4 @@ const getIndexCustomer = async(req,res) =>{
 
 
 
-export {addIndexCustomer, getIndexCustomers, getIndexCustomer}
+export {addIndexCustomer, getIndexCustomers, getIndexCustomer, editIndexCustomer}
