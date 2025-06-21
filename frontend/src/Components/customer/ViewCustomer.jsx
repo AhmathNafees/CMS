@@ -101,11 +101,18 @@ const ViewCustomer = () => {
                 </div>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Created:</p>
-                    <p className=' font-medium whitespace-nowrap'>{new Date(customer.createAt).toLocaleDateString('en-GB')}</p>
+                    <p className=' font-medium whitespace-nowrap'>{new Date(customer.createdAt).toLocaleDateString('en-GB')}</p>
                 </div>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Updated:</p>
-                    <p className=' font-medium whitespace-nowrap'>{new Date(customer.updateAt).toLocaleDateString('en-GB')}</p>
+                    <p className=' font-medium whitespace-nowrap'>{new Date(customer.updatedAt).toLocaleString('en-GB',{
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true,
+              })}</p>
                 </div>
             </div>
             

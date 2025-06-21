@@ -8,7 +8,7 @@ const branchAdminSchema = new Schema({
     maritalStatus: {type:String},
     branch : {type:Schema.Types.ObjectId, ref:"Branch",required:true},
     createAt:{type: Date, default:Date.now},
-    UpdateAt:{type: Date, default:Date.now},
+    updateAt:{type: Date, default:Date.now},
 
 });
 

@@ -2,68 +2,87 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CustomStatusDropdown from './CustomStatusDropdown';
 
-export const columns = (handleStatusChange) =>[
-  {
-    name: "S No",
-    selector: (row)=> row.sno,
-    sortable : true,
-    width:"75px",
-  },
-  {
-    name: "Customer Name",//coloumn name
-    selector: (row)=> row.name, //in the jsx file name given
-    sortable : true,
-    width:"160px",
-  },
-  {
-    name: "Profile Image",
-    selector: (row)=> row.profileImage,
-    width:"130px",
-    center:"true",
-  },
+export const columns = (handleStatusChange, userRole) =>{
+  const baseColumns = [
     {
-    name: 'Status',
-    cell: (row) => (
-      <CustomStatusDropdown
-        value={row.status}
-        rowId={row._id}
-        handleStatusChange={handleStatusChange}
-      />
-    ),
-    width: '170px',
-    center:"true",
-    
-  },
-  {
-    name: "Branch Admin",
-    selector: (row)=> row.Admin_name,
-    sortable : true,
-    width:"150px",
-  },
-  {
-    name: "Branch",
-    selector: (row)=> row.branch_name,
-    sortable : true,
-    width:"150px",
-  },
-  // {
-  //   name: "Phone Number",
-  //   selector: (row)=> row.pno,
-  //   width:"150px",
-  // },
-  {
-    name: "Created",
-    selector: (row)=> row.createAt,
-    width:"130px",
-    sortable:true,
-    
-  },
-  {
-    name: "Action",
-    selector: (row)=> row.action,
-    center:"true",
-  },
-]
+      name: "S No",
+      selector: (row)=> row.sno,
+      sortable : true,
+      width:"75px",
+    },
+    {
+      name: "Customer Name",//coloumn name
+      selector: (row)=> row.name, //in the jsx file name given
+      sortable : true,
+      width:"160px",
+    },
+    {
+      name: "Profile Image",
+      selector: (row)=> row.profileImage,
+      width:"130px",
+      center:"true",
+    },
+      {
+      name: 'Status',
+      cell: (row) => (
+        <CustomStatusDropdown
+          key={row._id}
+          value={row.status}
+          rowId={row._id}
+          handleStatusChange={handleStatusChange}
+        />
+      ),
+      width: '170px',
+      center:"true",
+      
+    },
+    // {
+    //   name: "Created",
+    //   selector: (row)=> row.createAt,
+    //   width:"130px",
+    //   sortable:true,
+      
+    // },
+    {
+      name: "Updated",
+      selector: (row)=> row.updatedAt,
+      // width:"130px",
+      sortable:true,
+      
+    },
+    {
+      name: "Action",
+      selector: (row)=> row.action,
+      center:"true",
+    },
+  ]
+
+  if (userRole === "admin") {
+    baseColumns.splice(5, 0, {
+      name: "Branch Admin",
+      selector: (row) => row.Admin_name,
+      sortable: true,
+      width: "150px",
+    }),
+    baseColumns.splice(6, 0, {
+      name: "Branch",
+      selector: (row) => row.branch_name,
+      sortable: true,
+      width: "150px",
+    });
+  }
+  if (userRole === "branchAdmin") {
+    baseColumns.splice(4, 0, {
+      name: "Phone Number",
+      selector: (row) => row.pno,
+      sortable: true,
+      width: "150px",
+    });
+  }
+  return baseColumns;
+  
+}
+
   
 export const CustomerButtons = ({ _id, onDelete, role}) => {
   const navigate = useNavigate();
@@ -91,6 +110,7 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
     }
   };
   const userRole = localStorage.getItem("userRole");
+  // console.log(userRole)
 
   return(
     <div className=" flex space-x-3">

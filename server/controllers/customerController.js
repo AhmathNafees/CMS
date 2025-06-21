@@ -86,14 +86,14 @@ const getCustomers = async (req, res) => {
         .populate("branchId");
 
     } else if (user.role === "branchAdmin") {
-      // ✅ Branch Admin sees only their branch's customers
+      // ✅ Branch Admin sees only their customers
       const branchAdmin = await BranchAdmin.findOne({ userId });
 
       if (!branchAdmin) {
         return res.status(404).json({ success: false, error: "Branch Admin not found" });
       }
 
-      customers = await Customer.find({ branchId: branchAdmin.branch })
+      customers = await Customer.find({ userId })
         .populate("userId", { password: 0 })
         .populate("branchId");
 
@@ -155,7 +155,6 @@ const editCustomer = async (req, res) => {
       desc,
       userId,
       branchId: branchAdmin.branch,
-      updateAt: Date.now()
     };
 
     // Handle profile image update
@@ -234,6 +233,7 @@ const getCustomersByBranchAdmin = async (req, res) => {
     res.status(500).json({ success: false, error: "Server Error" });
   }
 };
+//for Main Admin
 const getCustomersByBranch = async (req, res) => {
   try {
     const { branchId } = req.params;

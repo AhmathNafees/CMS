@@ -38,14 +38,14 @@ router.delete("/:id", authMiddleware, deleteCustomer);
 router.get('/byBranchAdmin/:branchAdminId', authMiddleware, getCustomersByBranchAdmin);
 router.get('/byBranch/:branchId', authMiddleware, getCustomersByBranch);
 
-//for Status Update
+// for Status Update
 router.patch('/:id/status', authMiddleware, async (req, res) => {
   try {
     const { status } = req.body;
     const customer = await Customer.findByIdAndUpdate(
       req.params.id,
-      { status },
-      { new: true }
+      { status, },
+      { new: true } // ✅ return updated document
     );
     if (!customer) return res.status(404).json({ success: false, error: 'Customer not found' });
 

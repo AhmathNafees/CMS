@@ -19,10 +19,8 @@ const customerSchema = new Schema({
     type: String,
     enum: ['begin', 'processing', 'complete', 'reject'],
     default: 'begin'},
-    createAt:{type: Date, default:Date.now},
-    updateAt:{type: Date, default:Date.now},
-
-});
+},{ timestamps: true } // ✅ enables createdAt and updatedAt automatically
+);
 
 const Customer = mongoose.model("Customer", customerSchema);
 export default Customer;

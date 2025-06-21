@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {Link, useParams} from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
-import { CustomerButtons,columns as baseColumns} from '../../utils/CustomerHelper';
+import { CustomerButtons,columns as customerColumns} from '../../utils/CustomerHelper';
 
 const ListCustomer = () => {
   const { branchAdminId,branchId } = useParams();
@@ -24,6 +24,14 @@ const ListCustomer = () => {
   // console.log(userRole)
 
   const handleStatusChange = async (customerId, newStatus) => {
+    // Find the current status of the customer
+    const customer = customers.find(c => c._id === customerId);
+
+    // 🛑 Prevent API call if status is the same
+    if (customer && customer.status === newStatus) {
+      console.log("Status is the same — no update needed.");
+      return;
+    }
     try {
       const res = await axios.patch(
         `http://localhost:3000/api/customer/${customerId}/status`,
@@ -34,6 +42,7 @@ const ListCustomer = () => {
           },
         }
       );
+      fetchCustomers();
 
       // Update state locally
       setCustomers((prev) =>
@@ -52,67 +61,76 @@ const ListCustomer = () => {
     }
   };
   // ✅ Call baseColumns with the handler
-  const dynamicColumns = baseColumns(handleStatusChange);
+  const dynamicColumns = customerColumns(handleStatusChange,userRole);
 
-  useEffect(()=>{
-    const fetchCustomers = async()=>{
-      setBaLoading(true)
-      try{
-        let url = "";
+  //Fetch Customers///////////////
+  const fetchCustomers = async()=>{
+    setBaLoading(true)
+    try{
+      let url = "";
 
-        if (userRole === "admin" && branchAdminId) {
-          // Main admin viewing a branch admin's customers
-          url = `http://localhost:3000/api/customer/byBranchAdmin/${branchAdminId}`;
-        } else if (userRole === "admin" && branchId ) {
-          // Main admin logged in; show Branch's customers
-          url = `http://localhost:3000/api/customer/byBranch/${branchId}`;
-        }else if (userRole === "branchAdmin") {
-          // Branch admin logged in; show their own Branch customers
-          url = `http://localhost:3000/api/customer/`;
-        } else if (userRole === "admin") {
-          // Main admin viewing all
-          url = `http://localhost:3000/api/customer/`;
-        }
-        const response = await axios.get(url,{
-          headers: {
-            Authorization :`Bearer ${localStorage.getItem('accessToken')}`
-          }
-        })
-        // console.log(response.data)
-        if(response.data.success){
-          let sno =1;
-          const data =await response.data.customers.map((customer)=>(
-            {
-              _id:customer._id,
-              sno:sno++,
-              branch_name:customer.branchId.branch_name,
-              Admin_name:customer.userId.name,
-              name:customer.name,
-              pno:customer.pno,
-              nic:customer.nic,
-              status: customer.status,
-              createAt: new Date(customer.createAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
-              day: "numeric"}),
-              profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
-              
-              action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
-            }
-          ))
-          setCustomers(data)
-          setFilteredCustomers(data)
-        }
-      }catch(error){
-        if(error.response && !error.response.data.success){
-        alert(error.response.data.error)
-        }
-
-      }finally{
-        setBaLoading(false)
+      if (userRole === "admin" && branchAdminId) {
+        // Main admin viewing a branch admin's customers
+        url = `http://localhost:3000/api/customer/byBranchAdmin/${branchAdminId}`;
+      } else if (userRole === "admin" && branchId ) {
+        // Main admin logged in; show Branch's customers
+        url = `http://localhost:3000/api/customer/byBranch/${branchId}`;
+      }else if (userRole === "branchAdmin") {
+        // Branch admin logged in; show their own Branch customers
+        url = `http://localhost:3000/api/customer/`;
+      } else if (userRole === "admin") {
+        // Main admin viewing all
+        url = `http://localhost:3000/api/customer/`;
       }
-    };
+      const response = await axios.get(url,{
+        headers: {
+          Authorization :`Bearer ${localStorage.getItem('accessToken')}`
+        }
+      })
+      // console.log(response.data)
+      if(response.data.success){
+        let sno =1;
+        const data =await response.data.customers.map((customer)=>(
+          {
+            _id:customer._id,
+            sno:sno++,
+            branch_name:customer.branchId.branch_name,
+            Admin_name:customer.userId.name,
+            name:customer.name,
+            pno:customer.pno,
+            nic:customer.nic,
+            status: customer.status,
+            updatedAt : new Date(customer.updatedAt).toLocaleString('en-GB',{
+              day: '2-digit',
+              month: '2-digit',
+              year: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            }),
+            createAt: new Date(customer.createAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
+            day: "numeric"}),
+            profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
+            
+            action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
+          }
+        ))
+        setCustomers(data)
+        setFilteredCustomers(data)
+      }
+    }catch(error){
+      if(error.response && !error.response.data.success){
+      alert(error.response.data.error)
+      }
+
+    }finally{
+      setBaLoading(false)
+    }
+  };
+  useEffect(()=>{
+    
     fetchCustomers();
     
-
   },[]);
 
   const handleFilter = (e) => {
