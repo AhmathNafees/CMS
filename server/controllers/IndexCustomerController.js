@@ -144,7 +144,6 @@ const editIndexCustomer = async (req, res) => {
       desc,
       userId,
       branchId: branchAdmin.branch,
-      updateAt: Date.now()
     };
 
     // Handle profile image update

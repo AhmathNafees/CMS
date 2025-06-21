@@ -10,10 +10,8 @@ const IndexCustomerSchema = new Schema({
     passportImage: { type: String },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
-    createAt:{type: Date, default:Date.now},
-    updateAt:{type: Date, default:Date.now},
 
-});
+},{timestamps:true});
 
 const IndexCustomer = mongoose.model("IndexCustomer", IndexCustomerSchema);
 export default IndexCustomer;

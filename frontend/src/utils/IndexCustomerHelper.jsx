@@ -40,7 +40,7 @@ export const columns = () =>[
   // },
   {
     name: "Created",
-    selector: (row)=> row.createAt,
+    selector: (row)=> row.createdAt,
     width:"130px",
     sortable:true,
     

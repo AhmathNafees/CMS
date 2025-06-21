@@ -1,6 +1,22 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CustomStatusDropdown from './CustomStatusDropdown';
+import { FaHourglassHalf, FaSyncAlt, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+
+const getStatusIcon = (status) => {
+  switch (status) {
+    case "begin":
+      return <FaHourglassHalf />;
+    case "processing":
+      return <FaSyncAlt className="text-yellow-500" />;
+    case "complete":
+      return <FaCheckCircle className="text-green-500" />;
+    case "reject":
+      return <FaTimesCircle className="text-red-500" />;
+    default:
+      return null;
+  }
+};
 
 export const columns = (handleStatusChange, userRole) =>{
   const baseColumns = [
@@ -22,19 +38,30 @@ export const columns = (handleStatusChange, userRole) =>{
       width:"130px",
       center:"true",
     },
-      {
-      name: 'Status',
-      cell: (row) => (
-        <CustomStatusDropdown
-          key={row._id}
-          value={row.status}
-          rowId={row._id}
-          handleStatusChange={handleStatusChange}
-        />
-      ),
-      width: '170px',
-      center:"true",
-      
+    {
+      name: "Status",
+      selector: (row) => row.status,
+      cell: (row) => {
+        if (userRole === "branchAdmin") {
+          return (
+            <CustomStatusDropdown
+              value={row.status}
+              rowId={row._id}
+              handleStatusChange={handleStatusChange}
+            />
+          );
+        } else {
+          return (
+            <span className="flex items-center space-x-2">
+              {getStatusIcon(row.status)}
+              <span className="capitalize">{row.status}</span>
+            </span>
+          );
+        }
+      },
+      width:'170px',
+      center:'true'
+
     },
     // {
     //   name: "Created",
@@ -62,13 +89,13 @@ export const columns = (handleStatusChange, userRole) =>{
       name: "Branch Admin",
       selector: (row) => row.Admin_name,
       sortable: true,
-      width: "150px",
+      width: "130px",
     }),
     baseColumns.splice(6, 0, {
       name: "Branch",
       selector: (row) => row.branch_name,
       sortable: true,
-      width: "150px",
+      width: "100px",
     });
   }
   if (userRole === "branchAdmin") {

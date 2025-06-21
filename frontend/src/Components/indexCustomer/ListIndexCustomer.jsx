@@ -51,7 +51,7 @@ const ListIndexCustomer = () => {
               Admin_name:customer.userId.name,
               name:customer.name,
               pno:customer.pno,
-              createAt: new Date(customer.createAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
+              createdAt: new Date(customer.createdAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
               day: "numeric"}),
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
               

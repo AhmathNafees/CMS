@@ -80,11 +80,11 @@ const ViewIndexCustomer = () => {
                 </div>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Created:</p>
-                    <p className=' font-medium whitespace-nowrap'>{new Date(indexCustomer.createAt).toLocaleDateString('en-GB')}</p>
+                    <p className=' font-medium whitespace-nowrap'>{new Date(indexCustomer.createdAt).toLocaleDateString('en-GB')}</p>
                 </div>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Branch:</p>
-                    <p className=' font-medium whitespace-nowrap'>{new Date(indexCustomer.updateAt).toLocaleDateString('en-GB')}</p>
+                    <p className=' font-medium whitespace-nowrap'>{new Date(indexCustomer.updatedAt).toLocaleDateString('en-GB')}</p>
                 </div>
             </div>
             
