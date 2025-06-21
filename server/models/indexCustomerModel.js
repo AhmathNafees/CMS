@@ -11,7 +11,7 @@ const IndexCustomerSchema = new Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
     createAt:{type: Date, default:Date.now},
-    UpdateAt:{type: Date, default:Date.now},
+    updateAt:{type: Date, default:Date.now},
 
 });
 

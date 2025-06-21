@@ -20,7 +20,7 @@ const customerSchema = new Schema({
     enum: ['begin', 'processing', 'complete', 'reject'],
     default: 'begin'},
     createAt:{type: Date, default:Date.now},
-    UpdateAt:{type: Date, default:Date.now},
+    updateAt:{type: Date, default:Date.now},
 
 });
 

@@ -46,6 +46,10 @@ const ViewCustomer = () => {
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-y-1 gap-x-90'>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Status:</p>
+                    <p className=' font-medium'>{customer.status}</p>
+                </div>
+                <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Name:</p>
                     <p className=' font-medium'>{customer.name}</p>
                 </div>
@@ -94,6 +98,14 @@ const ViewCustomer = () => {
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Branch:</p>
                     <p className=' font-medium whitespace-nowrap'>{customer.branchId.branch_name}</p>
+                </div>
+                <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Created:</p>
+                    <p className=' font-medium whitespace-nowrap'>{new Date(customer.createAt).toLocaleDateString('en-GB')}</p>
+                </div>
+                <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Updated:</p>
+                    <p className=' font-medium whitespace-nowrap'>{new Date(customer.updateAt).toLocaleDateString('en-GB')}</p>
                 </div>
             </div>
             
