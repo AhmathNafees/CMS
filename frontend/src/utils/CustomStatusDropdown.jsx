@@ -1,87 +1,77 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { FaHourglassHalf, FaSyncAlt, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import React, { useState, useRef, useEffect } from "react";
+import { FaHourglassHalf, FaSyncAlt, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 
 const statusOptions = [
-  { value: 'begin', label: 'Begin', icon: <FaHourglassHalf /> },
-  { value: 'processing', label: 'Processing', icon: <FaSyncAlt className=' text-yellow-500'/> },
-  { value: 'complete', label: 'Complete', icon: <FaCheckCircle className=' text-green-500'/> },
-  { value: 'reject', label: 'Reject', icon: <FaTimesCircle className=' text-red-500'/> },
+  { value: "begin", label: "Begin", icon: <FaHourglassHalf className="text-yellow-500" /> },
+  { value: "processing", label: "Processing", icon: <FaSyncAlt className="text-blue-500 animate-spin" /> },
+  { value: "complete", label: "Complete", icon: <FaCheckCircle className="text-green-500" /> },
+  { value: "reject", label: "Reject", icon: <FaTimesCircle className="text-red-500" /> },
 ];
 
 const CustomStatusDropdown = ({ value, rowId, handleStatusChange }) => {
-  const [open, setOpen] = useState(false);
-  // Local state is used to immediately reflect the new selection.
-  const [selectedValue, setSelectedValue] = useState(value);
-  const dropdownRef = useRef(null);
+  const [selectedStatus, setSelectedStatus] = useState(value);
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef();
 
-  // When the parent value changes, update the local state.
-  useEffect(() => {
-    setSelectedValue(value);
-  }, [value]);
-
-  // Determine the selected option based on selectedValue.
-  const selectedOption = statusOptions.find((option) => option.value === selectedValue);
-
-  const toggleDropdown = () => setOpen((prev) => !prev);
-
-  const onOptionSelect = (option) => {
-    setOpen(false);
-    setSelectedValue(option.value);
-    // Notify the parent about the change.
-    handleStatusChange(rowId, option.value);
+  const handleSelect = (status) => {
+    setSelectedStatus(status);
+    setIsOpen(false);
   };
 
-  // Close dropdown when clicked outside.
+  const onUpdateClick = () => {
+    if (selectedStatus !== value) {
+      handleStatusChange(rowId, selectedStatus);
+    }
+  };
+
+  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpen(false);
+        setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const selected = statusOptions.find((opt) => opt.value === selectedStatus);
+
   return (
-    <div ref={dropdownRef} className="relative inline-block w-full">
-      <div
-        onClick={toggleDropdown}
-        className="border px-2 py-1 rounded text-sm cursor-pointer flex items-center justify-between"
+    <div className="" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex justify-between items-center px-3 py-1 border rounded bg-white text-sm"
       >
-        <div className="flex items-center">
-          {selectedOption ? (
-            <>
-              {selectedOption.icon}
-              <span className="ml-2">{selectedOption.label}</span>
-            </>
-          ) : (
-            <span>Select status</span>
-          )}
-        </div>
-        <svg
-          className="w-4 h-4 ml-2"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </div>
-      {open && (
-        <div className="absolute z-10 w-full mt-1 bg-white border rounded shadow-lg">
-          {statusOptions.map((option) => (
+        <span className="flex items-center gap-2 w-23">
+          {selected?.icon}
+          {selected?.label}
+        </span>
+        <span className="ml-1">&#x25BC;</span>
+      </button>
+
+      {isOpen && (
+        <div className=" z-10 w-full mt-1 border bg-white rounded shadow">
+          {statusOptions.map((opt) => (
             <div
-              key={option.value}
-              onClick={() => onOptionSelect(option)}
-              className="px-3 py-2 flex items-center hover:bg-gray-200 cursor-pointer"
+              key={opt.value}
+              onClick={() => handleSelect(opt.value)}
+              className="px-3 py-2 hover:bg-gray-100 flex items-center gap-2 cursor-pointer text-sm"
             >
-              {option.icon}
-              <span className="ml-2">{option.label}</span>
+              {opt.icon}
+              {opt.label}
             </div>
           ))}
         </div>
       )}
+
+      <button
+        onClick={onUpdateClick}
+        disabled={selectedStatus === value}
+        className="mt-2 px-2 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700 cursor-pointer"
+      >
+        Update
+      </button>
     </div>
   );
 };

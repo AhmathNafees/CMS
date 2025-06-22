@@ -9,7 +9,6 @@ const ListCustomer = () => {
   const [customers, setCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
-  const [selectedRowId, setSelectedRowId] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -42,7 +41,7 @@ const ListCustomer = () => {
           },
         }
       );
-      fetchCustomers();
+      // fetchCustomers();
 
       // Update state locally
       setCustomers((prev) =>
@@ -55,13 +54,18 @@ const ListCustomer = () => {
           c._id === customerId ? { ...c, status: newStatus } : c
         )
       );
+      
+      fetchCustomers();
     } catch (error) {
       alert("Failed to update status");
       console.error(error);
     }
   };
   // ✅ Call baseColumns with the handler
-  const dynamicColumns = customerColumns(handleStatusChange,userRole);
+  const dynamicColumns = customerColumns(
+    handleStatusChange,
+    userRole,
+  );
 
   //Fetch Customers///////////////
   const fetchCustomers = async()=>{
@@ -92,6 +96,7 @@ const ListCustomer = () => {
         let sno =1;
         const data =await response.data.customers.map((customer)=>(
           {
+            ...customer,
             _id:customer._id,
             sno:sno++,
             branch_name:customer.branchId.branch_name,
@@ -99,7 +104,6 @@ const ListCustomer = () => {
             name:customer.name,
             pno:customer.pno,
             nic:customer.nic,
-            status: customer.status,
             updatedAt : new Date(customer.updatedAt).toLocaleString('en-GB',{
               day: '2-digit',
               month: '2-digit',
@@ -141,22 +145,6 @@ const ListCustomer = () => {
     );
     setFilteredCustomers(records);
   };
-
-  // Handler when a row is clicked; toggle selection
-  const handleRowClick = (row) => {
-    setSelectedRowId((prevId) => (prevId === row._id ? null : row._id));
-  };
-  // conditionalRowStyles for clicked (selected) row
-  const conditionalRowStyles = [
-    {
-      when: (row) => row._id === selectedRowId,
-      style: {
-        transition: 'all 1s ease-in-out',
-        height: '170px',
-        alignItems: 'flex-start',
-      },
-    },
-  ];
 
   // For Status Filter
   useEffect(() => {
@@ -209,8 +197,6 @@ const ListCustomer = () => {
             columns={dynamicColumns}
             data={filteredCustomers}
             pagination
-            onRowClicked={handleRowClick}
-            conditionalRowStyles={conditionalRowStyles}
             customStyles={{
               pagination: {
                 style: {
@@ -222,11 +208,6 @@ const ListCustomer = () => {
                 style: {
                   minHeight: '72px', // adjust as needed
                   marginTop:"10px",
-                  // '&:hover':{
-                  //   transition: 'all 1s ease-in-out',
-                  //   height: '170px',
-                  //   alignItems: 'flex-start', // pushes content to top
-                  // }
                 },
               },
             }}
