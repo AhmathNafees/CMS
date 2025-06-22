@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
+import PDFViewer from '../../utils/PDFViewer';
 
 const ViewIndexCustomer = () => {
     const[indexCustomer, setIndexCustomer]=useState(null)
@@ -41,8 +42,12 @@ const ViewIndexCustomer = () => {
                 <img src={`http://localhost:3000/${indexCustomer.profileImage}`} alt="" className=' rounded-full border-2 w-72' />
             </div>
             <div>
-              <p className=' text-lg font-bold'>Passport Image</p>
-              <img src={`http://localhost:3000/${indexCustomer.passportImage}`} alt="" className=' rounded-md w-72 border-2'  />
+              <p className=' text-lg font-bold'>View CV</p>
+              <a href={`http://localhost:3000/${indexCustomer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>
+            </div>
+            <div>
+              <p className=' text-lg font-bold'>View Passport</p>
+              <a href={`http://localhost:3000/${indexCustomer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-y-1 gap-x-90'>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>

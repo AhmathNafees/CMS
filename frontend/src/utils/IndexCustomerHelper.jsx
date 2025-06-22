@@ -15,12 +15,12 @@ export const columns = () =>[
     sortable : true,
     width:"160px",
   },
-  {
-    name: "Profile Image",
-    selector: (row)=> row.profileImage,
-    width:"130px",
-    center:"true",
-  },
+  // {
+  //   name: "CV",
+  //   selector: (row)=> row.cvPdf,
+  //   width:"130px",
+  //   center:"true",
+  // },
   {
     name: "Branch Admin",
     selector: (row)=> row.Admin_name,

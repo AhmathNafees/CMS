@@ -9,7 +9,8 @@ const EditIndexCustomer = () => {
         location:'',
         gender:'',
         profileImage:'',
-        passportImage:'',
+        passportPdf:'',
+        cvPdf:'',
         desc:'',
     })
 
@@ -36,7 +37,8 @@ const EditIndexCustomer = () => {
             location:indexCustomer.location,
             desc:indexCustomer.desc,
             profileImage:indexCustomer.profileImage,
-            passportImage:indexCustomer.passportImage,
+            passportPdf:indexCustomer.passportPdf,
+            cvPdf:indexCustomer.cvPdf,
             }))
           }
         }catch(error){
@@ -51,7 +53,7 @@ const EditIndexCustomer = () => {
     const handleChange =(e)=>{
         const{name, value, files} =e.target
         // Check if the field is a file input (for profileImage or passportImage)
-        if ((name === "profileImage" || name === "passportImage") && files && files.length > 0) {
+        if ((name === "profileImage" || name === "passportPdf" || name === "cvPdf") && files && files.length > 0) {
             setFormData((prevData)=>({...prevData, [name]:files[0]}))
         }else{
             setIndexCustomer((prevData)=>({...prevData, [name]:value}))
@@ -122,21 +124,44 @@ const EditIndexCustomer = () => {
                 </div>
 
                 {/* Passport Upload */}
-                {indexCustomer.passportImage && (
+                {indexCustomer.passportPdf && (
                 <div className="mb-4">
-                    <label className='block text-sm font-medium text-gray-700'>Current Profile Image</label>
-                    <img
-                    src={`http://localhost:3000/${indexCustomer.passportImage}`}
-                    alt="Profile"
-                    className="w-24 h-24 object-cover rounded-full"
-                    />
+                    <label className='block text-sm font-medium text-gray-700 mb-1'>Current Passport PDF</label>
+                    <a className=' border p-0.5  rounded-md' href={`http://localhost:3000/${indexCustomer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
                 </div>
                 )}
                 <div>
                     <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
-                        Upload Passport By Image
+                        Upload Passport By PDF
                     </label>
-                    <input type="file" name='passportImage' id='passportImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' accept='image/*' onChange={handleChange}/>
+                    <input
+                        type="file"
+                        name="passportPdf"
+                        id="passportPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
+                </div>
+                {/* CV Upload */}
+                {indexCustomer.cvPdf && (
+                <div className="mb-4">
+                    <label className='block text-sm font-medium text-gray-700 mb-1'>Current CV PDF</label>
+                    <a className=' border p-0.5  rounded-md' href={`http://localhost:3000/${indexCustomer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV </a>
+                </div>
+                )}
+                <div>
+                    <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
+                        Upload CV By PDF
+                    </label>
+                    <input
+                        type="file"
+                        name="cvPdf"
+                        id="cvPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
                 </div>
 
                 {/* Gender */}
@@ -165,7 +190,7 @@ const EditIndexCustomer = () => {
                 )}
                 <div>
                     <label htmlFor="baImage" className=' block text-sm font-medium text-gray-700'>
-                        Upload Image
+                        Upload Profile Image
                     </label>
                     <input type="file" name='profileImage' id='baImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' accept='image/*' onChange={handleChange}/>
                 </div>

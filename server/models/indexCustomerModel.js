@@ -7,7 +7,8 @@ const IndexCustomerSchema = new Schema({
     gender : {type:String},
     profileImage:{type:String},
     desc: { type: String },
-    passportImage: { type: String },
+    passportPdf: { type: String },     // ← updated
+    cvPdf: { type: String },
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     branchId: { type: mongoose.Schema.Types.ObjectId, ref: "Branch", required: true },
 

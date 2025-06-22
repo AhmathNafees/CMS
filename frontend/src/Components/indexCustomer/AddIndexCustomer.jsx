@@ -9,7 +9,7 @@ const AddIndexCustomer = () => {
     const handleChange =(e)=>{
         const{name, value, files} =e.target
         // Check if the field is a file input (for profileImage or passportImage)
-        if ((name === "profileImage" || name === "passportImage") && files && files.length > 0) {
+        if ((name === "profileImage" || name === "passportPdf" || name === "cvPdf") && files && files.length > 0) {
             setFormData((prevData)=>({...prevData, [name]:files[0]}))
         }else{
             setFormData((prevData)=>({...prevData, [name]:value}))
@@ -35,7 +35,6 @@ const AddIndexCustomer = () => {
                 alert(error.response.data.error)
             }
         }
-
 
     }
     
@@ -76,12 +75,34 @@ const AddIndexCustomer = () => {
                     onChange={handleChange}/>
                 </div>
                 
-                {/* Passport Upload */}
+                {/* Passport PDF Upload */}
                 <div>
-                    <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
-                        Upload Passport By Image
+                    <label htmlFor="passportPdf" className='block text-sm font-medium text-gray-700'>
+                        Upload Passport (PDF only)
                     </label>
-                    <input type="file" name='passportImage' id='passportImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' accept='image/*' onChange={handleChange}/>
+                    <input
+                        type="file"
+                        name="passportPdf"
+                        id="passportPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
+                </div>
+
+                {/* CV Upload */}
+                <div>
+                    <label htmlFor="cvPdf" className='block text-sm font-medium text-gray-700'>
+                        Upload CV (PDF only)
+                    </label>
+                    <input
+                        type="file"
+                        name="cvPdf"
+                        id="cvPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
                 </div>
 
                 {/* Gender */}

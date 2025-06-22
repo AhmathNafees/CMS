@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 import axios from 'axios';
 import { CustomerButtons,columns} from '../../utils/IndexCustomerHelper';
 
+
 const ListIndexCustomer = () => {
   const { branchAdminId,branchId } = useParams();
   const [indexCustomers, setIndexCustomers]= useState([]);
@@ -54,6 +55,7 @@ const ListIndexCustomer = () => {
               createdAt: new Date(customer.createdAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
               day: "numeric"}),
               profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
+              cvPdf:<a href={`http://localhost:3000/${customer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>,
               
               action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
             }
