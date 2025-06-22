@@ -43,11 +43,11 @@ const ViewIndexCustomer = () => {
             </div>
             <div>
               <p className=' text-lg font-bold'>View CV</p>
-              <a href={`http://localhost:3000/${indexCustomer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>
+              <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${indexCustomer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>
             </div>
             <div>
               <p className=' text-lg font-bold'>View Passport</p>
-              <a href={`http://localhost:3000/${indexCustomer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
+              <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${indexCustomer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-y-1 gap-x-90'>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>

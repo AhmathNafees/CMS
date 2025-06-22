@@ -28,7 +28,7 @@ export const columns = [
   },
   {
     name: "Role",
-    selector: (row)=> row.role,
+    selector: (row)=> row.role.charAt(0).toUpperCase() + row.role.slice(1),
     sortable : true,
     width:"130px",
   },

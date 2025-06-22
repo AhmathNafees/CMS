@@ -195,9 +195,13 @@ const deleteIndexCustomer = async (req, res) => {
       deleteImage("indexCustomers", indexCustomer.profileImage);
     }
 
-    // Delete passport image if exists
-    if (indexCustomer.passportImage) {
-      deleteImage("indexCustomerCV", indexCustomer.passportImage);
+    // Delete CV PDF if exists
+    if (indexCustomer.cvPdf) {
+      deleteImage("indexCustomerCV", indexCustomer.cvPdf);
+    }
+    // Delete Passports PDF if exists
+    if (indexCustomer.passportPdf) {
+      deleteImage("passports", indexCustomer.passportPdf);
     }
 
     // Delete customer from database

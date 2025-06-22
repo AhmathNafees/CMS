@@ -63,7 +63,7 @@ const ViewBranchByAdmins = () => {
     { name: "S No", selector: (row) => row.sno, sortable: true,width:"75px", },
     { name: "Name", selector: (row) => row.name, sortable: true, width:"100px", },
     { name: "Profile", selector: (row) => row.profileImage,width:"75px", },
-    { name: "Role", selector: (row) => row.role },
+    { name: "Role", selector: (row) => row.role.charAt(0).toUpperCase() + row.role.slice(1) },
     { name: "Branch", selector: (row) => row.branch_name },
     { name: "Phone", selector: (row) => row.pno },
     { name: "Action", selector: (row) => row.action,center:true },

@@ -127,7 +127,7 @@ const EditIndexCustomer = () => {
                 {indexCustomer.passportPdf && (
                 <div className="mb-4">
                     <label className='block text-sm font-medium text-gray-700 mb-1'>Current Passport PDF</label>
-                    <a className=' border p-0.5  rounded-md' href={`http://localhost:3000/${indexCustomer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
+                    <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${indexCustomer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
                 </div>
                 )}
                 <div>
@@ -147,7 +147,7 @@ const EditIndexCustomer = () => {
                 {indexCustomer.cvPdf && (
                 <div className="mb-4">
                     <label className='block text-sm font-medium text-gray-700 mb-1'>Current CV PDF</label>
-                    <a className=' border p-0.5  rounded-md' href={`http://localhost:3000/${indexCustomer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV </a>
+                    <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${indexCustomer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV </a>
                 </div>
                 )}
                 <div>
