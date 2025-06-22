@@ -39,7 +39,8 @@ const addCustomer = async (req, res) => {
     } = req.body;
     // Multer handles multiple files via req.files when using upload.fields
     const profileImage = req.files?.profileImage?.[0]?.filename  || "";
-    const passportImage = req.files?.passportImage?.[0]?.filename  || "";
+    const passportPdf = req.files?.passportPdf?.[0]?.filename || "";
+    const cvPdf = req.files?.cvPdf?.[0]?.filename || "";
     //  console.log("Uploaded Files:", req.files);
     const newCustomer = new Customer({
       name,
@@ -51,7 +52,8 @@ const addCustomer = async (req, res) => {
       gender,
       maritalStatus,
       profileImage,
-      passportImage,
+      passportPdf,
+      cvPdf,
       userId,
       branchId: branchAdmin.branch._id,
       passport, 
@@ -151,7 +153,6 @@ const editCustomer = async (req, res) => {
       dob,
       gender,
       maritalStatus,
-      passport,
       desc,
       userId,
       branchId: branchAdmin.branch,
@@ -163,10 +164,16 @@ const editCustomer = async (req, res) => {
       updatedFields.profileImage = req.files.profileImage[0].filename;
     }
 
-    // Handle passport image update
-    if (req.files?.passportImage?.[0]) {
-      deleteImage("passports", customer.passportImage); // delete old passport
-      updatedFields.passportImage = req.files.passportImage[0].filename;
+    // Handle passport PDF update
+    if (req.files?.passportPdf?.[0]) {
+      deleteImage("passports", customer.passportPdf); // delete old passport
+      updatedFields.passportPdf = req.files.passportPdf[0].filename;
+    }
+
+    // Handle CV PDF update
+    if (req.files?.cvPdf?.[0]) {
+      deleteImage("indexCustomerCV", customer.cvPdf); // delete old passport
+      updatedFields.cvPdf = req.files.cvPdf[0].filename;
     }
 
     // Update the customer in DB
@@ -198,10 +205,15 @@ const deleteCustomer = async (req, res) => {
       deleteImage("customers", customer.profileImage);
     }
 
-    // Delete passport image if exists
-    if (customer.passportImage) {
-      deleteImage("passports", customer.passportImage);
+    // Delete CV PDF if exists
+    if (customer.cvPdf) {
+      deleteImage("indexCustomerCV", customer.cvPdf);
     }
+    // Delete Passports PDF if exists
+    if (customer.passportPdf) {
+      deleteImage("passports", customer.passportPdf);
+    }
+
 
     // Delete customer from database
     await Customer.findByIdAndDelete(id);

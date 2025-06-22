@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const IndexCustomerSchema = new Schema({
     name:{type:String, required:true},
-    pno:{type:String, required:true},
+    pno:{type:String},
     location:{type:String},
     gender : {type:String},
     profileImage:{type:String},

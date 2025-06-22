@@ -13,8 +13,8 @@ const EditCustomer = () => {
         gender:'',
         maritalStatus:'',
         profileImage:'',
-        passportImage:'',
-        passport:'', 
+        passportPdf:'',
+        cvPdf:'',
         desc:'',
     })
 
@@ -44,9 +44,9 @@ const EditCustomer = () => {
             pno:customer.pno,
             homeAdd:customer.homeAdd,
             desc:customer.desc,
-            passport:customer.passport,
             profileImage:customer.profileImage,
-            passportImage:customer.passportImage,
+            passportPdf:customer.passportPdf,
+            cvPdf:customer.cvPdf,
             }))
           }
         }catch(error){
@@ -61,7 +61,7 @@ const EditCustomer = () => {
     const handleChange =(e)=>{
         const{name, value, files} =e.target
         // Check if the field is a file input (for profileImage or passportImage)
-        if ((name === "profileImage" || name === "passportImage") && files && files.length > 0) {
+        if ((name === "profileImage" || name === "passportPdf" || name === "cvPdf") && files && files.length > 0) {
             setFormData((prevData)=>({...prevData, [name]:files[0]}))
         }else{
             setCustomer((prevData)=>({...prevData, [name]:value}))
@@ -121,6 +121,13 @@ const EditCustomer = () => {
                     </label>
                     <input type="email" name='email' id='baEmail' placeholder='Enter Email / Gmail' className='mt-1 p-2 block w-full border border-gray-300 rounded-md'  onChange={handleChange} value={customer.email}/>
                 </div>
+                {/* NIC */}
+                <div>
+                    <label htmlFor="nic" className=' block text-sm font-medium text-gray-700'>
+                        NIC
+                    </label>
+                    <input type="text" name='nic' id='nic' placeholder='NIC' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={customer.nic}/>
+                </div>
                 {/* Home Address */}
                 <div>
                     <label htmlFor="homeAdd" className=' block text-sm font-medium text-gray-700'>
@@ -138,38 +145,45 @@ const EditCustomer = () => {
                     onChange={handleChange} value={customer.desc}/>
                 </div>
 
-
-                {/* NIC */}
-                <div>
-                    <label htmlFor="nic" className=' block text-sm font-medium text-gray-700'>
-                        NIC
-                    </label>
-                    <input type="text" name='nic' id='nic' placeholder='NIC' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={customer.nic}/>
-                </div>
-                
-                {/* Passport */}
-                <div>
-                    <label htmlFor="passport" className=' block text-sm font-medium text-gray-700'>
-                        Passport Number
-                    </label>
-                    <input type="text" name='passport' id='passport' placeholder='Passport Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange} value={customer.passport}/>
-                </div>
                 {/* Passport Upload */}
-                {customer.passportImage && (
+                {customer.passportPdf && (
                 <div className="mb-4">
-                    <label className='block text-sm font-medium text-gray-700'>Current Profile Image</label>
-                    <img
-                    src={`http://localhost:3000/${customer.passportImage}`}
-                    alt="Profile"
-                    className="w-24 h-24 object-cover rounded-full"
-                    />
+                    <label className='block text-sm font-medium text-gray-700 mb-1'>Current Passport PDF</label>
+                    <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${customer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
                 </div>
                 )}
                 <div>
                     <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
-                        Upload Passport By Image
+                        Upload Passport By PDF
                     </label>
-                    <input type="file" name='passportImage' id='passportImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' accept='image/*' onChange={handleChange}/>
+                    <input
+                        type="file"
+                        name="passportPdf"
+                        id="passportPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
+                </div>
+                {/* CV Upload */}
+                {customer.cvPdf && (
+                <div className="mb-4">
+                    <label className='block text-sm font-medium text-gray-700 mb-1'>Current CV PDF</label>
+                    <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${customer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV </a>
+                </div>
+                )}
+                <div>
+                    <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
+                        Upload CV By PDF
+                    </label>
+                    <input
+                        type="file"
+                        name="cvPdf"
+                        id="cvPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
                 </div>
 
                 {/* Date of Birth */}

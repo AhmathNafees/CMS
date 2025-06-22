@@ -9,7 +9,7 @@ const AddCustomer = () => {
     const handleChange =(e)=>{
         const{name, value, files} =e.target
         // Check if the field is a file input (for profileImage or passportImage)
-        if ((name === "profileImage" || name === "passportImage") && files && files.length > 0) {
+        if ((name === "profileImage" || name === "passportPdf" || name === "cvPdf") && files && files.length > 0) {
             setFormData((prevData)=>({...prevData, [name]:files[0]}))
         }else{
             setFormData((prevData)=>({...prevData, [name]:value}))
@@ -56,7 +56,7 @@ const AddCustomer = () => {
                     <label htmlFor="pno" className=' block text-sm font-medium text-gray-700'>
                         Mobile Number
                     </label>
-                    <input type="tel" name='pno' id='pno' placeholder='Mobile Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="tel" name='pno' id='pno' placeholder='Mobile Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md'  onChange={handleChange}/>
                 </div>
 
                 {/* Email */}
@@ -66,12 +66,19 @@ const AddCustomer = () => {
                     </label>
                     <input type="email" name='email' id='baEmail' placeholder='Enter Email / Gmail' className='mt-1 p-2 block w-full border border-gray-300 rounded-md'  onChange={handleChange} />
                 </div>
+                {/* NIC */}
+                <div>
+                    <label htmlFor="nic" className=' block text-sm font-medium text-gray-700'>
+                        NIC
+                    </label>
+                    <input type="text" name='nic' id='nic' placeholder='NIC' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' onChange={handleChange}/>
+                </div>
                 {/* Home Address */}
                 <div>
                     <label htmlFor="homeAdd" className=' block text-sm font-medium text-gray-700'>
                         Home Address
                     </label>
-                    <textarea name="homeAdd" id="homeAdd" placeholder='Home Address' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" required
+                    <textarea name="homeAdd" id="homeAdd" placeholder='Home Address' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" 
                     onChange={handleChange}/>
                 </div>
                 {/* Purpose Description */}
@@ -79,32 +86,38 @@ const AddCustomer = () => {
                     <label htmlFor="desc" className=' block text-sm font-medium text-gray-700'>
                         Purpose Descrption
                     </label>
-                    <textarea name="desc" id="desc" placeholder='Eg.Work Description' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" required
+                    <textarea name="desc" id="desc" placeholder='Eg.Work Description' className=' mt-1 p-2 block w-full border border-gray-300 rounded-md ' rows="4" 
                     onChange={handleChange}/>
                 </div>
 
+                {/* Passport PDF Upload */}
+                <div>
+                    <label htmlFor="passportPdf" className='block text-sm font-medium text-gray-700'>
+                        Upload Passport (PDF only)
+                    </label>
+                    <input
+                        type="file"
+                        name="passportPdf"
+                        id="passportPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
+                </div>
 
-                {/* NIC */}
+                {/* CV Upload */}
                 <div>
-                    <label htmlFor="nic" className=' block text-sm font-medium text-gray-700'>
-                        NIC
+                    <label htmlFor="cvPdf" className='block text-sm font-medium text-gray-700'>
+                        Upload CV (PDF only)
                     </label>
-                    <input type="text" name='nic' id='nic' placeholder='NIC' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
-                </div>
-                
-                {/* Passport */}
-                <div>
-                    <label htmlFor="passport" className=' block text-sm font-medium text-gray-700'>
-                        Passport Number
-                    </label>
-                    <input type="text" name='passport' id='passport' placeholder='Passport Number' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
-                </div>
-                {/* Passport Upload */}
-                <div>
-                    <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
-                        Upload Passport By Image
-                    </label>
-                    <input type="file" name='passportImage' id='passportImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' accept='image/*' onChange={handleChange}/>
+                    <input
+                        type="file"
+                        name="cvPdf"
+                        id="cvPdf"
+                        className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        accept="application/pdf"
+                        onChange={handleChange}
+                    />
                 </div>
 
                 {/* Date of Birth */}
@@ -112,7 +125,7 @@ const AddCustomer = () => {
                     <label htmlFor="baDOB" className=' block text-sm font-medium text-gray-700'>
                         Date of Birth
                     </label>
-                    <input type="date" name='dob' id='baDOB' placeholder='DOB' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}/>
+                    <input type="date" name='dob' id='baDOB' placeholder='DOB' className='mt-1 p-2 block w-full border border-gray-300 rounded-md'  onChange={handleChange}/>
                 </div>
 
                 {/* Gender */}
@@ -133,7 +146,7 @@ const AddCustomer = () => {
                     <label htmlFor="maritalStatus" className=' block text-sm font-medium text-gray-700'>
                         Marital Status
                     </label>
-                    <select  name='maritalStatus' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' required onChange={handleChange}>
+                    <select  name='maritalStatus' className='mt-1 p-2 block w-full border border-gray-300 rounded-md'  onChange={handleChange}>
                         <option value="">Select Status</option>
                         <option value="single">Single</option>
                         <option value="Married">Married</option>
@@ -144,7 +157,7 @@ const AddCustomer = () => {
                 {/* Image Upload */}
                 <div>
                     <label htmlFor="baImage" className=' block text-sm font-medium text-gray-700'>
-                        Upload Image
+                        Upload Profile Image
                     </label>
                     <input type="file" name='profileImage' id='baImage' placeholder='Upload Image' className='mt-1 p-2 block w-full border border-gray-300 rounded-md' accept='image/*' onChange={handleChange}/>
                 </div>
