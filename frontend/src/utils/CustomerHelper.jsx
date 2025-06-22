@@ -30,12 +30,12 @@ export const columns = (handleStatusChange, userRole) =>{
       name: "Customer Name",//coloumn name
       selector: (row)=> row.name, //in the jsx file name given
       sortable : true,
-      width:"160px",
+      width:"120px",
     },
     {
       name: "Profile Image",
       selector: (row)=> row.profileImage,
-      width:"130px",
+      width:"110px",
       center:"true",
     },
     {
@@ -43,6 +43,7 @@ export const columns = (handleStatusChange, userRole) =>{
       selector: (row) => row.status,
       cell: (row) => {
         if (userRole === "branchAdmin") {
+          // console.log("🧪 Row Status:", row.status); // 👈 Add this
           return (
             <CustomStatusDropdown
               value={row.status}
@@ -80,7 +81,7 @@ export const columns = (handleStatusChange, userRole) =>{
     {
       name: "Action",
       selector: (row)=> row.action,
-      center:"true",
+      center:'true',
     },
   ]
 

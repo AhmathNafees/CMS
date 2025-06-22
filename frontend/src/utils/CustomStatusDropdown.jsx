@@ -23,7 +23,9 @@ const CustomStatusDropdown = ({ value, rowId, handleStatusChange }) => {
       handleStatusChange(rowId, selectedStatus);
     }
   };
-
+  useEffect(() => {
+    setSelectedStatus(value); // Sync with external prop updates
+  }, [value]);
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e) => {

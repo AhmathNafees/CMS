@@ -54,7 +54,6 @@ const ListCustomer = () => {
           c._id === customerId ? { ...c, status: newStatus } : c
         )
       );
-      
       fetchCustomers();
     } catch (error) {
       alert("Failed to update status");
@@ -94,9 +93,11 @@ const ListCustomer = () => {
       // console.log(response.data)
       if(response.data.success){
         let sno =1;
+        console.log("💡 API Raw Customer", response.data.customers);
         const data =await response.data.customers.map((customer)=>(
           {
             ...customer,
+            status: customer.status,
             _id:customer._id,
             sno:sno++,
             branch_name:customer.branchId.branch_name,
@@ -114,7 +115,7 @@ const ListCustomer = () => {
             }),
             createAt: new Date(customer.createAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
             day: "numeric"}),
-            profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
+            profileImage:<img width={100} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
             
             action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
           }
