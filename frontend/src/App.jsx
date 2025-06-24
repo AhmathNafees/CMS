@@ -25,6 +25,9 @@ import ListIndexCustomer from "./Components/indexCustomer/ListIndexCustomer";
 import AddIndexCustomer from "./Components/indexCustomer/AddIndexCustomer";
 import ViewIndexCustomer from "./Components/indexCustomer/ViewIndexCustomer";
 import EditIndexCustomer from "./Components/indexCustomer/EditIndexCustomer";
+import MyRequests from "./Components/customerCare/MyRequests";
+import MyLogs from "./Components/customerCare/MyLogs";
+import Requests from "./Components/branchAdmin/Requests";
 
 
 function App() {
@@ -92,6 +95,8 @@ function App() {
           <Route path="add-customer" element={<AddCustomer />} />
           <Route path="customer/:id" element={<ViewCustomer />} />
           <Route path="customer/edit/:id" element={<EditCustomer />} />
+          <Route path="requests" element={<Requests />} />
+          <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
         </Route>
 
 
@@ -114,6 +119,8 @@ function App() {
           <Route path="add-indexCustomer" element={<AddIndexCustomer />} />
           <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
           <Route path="indexCustomer/edit/:id" element={<EditIndexCustomer />} />
+          <Route path="myRequests" element={<MyRequests />} />
+          <Route path="myLogs" element={<MyLogs />} />
 
         </Route>
 

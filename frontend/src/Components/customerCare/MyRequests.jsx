@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import {Link, useParams} from 'react-router-dom'
 import DataTable from 'react-data-table-component';
 import axios from 'axios';
-import { CustomerButtons,columns} from '../../utils/IndexCustomerHelper';
+import { CustomerButtons,columns} from '../customerCare/MyRequestsHelper';
 
 
-const ListIndexCustomer = () => {
+const MyRequests = () => {
   const { branchAdminId,branchId } = useParams();
   const [indexCustomers, setIndexCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
@@ -36,30 +36,43 @@ const ListIndexCustomer = () => {
           // Main admin viewing all
           url = `http://localhost:3000/api/IndexCustomer/`;
         }
-        const response = await axios.get(url,{
-          headers: {
-            Authorization :`Bearer ${localStorage.getItem('accessToken')}`
-          }
-        })
-        // console.log(response.data)
-        if(response.data.success){
-          let sno =1;
-          const data =await response.data.indexCustomers.map((customer)=>(
-            {
-              _id:customer._id,
-              sno:sno++,
-              branch_name:customer.branchId.branch_name,
-              Admin_name:customer.userId.name,
-              name:customer.name,
-              pno:customer.pno,
-              createdAt: new Date(customer.createdAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
-              day: "numeric"}),
-              profileImage:<img width={40} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
-              cvPdf:<a href={`http://localhost:3000/${customer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>,
-              
-              action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
+        const [custRes, reqRes] = await Promise.all([
+          axios.get(url, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`
             }
-          ))
+          }),
+          axios.get("http://localhost:3000/api/request/my-requests", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("accessToken")}`
+            }
+          })
+        ]);
+        const requestMap = {};
+        reqRes.data.requests.forEach(req => {
+          requestMap[req.indexCustomer._id] = {
+            status: req.status,
+            handledBy: req.handledBy?.name || "N/A"
+          };
+        });
+        // console.log(response.data)
+        if (custRes.data.success) {
+        let sno = 1;
+        const data = custRes.data.indexCustomers.map(customer => {
+          const reqInfo = requestMap[customer._id] || { status: "Not Sent", handledBy: "-" };
+          return {
+            _id: customer._id,
+            sno: sno++,
+            name: customer.name,
+            pno: customer.pno,
+            createdAt: new Date(customer.createdAt).toLocaleDateString(),
+            profileImage: <img width={40} className="rounded-full" src={`http://localhost:3000/${customer.profileImage}`} />,
+            cvPdf: <a href={`http://localhost:3000/${customer.cvPdf}`} target="_blank" rel="noopener noreferrer">Download CV</a>,
+            action: <CustomerButtons _id={customer._id} customer={customer} />,
+            status: reqInfo.status,
+            handledBy: reqInfo.handledBy,
+          };
+        });
           setIndexCustomers(data)
           setFilteredCustomers(data)
         }
@@ -94,7 +107,7 @@ const ListIndexCustomer = () => {
           className=' px-4 py-0.5 ml-1 border rounded w-65' onChange={handleFilter}
           />
           <div className='text-center'>
-            <h3 className=' text-2xl font-bold'>Manage Customers</h3>
+            <h3 className=' text-2xl font-bold'>Send Index Customers</h3>
           </div>
           {userRole === "customerCare" ? (
             <Link
@@ -114,12 +127,12 @@ const ListIndexCustomer = () => {
             columns={columns()}
             data={filteredCustomers}
             pagination
-            defaultSortFieldId="createdAt"
+            defaultSortFieldId="createdAt" // 🔁 Sort by Created column
             defaultSortAsc={false}
           />
         </div>
-      </div>
+    </div>
   )
 }
 
-export default ListIndexCustomer
+export default MyRequests;

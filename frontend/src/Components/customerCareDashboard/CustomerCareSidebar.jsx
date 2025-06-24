@@ -1,6 +1,6 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom';
-import {FaBuilding, FaCogs, FaTachometerAlt, FaUser, FaUsers} from 'react-icons/fa';
+import {FaBuilding, FaCogs, FaExchangeAlt, FaTachometerAlt, FaUser, FaUsers} from 'react-icons/fa';
 import { useAuth } from '../../context/AuthProvider';
 
 const CustomerCareSidebar = () => {
@@ -27,6 +27,16 @@ const CustomerCareSidebar = () => {
             className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaUsers/>
                 <span>Index Customers</span>
+            </NavLink>
+            <NavLink to="/customerCare-dashboard/myRequests"
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
+                <FaExchangeAlt/>
+                <span>My Requests</span>
+            </NavLink>
+            <NavLink to="/customerCare-dashboard/myLogs"
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
+                <FaUsers/>
+                <span>My Logs</span>
             </NavLink>
 
             <NavLink to="/customerCare-dashboard/setting"

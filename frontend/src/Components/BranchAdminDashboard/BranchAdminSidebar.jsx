@@ -1,6 +1,6 @@
 import React from 'react'
 import {NavLink} from 'react-router-dom';
-import {FaBuilding, FaCogs, FaTachometerAlt, FaUser, FaUsers} from 'react-icons/fa';
+import {FaBuilding, FaCogs, FaExchangeAlt, FaTachometerAlt, FaUser, FaUsers} from 'react-icons/fa';
 import { useAuth } from '../../context/AuthProvider';
 
 const BranchAdminSidebar = () => {
@@ -27,6 +27,11 @@ const BranchAdminSidebar = () => {
             className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaUsers/>
                 <span>Customers</span>
+            </NavLink>
+            <NavLink to="/branchAdmin-dashboard/requests"
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
+                <FaExchangeAlt/>
+                <span>Requests</span>
             </NavLink>
 
             <NavLink to="/branchAdmin-dashboard/setting"

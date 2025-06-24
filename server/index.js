@@ -8,6 +8,7 @@ import settingRouter from './routes/setting.js'
 import customerRouter from './routes/customer.js'
 import customerCareRouter from './routes/customercare.js'
 import indexCustomerRouter from './routes/indexCustomer.js'
+import requestRouter from './routes/requests.js'
 
 connectToDatabase()
 const app = express()
@@ -25,6 +26,8 @@ app.use('/api/customerCare',customerCareRouter)
 app.use('/api/setting',settingRouter)
 app.use('/api/customer',customerRouter)
 app.use('/api/indexCustomer',indexCustomerRouter)
+app.use('/api/request',requestRouter)
+
 
 app.listen(process.env.PORT,()=>{
     console.log(`Server is runnig on port ${process.env.PORT}`)

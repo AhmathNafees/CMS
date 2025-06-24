@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import CustomStatusDropdown from './CustomStatusDropdown';
 
 export const columns = () =>[
   {
@@ -39,6 +38,7 @@ export const columns = () =>[
   //   width:"150px",
   // },
   {
+    id: 'createdAt', // 🔑 Add an ID for sorting
     name: "Created",
     selector: (row)=> row.createdAt,
     width:"130px",

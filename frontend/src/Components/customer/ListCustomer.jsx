@@ -93,7 +93,7 @@ const ListCustomer = () => {
       // console.log(response.data)
       if(response.data.success){
         let sno =1;
-        console.log("💡 API Raw Customer", response.data.customers);
+        // console.log("💡 API Raw Customer", response.data.customers);
         const data =await response.data.customers.map((customer)=>(
           {
             ...customer,
