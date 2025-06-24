@@ -134,5 +134,36 @@ const updateRequestStatus = async (req, res) => {
   }
 };
 
+const getAllLogs = async (req, res) => {
+  try {
+    const userRole = req.user.role;
+    const userId = req.user.id;
 
-export{createRequest,getRequests,updateRequestStatus, getMyRequests}
+    let filter = {};
+
+    if (userRole === "branchAdmin") {
+      // Only show requests handled by this branchAdmin
+      filter.handledBy = userId;
+    } else if (userRole === "customerCare") {
+      // Only show requests created by this customerCare
+      filter.requestedBy = userId;
+    }
+
+    const logs = await Request.find(filter)
+      .populate("indexCustomer")
+      .populate("requestedBy", "name")
+      .populate("handledBy", "name")
+      .populate("branch", "branch_name")
+      .sort({ createdAt: -1 });
+
+    const validLogs = logs.filter(req => req.indexCustomer);
+
+    return res.json({ success: true, logs: validLogs });
+  } catch (error) {
+    console.error("Error fetching logs:", error.message);
+    return res.status(500).json({ success: false, error: "Server error" });
+  }
+};
+
+
+export{createRequest,getRequests,updateRequestStatus, getMyRequests,getAllLogs}

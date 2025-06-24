@@ -198,6 +198,8 @@ const ListCustomer = () => {
             columns={dynamicColumns}
             data={filteredCustomers}
             pagination
+            defaultSortFieldId="createdAt"
+            defaultSortAsc={false}
             customStyles={{
               pagination: {
                 style: {

@@ -72,9 +72,8 @@ function App() {
             <Route path="customer/:id" element={<ViewCustomer />} />
             <Route path="/admin-dashboard/indexCustomers/:branchAdminId" element={<ListIndexCustomer />} />
             <Route path="/admin-dashboard/indexCustomer/byBranch/:branchId" element={<ListIndexCustomer />} />
+            <Route path="logs" element={<Logs />} />
             
-
-
         </Route>
         
         <Route
@@ -97,6 +96,7 @@ function App() {
           <Route path="customer/edit/:id" element={<EditCustomer />} />
           <Route path="requests" element={<Requests />} />
           <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
+          <Route path="logs" element={<Logs />} />
         </Route>
 
 

@@ -41,8 +41,15 @@ const ViewCustomer = () => {
                 <img src={`http://localhost:3000/${customer.profileImage}`} alt="" className=' rounded-full border-2 w-72' />
             </div>
             <div>
-              <p className=' text-lg font-bold'>Passport Image</p>
-              <img src={`http://localhost:3000/${customer.passportImage}`} alt="" className=' rounded-md w-72 border-2'  />
+
+            </div>
+            <div>
+              <p className=' text-lg font-bold'>View CV</p>
+              <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${customer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>
+            </div>
+            <div>
+              <p className=' text-lg font-bold'>View Passport</p>
+              <a   className="text-blue-500 hover:text-blue-700 underline font-semibold" href={`http://localhost:3000/${customer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport</a>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-y-1 gap-x-90'>
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
@@ -73,10 +80,7 @@ const ViewCustomer = () => {
                     <p className=' text-lg font-bold'>NIC:</p>
                     <p className=' font-medium'>{customer.nic}</p>
                 </div>
-                <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
-                    <p className=' text-lg font-bold whitespace-nowrap'>Passport Number:</p>
-                    <p className=' font-medium'>{customer.passport}</p>
-                </div>
+
                 <div className=' flex flex-col md:flex-row md:items-center space-x-3 mb-5'>
                     <p className=' text-lg font-bold whitespace-nowrap'>Date of Birth:</p>
                     <p className=' font-medium'>{new Date(customer.dob).toLocaleDateString()}</p>

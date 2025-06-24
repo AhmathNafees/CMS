@@ -64,13 +64,14 @@ export const columns = (handleStatusChange, userRole) =>{
       center:'true'
 
     },
-    // {
-    //   name: "Created",
-    //   selector: (row)=> row.createAt,
-    //   width:"130px",
-    //   sortable:true,
+    {
+      id: 'createdAt', // 🔑 Add an ID for sorting
+      name: "Created",
+      selector: (row)=> row.createAt,
+      width:"130px",
+      sortable:true,
       
-    // },
+    },
     {
       name: "Updated",
       selector: (row)=> row.updatedAt,
@@ -99,14 +100,14 @@ export const columns = (handleStatusChange, userRole) =>{
       width: "100px",
     });
   }
-  if (userRole === "branchAdmin") {
-    baseColumns.splice(4, 0, {
-      name: "Phone Number",
-      selector: (row) => row.pno,
-      sortable: true,
-      width: "150px",
-    });
-  }
+  // if (userRole === "branchAdmin") {
+  //   baseColumns.splice(4, 0, {
+  //     name: "Phone Number",
+  //     selector: (row) => row.pno,
+  //     sortable: true,
+  //     width: "150px",
+  //   });
+  // }
   return baseColumns;
   
 }
