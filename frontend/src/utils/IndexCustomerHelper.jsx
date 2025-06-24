@@ -1,7 +1,8 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export const columns = () =>[
+export const columns = (userRole) =>{
+  const baseColumns=[
   {
     name: "S No",
     selector: (row)=> row.sno,
@@ -14,29 +15,11 @@ export const columns = () =>[
     sortable : true,
     width:"160px",
   },
-  // {
-  //   name: "CV",
-  //   selector: (row)=> row.cvPdf,
-  //   width:"130px",
-  //   center:"true",
-  // },
   {
-    name: "Branch Admin",
-    selector: (row)=> row.Admin_name,
-    sortable : true,
+    name: "Phone Number",
+    selector: (row)=> row.pno,
     width:"150px",
   },
-  {
-    name: "Branch",
-    selector: (row)=> row.branch_name,
-    sortable : true,
-    width:"150px",
-  },
-  // {
-  //   name: "Phone Number",
-  //   selector: (row)=> row.pno,
-  //   width:"150px",
-  // },
   {
     id: 'createdAt', // 🔑 Add an ID for sorting
     name: "Created",
@@ -49,8 +32,23 @@ export const columns = () =>[
     name: "Action",
     selector: (row)=> row.action,
     center:"true",
-  },
-]
+  },]
+  if (userRole === "admin") {
+    baseColumns.splice(3, 0, {
+      name: "Branch Admin",
+      selector: (row) => row.Admin_name,
+      sortable: true,
+      width: "130px",
+    }),
+    baseColumns.splice(4, 0, {
+      name: "Branch",
+      selector: (row) => row.branch_name,
+      sortable: true,
+      width: "100px",
+    });
+  }
+  return baseColumns;
+}
   
 export const CustomerButtons = ({ _id, onDelete, role}) => {
   const navigate = useNavigate();
@@ -78,6 +76,7 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
     }
   };
   const userRole = localStorage.getItem("userRole");
+  
 
   return(
     <div className=" flex space-x-3">

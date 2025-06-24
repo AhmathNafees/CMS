@@ -54,7 +54,7 @@ export const columns = () =>[
   },
 ]
 
-export const CustomerButtons = ({ _id, customer  }) => {
+export const CustomerButtons = ({ _id, customer, onSuccess  }) => {
   const [branches, setBranches] = useState([]);
   const [formData, setFormData] = useState({});
   const userRole = localStorage.getItem("userRole");
