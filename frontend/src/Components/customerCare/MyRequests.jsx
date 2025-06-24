@@ -52,10 +52,11 @@ const MyRequests = () => {
         reqRes.data.requests.forEach(req => {
           requestMap[req.indexCustomer._id] = {
             status: req.status,
-            handledBy: req.handledBy?.name || "N/A"
+            handledBy: req.handledBy?.name || "N/A",
+            branch: req.branch?.branch_name || "N/A"
           };
         });
-        // console.log(response.data)
+        // console.log(reqRes.data)
         if (custRes.data.success) {
         let sno = 1;
         const data = custRes.data.indexCustomers.map(customer => {
@@ -68,9 +69,10 @@ const MyRequests = () => {
             createdAt: new Date(customer.createdAt).toLocaleDateString(),
             profileImage: <img width={40} className="rounded-full" src={`http://localhost:3000/${customer.profileImage}`} />,
             cvPdf: <a href={`http://localhost:3000/${customer.cvPdf}`} target="_blank" rel="noopener noreferrer">Download CV</a>,
-            action: <CustomerButtons _id={customer._id} customer={customer} />,
+            action: <CustomerButtons _id={customer._id} customer={customer} onSuccess={fetchCustomers}/>,
             status: reqInfo.status,
             handledBy: reqInfo.handledBy,
+            branch: reqInfo.branch,
           };
         });
           setIndexCustomers(data)

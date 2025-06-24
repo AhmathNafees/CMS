@@ -26,8 +26,8 @@ import AddIndexCustomer from "./Components/indexCustomer/AddIndexCustomer";
 import ViewIndexCustomer from "./Components/indexCustomer/ViewIndexCustomer";
 import EditIndexCustomer from "./Components/indexCustomer/EditIndexCustomer";
 import MyRequests from "./Components/customerCare/MyRequests";
-import MyLogs from "./Components/customerCare/MyLogs";
 import Requests from "./Components/branchAdmin/Requests";
+import Logs from "./utils/Logs";
 
 
 function App() {
@@ -120,7 +120,7 @@ function App() {
           <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
           <Route path="indexCustomer/edit/:id" element={<EditIndexCustomer />} />
           <Route path="myRequests" element={<MyRequests />} />
-          <Route path="myLogs" element={<MyLogs />} />
+          <Route path="logs" element={<Logs />} />
 
         </Route>
 

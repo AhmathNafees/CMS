@@ -38,8 +38,11 @@ const ViewIndexCustomer = () => {
         </h2>
         <div className=' grid grid-cols-1 md:grid-cols-2 gap-6'>
             <div>
-                <p className=' text-lg font-bold'>Customer Photo</p>
+                <p className=' text-lg font-bold '>Customer Photo</p>
                 <img src={`http://localhost:3000/${indexCustomer.profileImage}`} alt="" className=' rounded-full border-2 w-72' />
+            </div>
+            <div>
+
             </div>
             <div>
               <p className=' text-lg font-bold'>View CV</p>

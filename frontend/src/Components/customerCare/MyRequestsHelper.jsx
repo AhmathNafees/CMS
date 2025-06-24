@@ -46,6 +46,12 @@ export const columns = () =>[
     center: true,
     width:"130px",
   },
+  {
+    name: "Send Branch",
+    selector: (row) => row.branch,
+    center: true,
+    width:"130px",
+  },
 ]
 
 export const CustomerButtons = ({ _id, customer  }) => {
@@ -104,6 +110,7 @@ export const CustomerButtons = ({ _id, customer  }) => {
 
       if (res.data.success) {
         alert("Request sent successfully!");
+        if (onSuccess) onSuccess(); // ✅ Refresh
       } else {
         alert("Failed to send request.");
       }
@@ -112,36 +119,7 @@ export const CustomerButtons = ({ _id, customer  }) => {
       console.error(err);
     }
   };
-  // const [requests, setRequests] = useState([]);
-  // const [loading, setLoading] = useState(false);
-
-  // const fetchMyRequests = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await axios.get("http://localhost:3000/api/request/my-requests", {
-  //       headers: {
-  //         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-  //       },
-  //     });
-
-  //     if (res.data.success) {
-  //       const data = res.data.requests.map((req) => ({
-  //         handledBy: req.handledBy?.name || "N/A",
-  //         status: req.status || "pending"
-  //       }));
-  //       setRequests(data);
-  //     }
-  //   } catch (err) {
-  //     console.error("Error loading requests", err);
-  //     alert("Failed to load requests");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchMyRequests();
-  // }, []);
+  
 
   return (
     <div className="flex space-x-3">
