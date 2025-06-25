@@ -19,7 +19,20 @@ const createRequest = async (req, res) => {
     if (!indexCustomer) {
       return res.status(404).json({ success: false, error: "Index customer not found" });
     }
+    // 🔥 Check for duplicate request
+    const existingRequest = await Request.findOne({
+      indexCustomer: indexCustomerId,
+      branch: branchId,
+      requestedBy,
+    });
 
+    if (existingRequest) {
+      return res.status(400).json({
+        success: false,
+        error: "Request already sent to this branch for this customer",
+      });
+    }
+     // ✅ Create new request
     const newRequest = new Request({
       indexCustomer: indexCustomerId,
       branch: branchId,
@@ -50,6 +63,10 @@ const getRequests = async (req, res) => {
       return res.status(404).json({ success: false, error: "Branch admin data not found" });
     }
 
+    if (!fullBranchAdmin.branch) {
+      return res.status(404).json({ success: false, error: "Branch not assigned to this branch admin" });
+    }
+
     const branchId = fullBranchAdmin.branch._id;
 
     const requests = await Request.find({
@@ -63,10 +80,10 @@ const getRequests = async (req, res) => {
       const validRequests = requests.filter(req => req.indexCustomer); // 🔥 Remove ones with missing customer
 
     return res.json({ success: true, requests:validRequests });
-  } catch (error) {
-    console.error("Error getting branch requests:", error.message);
-    return res.status(500).json({ success: false, error: "Server error" });
-  }
+    } catch (error) {
+      console.error("Error getting branch requests:", error.stack); // <--- full stack
+      return res.status(500).json({ success: false, error: "Server error" });
+    }
 };
 
 const getMyRequests = async (req, res) => {

@@ -41,8 +41,7 @@ const Logs = () => {
 
       if (res.data.success) {
         setLogs(res.data.logs);
-        setFilteredLogs(res.data.logs);
-        setCurrentPage(1);
+
       }
     } catch (err) {
       alert("Failed to load logs.");
@@ -77,15 +76,29 @@ const Logs = () => {
   // Search local filter
   useEffect(() => {
     const lower = searchTerm.toLowerCase();
-    const result = logs.filter((log) => {
+
+    const filtered = logs.filter((log) => {
       const care = log.requestedBy?.name?.toLowerCase() || "";
       const admin = log.handledBy?.name?.toLowerCase() || "";
       const branch = log.branch?.branch_name?.toLowerCase() || "";
-      return care.includes(lower) || admin.includes(lower) || branch.includes(lower);
+      const statusMatch = statusFilter === "all" || log.status === statusFilter;
+      const branchMatch = branchFilter === "all" || log.branch?._id === branchFilter;
+
+      // Date range filtering
+      const created = new Date(log.createdAt);
+      const from = startDate ? new Date(startDate) : null;
+      const to = endDate ? new Date(endDate) : null;
+      const inDateRange = (!from || created >= from) && (!to || created <= to);
+
+      const matchesSearch = care.includes(lower) || admin.includes(lower) || branch.includes(lower);
+
+      return statusMatch && branchMatch && inDateRange && matchesSearch;
     });
-    setFilteredLogs(result);
+
+    setFilteredLogs(filtered);
     setCurrentPage(1);
-  }, [searchTerm, logs]);
+  }, [logs, searchTerm, statusFilter, startDate, endDate, branchFilter]);
+
 
   // Pagination
   const indexOfLast = currentPage * logsPerPage;
