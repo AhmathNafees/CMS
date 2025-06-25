@@ -67,7 +67,7 @@ export const columns = (handleStatusChange, userRole) =>{
     {
       id: 'createdAt', // 🔑 Add an ID for sorting
       name: "Created",
-      selector: (row)=> row.createAt,
+      selector: (row)=> row.createdAt,
       width:"130px",
       sortable:true,
       
