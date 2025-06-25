@@ -46,11 +46,13 @@ const ListIndexCustomer = () => {
         })
         // console.log(response.data)
         if(response.data.success){
-          let sno =1;
-          const data =await response.data.indexCustomers.map((customer)=>(
+          const sortedCustomers = response.data.indexCustomers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
+          );
+
+          const data =sortedCustomers.map((customer, index)=>(
             {
               _id:customer._id,
-              sno:sno++,
+              sno:index + 1,
               name:customer.name,
               pno:customer.pno,
               location:customer.location,
@@ -61,10 +63,16 @@ const ListIndexCustomer = () => {
               passportpdf:<a href={`http://localhost:3000/${customer.passportpdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport PDF</a>,
               Admin_name:customer.userId.name,
               branch_name:customer.branchId.branch_name,
-              createdAt: new Date(customer.createdAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
-              day: "numeric"}),
-              updatedAt: new Date(customer.updatedAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric",
-              day: "numeric"}),
+              createdAt: customer.createdAt, // keep raw for sorting/filtering
+              createdAtDisplay: new Date(customer.createdAt).toLocaleDateString("en-US", {
+                year: "numeric", month: "numeric", day: "numeric"
+              }),
+
+              updatedAt: customer.updatedAt,
+              updatedAtDisplay: new Date(customer.updatedAt).toLocaleDateString("en-US", {
+                year: "numeric", month: "numeric", day: "numeric"
+              }),
+
               
               action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
             }

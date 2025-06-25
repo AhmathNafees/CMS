@@ -23,7 +23,7 @@ export const columns = (userRole) =>{
   {
     id: 'createdAt', // 🔑 Add an ID for sorting
     name: "Created",
-    selector: (row)=> row.createdAt,
+    selector: (row)=> row.createdAtDisplay,
     width:"130px",
     sortable:true,
     

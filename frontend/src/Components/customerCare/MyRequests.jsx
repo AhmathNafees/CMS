@@ -58,12 +58,15 @@ const MyRequests = () => {
         });
         // console.log(reqRes.data)
         if (custRes.data.success) {
-        let sno = 1;
-        const data = custRes.data.indexCustomers.map(customer => {
+          // Sort customers: newest first
+          const sorted = custRes.data.indexCustomers.sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+          );
+        const data = sorted.map((customer,index) => {
           const reqInfo = requestMap[customer._id] || { status: "Not Sent", handledBy: "-" };
           return {
             _id: customer._id,
-            sno: sno++,
+            sno: index + 1,
             name: customer.name,
             pno: customer.pno,
             createdAt: new Date(customer.createdAt).toLocaleDateString(),

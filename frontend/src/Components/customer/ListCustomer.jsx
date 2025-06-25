@@ -95,13 +95,14 @@ const ListCustomer = () => {
       })
       // console.log(response.data)
       if(response.data.success){
-        let sno =1;
+        const sortedCustomers = response.data.customers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
+          );
         // console.log("💡 API Raw Customer", response.data.customers);
-        const data =await response.data.customers.map((customer)=>(
+        const data =sortedCustomers.map((customer, index)=>(
           {
             ...customer,
             _id:customer._id,
-            sno:sno++,
+            sno:index+1,
             name:customer.name,
             status: customer.status,
             pno:customer.pno,
