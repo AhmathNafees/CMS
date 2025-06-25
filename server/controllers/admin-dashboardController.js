@@ -1,0 +1,73 @@
+import BranchAdmin from "../models/BranchAdminModel.js";
+import Branch from "../models/BranchModel.js"
+import Customer from "../models/customerModel.js";
+import IndexCustomer from "../models/indexCustomerModel.js";
+import Request from "../models/requestModel.js";
+import User from "../models/User.js";
+
+const getSummary =async(req,res)=>{
+    try{
+        const totalBranches = await Branch.countDocuments();
+
+        const totalBranchAdmins = await BranchAdmin.countDocuments();
+
+        const totalCustomerCares = await User.countDocuments({
+            role: "customerCare"
+        });
+        const totalBranchAdmin = await User.countDocuments({
+            role: "branchAdmin"
+        });
+        const totalMainAdmin = await User.countDocuments({
+            role: "admin"
+        });     
+        const totalCustomers = await Customer.countDocuments();
+
+        const customerStatus = await Customer.aggregate([
+            {
+                $group:{
+                    _id:"$status",
+                    count : {$sum:1}
+                }
+            }
+        ])
+        const customerSummary ={
+            begin:customerStatus.find(item=>item._id === "begin")?.count || 0,
+            processing:customerStatus.find(item=>item._id === "processing")?.count || 0,
+            complete:customerStatus.find(item=>item._id === "complete")?.count || 0,
+            reject:customerStatus.find(item=>item._id === "reject")?.count || 0
+        }
+
+        const totalIndexCustomers = await IndexCustomer.countDocuments();
+        // const totalRequests = await Request.countDocuments();
+        const requestStatus =await Request.aggregate([
+            {
+                $group:{
+                    _id:"$status",
+                    count : {$sum:1}
+                }
+            }
+        ])
+        const indexCustomerSummary={
+            pending:requestStatus.find(item=>item._id === "pending")?.count || 0,
+        }
+
+        return res.status(200).json({
+            totalBranches,
+            totalBranchAdmins,
+            totalCustomerCares,
+            totalCustomers,
+            totalIndexCustomers,
+            customerSummary,
+            indexCustomerSummary,
+            totalBranchAdmin,
+            totalMainAdmin
+        })
+
+    }catch(error){
+        console.log(error.message)
+        return res.status(500).json({success:false, error:"Admin Dashoard Summary Error"})
+    }
+}
+
+
+export {getSummary}

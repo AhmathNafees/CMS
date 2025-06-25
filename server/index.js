@@ -9,6 +9,7 @@ import customerRouter from './routes/customer.js'
 import customerCareRouter from './routes/customercare.js'
 import indexCustomerRouter from './routes/indexCustomer.js'
 import requestRouter from './routes/requests.js'
+import adminDashboardRouter from './routes/admin-dashboard.js'
 
 connectToDatabase()
 const app = express()
@@ -27,6 +28,7 @@ app.use('/api/setting',settingRouter)
 app.use('/api/customer',customerRouter)
 app.use('/api/indexCustomer',indexCustomerRouter)
 app.use('/api/request',requestRouter)
+app.use('/api/admin-dashboard',adminDashboardRouter)
 
 
 app.listen(process.env.PORT,()=>{
