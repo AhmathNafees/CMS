@@ -109,5 +109,42 @@ const getCustomerCareSummary = async (req, res) => {
   }
 };
 
+const getBranchAdminSummary=async(req,res)=>{
+    try{
+        const branchAdminId =req.user._id
 
-export {getSummary,getCustomerCareSummary}
+        const totalCustomers = await Customer.countDocuments({
+            userId:branchAdminId
+        });
+
+        const customerStatus = await Customer.aggregate([
+            { $match: { userId: new mongoose.Types.ObjectId(branchAdminId) } },
+            {
+                $group:{
+                    _id:"$status",
+                    count : {$sum:1}
+                }
+            }
+        ])
+        const customerSummary ={
+            begin:customerStatus.find(item=>item._id === "begin")?.count || 0,
+            processing:customerStatus.find(item=>item._id === "processing")?.count || 0,
+            complete:customerStatus.find(item=>item._id === "complete")?.count || 0,
+            reject:customerStatus.find(item=>item._id === "reject")?.count || 0
+        }
+
+        return res.status(200).json({
+
+            totalCustomers,
+            customerSummary,
+        })
+
+    }catch(error){
+        console.log(error.message)
+        return res.status(500).json({success:false, error:"Admin Dashoard Summary Error"})
+    }
+
+}
+
+
+export {getSummary,getCustomerCareSummary,getBranchAdminSummary}
