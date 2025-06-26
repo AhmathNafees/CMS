@@ -28,6 +28,7 @@ import EditIndexCustomer from "./Components/indexCustomer/EditIndexCustomer";
 import MyRequests from "./Components/customerCare/MyRequests";
 import Requests from "./Components/branchAdmin/Requests";
 import Logs from "./utils/Logs";
+import CustomerCareSummary from "./Components/customerCareDashboard/CustomerCareSummary";
 
 
 function App() {
@@ -112,7 +113,7 @@ function App() {
           }
         >
           {/* Nested routes use RELATIVE paths here */}
-          <Route index element={<BranchAdminSummary />} />
+          <Route index element={<CustomerCareSummary />} />
           <Route path="profile/:id" element={<ViewBranchAdmins />} />
           <Route path="setting" element={<Setting />} />
           <Route path="indexCustomers" element={<ListIndexCustomer />} />

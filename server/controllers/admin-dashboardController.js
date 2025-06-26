@@ -4,6 +4,7 @@ import Customer from "../models/customerModel.js";
 import IndexCustomer from "../models/indexCustomerModel.js";
 import Request from "../models/requestModel.js";
 import User from "../models/User.js";
+import mongoose from "mongoose";
 
 const getSummary =async(req,res)=>{
     try{
@@ -69,5 +70,44 @@ const getSummary =async(req,res)=>{
     }
 }
 
+const getCustomerCareSummary = async (req, res) => {
+  try {
+    const customerCareId = req.user._id; // Ensure your auth middleware sets req.user
 
-export {getSummary}
+    // Count all requests sent by this customer care user
+    const totalRequests = await Request.countDocuments({ requestedBy: customerCareId });
+
+    const totalIndexCustomers = await IndexCustomer.countDocuments({ userId: customerCareId });
+
+    // Group by status for this customer care
+    const requestStatus = await Request.aggregate([
+      { $match: { requestedBy: new mongoose.Types.ObjectId(customerCareId) } },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const statusSummary = {
+      total: totalRequests,
+      accepted: requestStatus.find(item => item._id === "accepted")?.count || 0,
+      pending: requestStatus.find(item => item._id === "pending")?.count || 0,
+      rejected: requestStatus.find(item => item._id === "rejected")?.count || 0
+    };
+
+    return res.status(200).json({ success: true, 
+        statusSummary,
+        totalIndexCustomers
+        
+    });
+
+  } catch (error) {
+    console.error("CustomerCare Summary Error:", error.message);
+    return res.status(500).json({ success: false, error: "Customer Care Dashboard Error" });
+  }
+};
+
+
+export {getSummary,getCustomerCareSummary}
