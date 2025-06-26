@@ -29,6 +29,8 @@ import MyRequests from "./Components/customerCare/MyRequests";
 import Requests from "./Components/branchAdmin/Requests";
 import Logs from "./utils/Logs";
 import CustomerCareSummary from "./Components/customerCareDashboard/CustomerCareSummary";
+import ListSupplier from "./Components/supplier/ListSupplier";
+import AddSupplier from "./Components/supplier/AddSupplier";
 
 
 function App() {
@@ -74,6 +76,8 @@ function App() {
             <Route path="/admin-dashboard/indexCustomers/:branchAdminId" element={<ListIndexCustomer />} />
             <Route path="/admin-dashboard/indexCustomer/byBranch/:branchId" element={<ListIndexCustomer />} />
             <Route path="logs" element={<Logs />} />
+            <Route path="supplier" element={<ListSupplier />} />
+            <Route path="supplier/add" element={<AddSupplier />} />
             
         </Route>
         

@@ -10,8 +10,6 @@ const ListBranchAdmin = ({ role }) => {
   const [baLoading, setBaLoading] = useState(false)
   const [filteredBranchAdmins, setFilteredBranchAdmins] = useState([])
 
-
-
   useEffect(()=>{
     const fetchbranchAdmins = async()=>{
       setBaLoading(true)

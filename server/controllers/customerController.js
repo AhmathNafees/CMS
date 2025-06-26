@@ -22,9 +22,6 @@ const deleteImage = (folder, filename) => {
 };
 
 
-
-
-
 const addCustomer = async (req, res) => {
   try {
     const userId = req.user.id; // from authMiddleware
