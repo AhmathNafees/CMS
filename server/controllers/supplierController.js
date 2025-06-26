@@ -92,5 +92,15 @@ const getSuppliers = async (req, res) => {
   }
 };
 
+const getSupplier = async(req,res) =>{
+  const {id} = req.params;
+  try{
+      const supplier = await Supplier.findById({_id:id})
+      return res.status(200).json({success:true, supplier})
+    }catch(error){
+      return res.status(500).json({success: false, error:"Server Error in get Supplier"})
+    }
+}
 
-export{addSupplier,upload, getSuppliers}
+
+export{addSupplier,upload, getSuppliers, getSupplier}

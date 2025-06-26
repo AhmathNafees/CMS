@@ -31,6 +31,7 @@ import Logs from "./utils/Logs";
 import CustomerCareSummary from "./Components/customerCareDashboard/CustomerCareSummary";
 import ListSupplier from "./Components/supplier/ListSupplier";
 import AddSupplier from "./Components/supplier/AddSupplier";
+import ViewSupplier from "./Components/supplier/ViewSupplier";
 
 
 function App() {
@@ -78,7 +79,7 @@ function App() {
             <Route path="logs" element={<Logs />} />
             <Route path="supplier" element={<ListSupplier />} />
             <Route path="supplier/add" element={<AddSupplier />} />
-            
+            <Route path="supplier/:id" element={<ViewSupplier />} />
         </Route>
         
         <Route

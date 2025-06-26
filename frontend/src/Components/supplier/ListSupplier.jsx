@@ -64,7 +64,7 @@ const ListSupplier = () => {
         </div>
         <div className='flex justify-between items-center'>
           <input type="text" placeholder='Search By Supplier Name' 
-          className=' px-4 py-0.5 ml-1 border rounded w-65'
+          className=' px-4 py-0.5 ml-1 border rounded w-65' onChange={handleFilter}
           />
           <Link to="/admin-dashboard/supplier/add" className=' px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white'>Add New Supplier</Link>
         </div>

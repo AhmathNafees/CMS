@@ -47,7 +47,7 @@ export const SupplierButtons = ({ _id, onDelete}) => {
     const confirmDelete = window.confirm("Do you really want to delete this Customer?");
     if(confirmDelete) {
       try {
-        const response = await axios.delete(`http://localhost:3000/api/customer/${_id}`, {
+        const response = await axios.delete(`http://localhost:3000/api/supplier/${_id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`
           }
