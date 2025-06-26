@@ -117,7 +117,7 @@ const ListCustomer = () => {
             Admin_name:customer.userId.name,
             profileImage:<img width={100} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
             cvPdf:<a href={`http://localhost:3000/${customer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>,
-            passportpdf:<a href={`http://localhost:3000/${customer.passportpdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport PDF</a>,
+            passportPdf:<a href={`http://localhost:3000/${customer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport PDF</a>,
             createdAt: new Date(customer.createdAt).toLocaleDateString("en-US", {year: "numeric",month: "numeric", day: "numeric"}),
             updatedAt : new Date(customer.updatedAt).toLocaleString('en-GB',{
               day: '2-digit',
@@ -205,9 +205,9 @@ const ListCustomer = () => {
       "Branch Admin": customer.Admin_name,
       "Status": customer.status,
       "Description": customer.desc,
-      "Profile Image": `http://localhost:3000/${customer.profileImage?.props?.src || ""}`,
-      "CV PDF": `http://localhost:3000/${customer.cvPdf?.props?.href || ""}`,
-      "Passport PDF": `http://localhost:3000/${customer.passportpdf?.props?.href || ""}`,
+      "Profile Image": `${customer.profileImage?.props?.src || ""}`,
+      "CV PDF": `${customer.cvPdf?.props?.href || ""}`,
+      "Passport PDF": `${customer.passportPdf?.props?.href || ""}`,
       "Created At": customer.createdAt,
       "Updated At": customer.updatedAt,
     }));
@@ -220,7 +220,7 @@ const ListCustomer = () => {
     const blob = new Blob([csvContent], { type: "text/csv" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "index_customers_full_details.csv";
+    link.download = "Customers_full_details.csv";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
