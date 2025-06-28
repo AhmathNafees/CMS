@@ -146,5 +146,40 @@ const getBranchAdminSummary=async(req,res)=>{
 
 }
 
+const getSupplierSummary=async(req,res)=>{
+    try{
+        const supplierId =req.supplier._id
 
-export {getSummary,getCustomerCareSummary,getBranchAdminSummary}
+        const totalCustomers = await Customer.countDocuments({
+            supplierId
+        });
+
+        const customerStatus = await Customer.aggregate([
+            { $match: { supplierId: new mongoose.Types.ObjectId(supplierId) } },
+            {
+                $group:{
+                    _id:"$status",
+                    count : {$sum:1}
+                }
+            }
+        ])
+        const customerSummary ={
+            begin:customerStatus.find(item=>item._id === "begin")?.count || 0,
+            processing:customerStatus.find(item=>item._id === "processing")?.count || 0,
+            complete:customerStatus.find(item=>item._id === "complete")?.count || 0,
+            reject:customerStatus.find(item=>item._id === "reject")?.count || 0
+        }
+
+        return res.status(200).json({
+
+            totalCustomers,
+            customerSummary,
+        })
+
+    }catch(error){
+        console.log(error.message)
+        return res.status(500).json({success:false, error:"Supplier Dashoard Summary Error"})
+    }
+
+}
+export {getSummary,getCustomerCareSummary,getBranchAdminSummary,getSupplierSummary}

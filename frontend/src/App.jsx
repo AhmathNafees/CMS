@@ -34,6 +34,7 @@ import AddSupplier from "./Components/supplier/AddSupplier";
 import ViewSupplier from "./Components/supplier/ViewSupplier";
 import EditSupplier from "./Components/supplier/EditSupplier";
 import SupplierDashboard from "./pages/SupplierDashboard";
+import SupplierSummary from "./Components/supplierDashboard/SupplierSummary";
 
 
 function App() {
@@ -133,7 +134,7 @@ function App() {
 
         </Route>
         
-
+        
         {/* {For Suppliers} */}
         <Route
           path="/supplier-dashboard"
@@ -146,10 +147,10 @@ function App() {
           }
         >
           {/* Nested routes use RELATIVE paths here */}
-
+          <Route index element={<SupplierSummary />} />
           <Route path="profile/:id" element={<ViewSupplier />} />
           <Route path="setting" element={<Setting />} />
-          {/* <Route index element={<CustomerCareSummary />} />
+          {/* 
           
           
           <Route path="indexCustomers" element={<ListIndexCustomer />} />
