@@ -11,6 +11,7 @@ import indexCustomerRouter from './routes/indexCustomer.js'
 import requestRouter from './routes/requests.js'
 import adminDashboardRouter from './routes/admin-dashboard.js'
 import supplierRouter from './routes/supplier.js'
+import sCustomerRouter from './routes/sCustomer.js'
 
 connectToDatabase()
 const app = express()
@@ -31,6 +32,7 @@ app.use('/api/indexCustomer',indexCustomerRouter)
 app.use('/api/request',requestRouter)
 app.use('/api/admin-dashboard',adminDashboardRouter)
 app.use('/api/supplier',supplierRouter)
+app.use('/api/sCustomer',sCustomerRouter)
 
 
 app.listen(process.env.PORT,()=>{

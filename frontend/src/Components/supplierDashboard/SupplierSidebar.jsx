@@ -23,7 +23,7 @@ const SupplierSidebar = () => {
                 <span>My Profile</span>
             </NavLink>
 
-            <NavLink to="/supplier-dashboard/customers"
+            <NavLink to="/supplier-dashboard/scustomers"
             className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaUsers/>
                 <span>Customers</span>

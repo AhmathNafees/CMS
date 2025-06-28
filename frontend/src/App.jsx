@@ -35,6 +35,8 @@ import ViewSupplier from "./Components/supplier/ViewSupplier";
 import EditSupplier from "./Components/supplier/EditSupplier";
 import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierSummary from "./Components/supplierDashboard/SupplierSummary";
+import ListSCustomer from "./Components/sCustomer/ListSCustomer";
+import AddSCustomer from "./Components/sCustomer/AddSCustomer";
 
 
 function App() {
@@ -150,15 +152,11 @@ function App() {
           <Route index element={<SupplierSummary />} />
           <Route path="profile/:id" element={<ViewSupplier />} />
           <Route path="setting" element={<Setting />} />
-          {/* 
-          
-          
-          <Route path="indexCustomers" element={<ListIndexCustomer />} />
-          <Route path="add-indexCustomer" element={<AddIndexCustomer />} />
-          <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
-          <Route path="indexCustomer/edit/:id" element={<EditIndexCustomer />} />
-          <Route path="myRequests" element={<MyRequests />} />
-          <Route path="logs" element={<Logs />} /> */}
+          <Route path="scustomers" element={<ListSCustomer />} />
+          <Route path="add-scustomer" element={<AddSCustomer/>} />
+          <Route path="customer/:id" element={<ViewCustomer />} />
+          <Route path="customer/edit/:id" element={<EditCustomer />} />
+          <Route path="requests" element={<Requests />} />
 
         </Route>
       </Routes>
