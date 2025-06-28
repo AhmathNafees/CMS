@@ -44,7 +44,7 @@ export const SupplierButtons = ({ _id, onDelete}) => {
   const navigate = useNavigate();
 
   const handleDelete = async () => {
-    const confirmDelete = window.confirm("Do you really want to delete this Customer?");
+    const confirmDelete = window.confirm("Do you really want to delete this Supplier?");
     if(confirmDelete) {
       try {
         const response = await axios.delete(`http://localhost:3000/api/supplier/${_id}`, {
@@ -62,7 +62,7 @@ export const SupplierButtons = ({ _id, onDelete}) => {
       }
     }else {
       // Optional: notify cancel or just do nothing
-      console.log("Customer delete canceled");
+      console.log("Supplier delete canceled");
     }
   };
   const userRole = localStorage.getItem("userRole");

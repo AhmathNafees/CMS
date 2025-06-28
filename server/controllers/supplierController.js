@@ -153,4 +153,29 @@ const updateSupplier = async (req, res) => {
 };
 
 
-export{addSupplier,upload, getSuppliers, getSupplier,updateSupplier}
+const deleteSupplier = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const supplier = await Supplier.findById(id);
+    if (!supplier) {
+      return res.status(404).json({ success: false, error: "Supplier not found" });
+    }
+
+    // Delete profile image if exists
+    if (supplier.profileImage) {
+      deleteImage("customers", supplier.profileImage);
+    }
+
+    // Delete supplier from database
+    await Supplier.findByIdAndDelete(id);
+
+    return res.status(200).json({ success: true, message: "Supplier deleted successfully" });
+  } catch (error) {
+    console.error("Delete Supplier Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server error while deleting supplier" });
+  }
+};
+
+
+export{addSupplier,upload, getSuppliers, getSupplier,updateSupplier,deleteSupplier}
