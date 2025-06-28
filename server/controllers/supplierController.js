@@ -100,7 +100,57 @@ const getSupplier = async(req,res) =>{
     }catch(error){
       return res.status(500).json({success: false, error:"Server Error in get Supplier"})
     }
-}
+};
+
+const updateSupplier = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // First, find the existing Supplier document
+    const supplierDoc = await Supplier.findById(id);
+    if (!supplierDoc) {
+      return res.status(404).json({ success: false, error: "Supplier Not Found" });
+    }
+    
+    // Extract the User ID from the BranchAdmin document
+    const userId = supplierDoc;
+    const oldProfileImage = supplierDoc.profileImage; 
+
+    // Build an update object for the User.
+    // Here, if a new password is provided, hash it; otherwise, leave it unchanged.
+    const updateUserObj = {
+      name: req.body.name,
+      email: req.body.email,
+      nic: req.body.nic,
+      dob: req.body.dob,
+      gender: req.body.gender,
+      maritalStatus: req.body.maritalStatus,
+      pno: req.body.pno,
+      
+    };
+    // If file upload is processed by multer, req.file will exist.
+    // If a new profileImage file is provided, update the profileImage field.
+    if (req.file) {
+      // 🗑️ Delete the old profile image from disk if it exists
+      deleteImage("public/uploads", oldProfileImage);
+      updateUserObj.profileImage = req.file.filename;
+    } else if(req.body.profileImage) {
+      // Alternatively, if the client sent a profileImage value via FormData
+      updateUserObj.profileImage = req.body.profileImage;
+    }
+
+    // Update the Supplier document
+    const updateSupplier = await Supplier.findByIdAndUpdate(id, updateUserObj, { new: true })
+
+    if (!updateSupplier) {
+      return res.status(500).json({ success: false, error: "Document not found" });
+    }
+    return res.status(200).json({ success: true, message: "Supplier Updated", supplier:updateSupplier });
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).json({ success: false, error: "Server Error in Update supplier", details: error.message });
+  }
+};
 
 
-export{addSupplier,upload, getSuppliers, getSupplier}
+export{addSupplier,upload, getSuppliers, getSupplier,updateSupplier}

@@ -66,6 +66,10 @@ const ViewSupplier = () => {
                     <p className=' font-medium'>{supplier.gender}</p>
                 </div>
                 <div className=' flex space-x-3 mb-5'>
+                    <p className=' text-lg font-bold'>Role:</p>
+                    <p className=' font-medium'>{supplier.role}</p>
+                </div>
+                <div className=' flex space-x-3 mb-5'>
                     <p className=' text-lg font-bold'>Marital Status:</p>
                     <p className=' font-medium'>{supplier.maritalStatus}</p>
                 </div>
