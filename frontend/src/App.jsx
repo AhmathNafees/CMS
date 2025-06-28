@@ -33,6 +33,7 @@ import ListSupplier from "./Components/supplier/ListSupplier";
 import AddSupplier from "./Components/supplier/AddSupplier";
 import ViewSupplier from "./Components/supplier/ViewSupplier";
 import EditSupplier from "./Components/supplier/EditSupplier";
+import SupplierDashboard from "./pages/SupplierDashboard";
 
 
 function App() {
@@ -131,7 +132,34 @@ function App() {
           <Route path="logs" element={<Logs />} />
 
         </Route>
+        
 
+        {/* {For Suppliers} */}
+        <Route
+          path="/supplier-dashboard"
+          element={
+            <PrivateRoute>
+              <RoleBaseRoutes requiredRole={["supplier"]}>
+                <SupplierDashboard />
+              </RoleBaseRoutes>
+            </PrivateRoute>
+          }
+        >
+          {/* Nested routes use RELATIVE paths here */}
+
+          <Route path="profile/:id" element={<ViewSupplier />} />
+          <Route path="setting" element={<Setting />} />
+          {/* <Route index element={<CustomerCareSummary />} />
+          
+          
+          <Route path="indexCustomers" element={<ListIndexCustomer />} />
+          <Route path="add-indexCustomer" element={<AddIndexCustomer />} />
+          <Route path="indexCustomer/:id" element={<ViewIndexCustomer />} />
+          <Route path="indexCustomer/edit/:id" element={<EditIndexCustomer />} />
+          <Route path="myRequests" element={<MyRequests />} />
+          <Route path="logs" element={<Logs />} /> */}
+
+        </Route>
       </Routes>
     </BrowserRouter>
   );

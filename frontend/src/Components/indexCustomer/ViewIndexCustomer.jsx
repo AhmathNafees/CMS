@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
-import PDFViewer from '../../utils/PDFViewer';
 
 const ViewIndexCustomer = () => {
     const[indexCustomer, setIndexCustomer]=useState(null)

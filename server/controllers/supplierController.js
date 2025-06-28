@@ -1,9 +1,9 @@
 import bcrypt from "bcrypt"
+import jwt from 'jsonwebtoken';
 import multer from "multer"
 import path from "path"
 import fs from "fs";
 import Supplier from "../models/supplierModel.js";
-import User from "../models/User.js";
 
 const deleteImage = (folder, filename) => {
   if (!filename) return;
@@ -30,8 +30,86 @@ const storage = multer.diskStorage({
         cb(null, Date.now() + path.extname(file.originalname))
     }
 })
-
 const upload = multer({storage:storage})
+
+//Login for Suppliers
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const supplier = await Supplier.findOne({ email });
+    if (!supplier) {
+      return res.status(404).json({ success: false, error: "Supplier Not Found" });
+    }
+    
+    const isMatch = await bcrypt.compare(password, supplier.password);
+    if (!isMatch) {
+      return res.status(404).json({ success: false, error: "Wrong Password" });
+    }
+
+    // Generate access and refresh tokens:
+    const accessToken = jwt.sign(
+      { _id: supplier._id, role: supplier.role },
+      process.env.JWT_KEY,
+      { expiresIn: "8h" } // Access token expires in 8h
+    );
+    const refreshToken = jwt.sign(
+      { _id: supplier._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" } // Refresh token expires in 7 days
+    );
+
+    res.status(200).json({
+      success: true,
+      accessToken,
+      refreshToken,
+      supplier: { _id: supplier._id, name: supplier.name, role: supplier.role }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+const verify = (req, res) => {
+  // By this point, authMiddleware has attached req.supplier
+  return res.status(200).json({ success: true, supplier: req.supplier });
+};
+
+// controllers/supplierController.js or separate controller
+const refreshSupplierToken = async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+      return res.status(400).json({ success: false, error: "Refresh token is required" });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const supplier = await Supplier.findById(decoded._id).select("-password");
+
+    if (!supplier) {
+      return res.status(404).json({ success: false, error: "Supplier not found" });
+    }
+
+    const newAccessToken = jwt.sign(
+      { _id: supplier._id, role: supplier.role },
+      process.env.JWT_KEY,
+      { expiresIn: "8h" }
+    );
+    const newRefreshToken = jwt.sign(
+      { _id: supplier._id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    return res.status(200).json({
+      success: true,
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken
+    });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+};
+
 
 const addSupplier =async (req, res)=>{
 
@@ -41,9 +119,9 @@ const addSupplier =async (req, res)=>{
             gender,maritalStatus,pno,
         }=req.body;
 
-        const user =await Supplier.findOne({email})
-        if(user){
-            return res.status(400).json({success : false, error:"user already Registered "})
+        const supplier =await Supplier.findOne({email})
+        if(supplier){
+            return res.status(400).json({success : false, error:"supplier already Registered "})
         }
 
         const hashPassword = await bcrypt.hash(password,10)
@@ -73,13 +151,13 @@ const addSupplier =async (req, res)=>{
 
 const getSuppliers = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.supplier.id;
 
-    // Get the logged-in user
-    const user = await User.findById(userId);
+    // Get the logged-in supplier
+    const supplier = await Supplier.findById(userId);
 
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User not found" });
+    if (!supplier) {
+      return res.status(404).json({ success: false, error: "Supplier not found" });
     }
     let suppliers;
     suppliers = await Supplier.find()
@@ -112,11 +190,11 @@ const updateSupplier = async (req, res) => {
       return res.status(404).json({ success: false, error: "Supplier Not Found" });
     }
     
-    // Extract the User ID from the BranchAdmin document
+    // Extract the Supplier ID from the BranchAdmin document
     const userId = supplierDoc;
     const oldProfileImage = supplierDoc.profileImage; 
 
-    // Build an update object for the User.
+    // Build an update object for the Supplier.
     // Here, if a new password is provided, hash it; otherwise, leave it unchanged.
     const updateUserObj = {
       name: req.body.name,
@@ -178,4 +256,4 @@ const deleteSupplier = async (req, res) => {
 };
 
 
-export{addSupplier,upload, getSuppliers, getSupplier,updateSupplier,deleteSupplier}
+export{addSupplier,upload, getSuppliers, getSupplier,updateSupplier,deleteSupplier,login,verify,refreshSupplierToken}

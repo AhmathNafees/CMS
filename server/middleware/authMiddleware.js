@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import Supplier from '../models/supplierModel.js';
 
 const verifyUser = async (req, res, next) => {
   try {
@@ -28,12 +29,13 @@ const verifyUser = async (req, res, next) => {
     }
     // Find user and attach to request
     const user = await User.findById(decoded._id).select("-password");
-
-    if (!user) {
-      return res.status(404).json({ success: false, error: "User Not Found" });
+    const supplier = await Supplier.findById(decoded._id).select("-password");
+    if (!user && !supplier) {
+      return res.status(404).json({ success: false, error: "User/Supplier Not Found" });
     }
 
     req.user = user;
+    req.supplier=supplier;
     next(); // Go to next middleware or route handler
 
   } catch (error) {

@@ -1,9 +1,14 @@
 import express from 'express'
 import authMiddleware from '../middleware/authMiddleware.js'
-import {addSupplier,upload,getSuppliers,getSupplier,updateSupplier,deleteSupplier} from '../controllers/supplierController.js'
+import {addSupplier,upload,getSuppliers,getSupplier,updateSupplier,deleteSupplier,login,verify,refreshSupplierToken} from '../controllers/supplierController.js'
 
 
 const router =express.Router()
+
+router.post('/login', login);
+// routes/supplier.js
+router.post('/refresh', refreshSupplierToken)
+router.get('/verify', authMiddleware, verify);
 router.post('/add',authMiddleware,upload.single('profileImage'), addSupplier)
 router.get('/',authMiddleware, getSuppliers)
 router.get('/:id',authMiddleware, getSupplier)

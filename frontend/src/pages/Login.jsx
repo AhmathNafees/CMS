@@ -11,27 +11,37 @@ const Login = () => {
   const [error, setError] = useState(null);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [role, setRole] = useState('admin'); // default to admin
+
   
   const handelSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/login", { email, password });
+      const loginEndpoint = role === "supplier"
+      ? "http://localhost:3000/api/supplier/login"
+      : "http://localhost:3000/api/auth/login";
+      const response = await axios.post(loginEndpoint, { email, password });
       // console.log(response.data)
-      if (response.data.success) {
-        login(response.data.user);
-        localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("refreshToken", response.data.refreshToken);
-        localStorage.setItem("userRole", response.data.user.role);// "admin" or "branchAdmin"
-        localStorage.setItem("userId", response.data.user._id); // Needed to fetch user's customers
+      const resData = response.data;
+    const userData = resData.user || resData.supplier;
 
-        if (response.data.user.role === "admin") {
-          navigate('/admin-dashboard');
-        }else if(response.data.user.role === "branchAdmin"){
-          navigate('/branchAdmin-dashboard');
-        }else {
-          navigate('/customerCare-dashboard');
-        }
+    if (resData.success) {
+      login(userData);
+      localStorage.setItem("accessToken", resData.accessToken);
+      localStorage.setItem("refreshToken", resData.refreshToken);
+      localStorage.setItem("userRole", userData.role);
+      localStorage.setItem("userId", userData._id);
+
+      if (userData.role === "admin") {
+        navigate('/admin-dashboard');
+      } else if (userData.role === "branchAdmin") {
+        navigate('/branchAdmin-dashboard');
+      } else if (userData.role === "supplier") {
+        navigate('/supplier-dashboard');
+      } else {
+        navigate('/customerCare-dashboard');
       }
+    }
     } catch (error) {
       if(error.response && !error.response.data.success){
         setError(error.response.data.error);
@@ -44,8 +54,22 @@ const Login = () => {
   return (
     <div className='flex flex-col items-center h-screen justify-center bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6'>
       <h2 className='font-signika text-3xl text-white'>Customer Management System</h2>
+
       <div className='border-0 shadow p-6 w-80 bg-white rounded'>
         <h2 className='text-2xl font-bold mb-4'>Login</h2>
+        <div className='mb-4'>
+          <label htmlFor="role" className='block text-gray-700'>Login As</label>
+          <select
+            id='role'
+            className='w-full px-3 py-2 border rounded-md'
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="admin">Admin</option>
+            <option value="supplier">Supplier</option>
+          </select>
+        </div>
+        
         {error && <p className='text-red-600'>{error}</p>}
         <form onSubmit={handelSubmit}>
           <div className='mb-4'>

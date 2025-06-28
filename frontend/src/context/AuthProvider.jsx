@@ -11,52 +11,63 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const verifyAndRefresh = async () => {
       try {
-        let accessToken = localStorage.getItem('accessToken');
-        if (accessToken) {
-          try {
-            const response = await axios.get('http://localhost:3000/api/auth/verify', {
-              headers: { "Authorization": `Bearer ${accessToken}` }
-            });
-            if (response.data.success) {
-              setUser(response.data.user);
-              return;
-            }
-          } catch (verifyError) {
-            // If verification fails (e.g., token expired), try refreshing
-            if (verifyError.response && verifyError.response.status === 401) {
-              const refreshToken = localStorage.getItem('refreshToken');
-              if (refreshToken) {
-                const refreshResponse = await axios.post('http://localhost:3000/api/auth/refresh', { refreshToken });
-                if (refreshResponse.data.success) {
-                  // Store new tokens
-                  localStorage.setItem('accessToken', refreshResponse.data.accessToken);
-                  localStorage.setItem('refreshToken', refreshResponse.data.refreshToken);
-                  // Verify with the new access token
-                  const newVerify = await axios.get('http://localhost:3000/api/auth/verify', {
-                    headers: { "Authorization": `Bearer ${refreshResponse.data.accessToken}` }
-                  });
-                  if (newVerify.data.success) {
-                    setUser(newVerify.data.user);
-                    return;
-                  }
+        const accessToken = localStorage.getItem('accessToken');
+        const refreshToken = localStorage.getItem('refreshToken');
+        const role = localStorage.getItem('userRole');
+
+        if (!accessToken || !role) {
+          setUser(null);
+          setLoading(false);
+          return;
+        }
+
+        const baseURL = role === "supplier" ? "http://localhost:3000/api/supplier" : "http://localhost:3000/api/auth";
+
+        try {
+          const verifyResponse = await axios.get(`${baseURL}/verify`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+
+          if (verifyResponse.data.success) {
+            setUser(verifyResponse.data.user || verifyResponse.data.supplier);
+            return;
+          }
+        } catch (verifyError) {
+          if (verifyError.response && verifyError.response.status === 401 && refreshToken) {
+            const refreshEndpoint = role === "supplier"
+              ? "http://localhost:3000/api/supplier/refresh"
+              : "http://localhost:3000/api/auth/refresh";
+
+            try {
+              const refreshResponse = await axios.post(refreshEndpoint, { refreshToken });
+
+              if (refreshResponse.data.success) {
+                localStorage.setItem('accessToken', refreshResponse.data.accessToken);
+                localStorage.setItem('refreshToken', refreshResponse.data.refreshToken);
+
+                const reVerify = await axios.get(`${baseURL}/verify`, {
+                  headers: { Authorization: `Bearer ${refreshResponse.data.accessToken}` },
+                });
+
+                if (reVerify.data.success) {
+                  setUser(reVerify.data.user || reVerify.data.supplier);
+                  return;
                 }
               }
+            } catch (refreshError) {
+              console.error("Refresh failed", refreshError.message);
             }
-            // If refresh fails, clear the user  
-            setUser(null);
           }
-        } else {
           setUser(null);
-          //new
-          setLoading(false)
         }
       } catch (error) {
-        console.error(error);
+        console.error("Verify error", error.message);
         setUser(null);
       } finally {
         setLoading(false);
       }
     };
+
 
     verifyAndRefresh();
   }, []);
