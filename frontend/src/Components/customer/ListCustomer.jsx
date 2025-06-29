@@ -43,6 +43,9 @@ const ListCustomer = () => {
           },
         }
       );
+
+      // ✅ Show success message
+      alert("Status updated successfully");
       // fetchCustomers();
 
       // Update state locally

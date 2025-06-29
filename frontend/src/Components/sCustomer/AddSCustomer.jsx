@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 const AddSCustomer = () => {
     const [formData, setFormData] =useState({})
     const navigate = useNavigate()
-
+    
     const handleChange =(e)=>{
         const{name, value, files} =e.target
         // Check if the field is a file input (for profileImage or passportImage)

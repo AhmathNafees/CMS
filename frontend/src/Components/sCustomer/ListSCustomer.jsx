@@ -24,7 +24,7 @@ const ListSCustomer = () => {
   const userRole = localStorage.getItem("userRole");  // "admin" or "branchAdmin"
   const userId = localStorage.getItem("userId");
   // console.log(userRole)
-  console.log("Role:", userRole, "UserID:", userId);
+  // console.log("Role:", userRole, "UserID:", userId);
 
   const handleStatusChange = async (customerId, newStatus) => {
     // Find the current status of the customer
@@ -45,6 +45,9 @@ const ListSCustomer = () => {
           },
         }
       );
+
+      // ✅ Show success message
+      alert("Status updated successfully");
       // fetchCustomers();
 
       // Update state locally
@@ -78,7 +81,7 @@ const ListSCustomer = () => {
 
       if (userRole === "admin" && supplierId) {
         // Main admin viewing a supplier's sCustomers
-        url = `http://localhost:3000/api/customer/bySupplier/${supplierId}`;
+        url = `http://localhost:3000/api/sCustomer/bySupplier/${supplierId}`;
 
       }else if (userRole === "supplier") {
         // supplier logged in; show their own sCustomers
@@ -92,7 +95,7 @@ const ListSCustomer = () => {
           Authorization :`Bearer ${localStorage.getItem('accessToken')}`
         }
       })
-      console.log(response.data)
+      // console.log(response.data)
       if(response.data.success){
         const sortedCustomers = response.data.sCustomers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
           );
@@ -235,12 +238,18 @@ const ListSCustomer = () => {
           <div className='text-center'>
             <h3 className=' text-2xl font-bold'>Manage Customers</h3>
           </div>
-          <Link
+          {userRole === "supplier" ? (
+            <Link
               to="/supplier-dashboard/add-scustomer"
               className="px-4 py-1 bg-teal-600 rounded hover:bg-teal-800 mr-1 text-white"
             >
               Add New Customer
             </Link>
+          ): (
+            <div className="text-sm text-gray-500">
+              {/* You are not authorized to add a customer. */}
+            </div>
+          )}
         </div>
         <div className="flex gap-2 justify-between mb-4">
           <div className="flex gap-2 mt-3">

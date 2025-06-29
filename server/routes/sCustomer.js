@@ -3,7 +3,7 @@ import authMiddleware from '../middleware/authMiddleware.js'
 import multer from 'multer'
 import path from 'path'
 import SCustomer from '../models/sCustomerModel.js'
-import { addSCustomer, getSCustomers,getSCustomer,editSCustomer,deleteSCustomer } from '../controllers/sCustomerController.js'
+import { addSCustomer, getSCustomers,getSCustomer,editSCustomer,deleteSCustomer , getSCustomersBySupplier} from '../controllers/sCustomerController.js'
 
 const router =express.Router()
 // Set up Multer Dynamic storage
@@ -20,7 +20,8 @@ const storage = multer.diskStorage({
     }
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const uniqueName = `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
   }
 });
 
@@ -51,7 +52,7 @@ router.put('/:id',authMiddleware,upload.fields([
     { name: 'cvPdf', maxCount: 1 }
   ]), editSCustomer)
 router.delete("/:id", authMiddleware, deleteSCustomer);
-// router.get('/byBranchAdmin/:branchAdminId', authMiddleware, getCustomersByBranchAdmin);
+router.get('/bySupplier/:supplierId', authMiddleware, getSCustomersBySupplier);
 
 // for Status Update
 router.patch('/:id/status', authMiddleware, async (req, res) => {

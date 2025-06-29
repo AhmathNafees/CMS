@@ -106,7 +106,6 @@ export const columns = (handleStatusChange, userRole) =>{
   return baseColumns;
   
 }
-
   
 export const CustomerButtons = ({ _id, onDelete, role}) => {
   const navigate = useNavigate();
@@ -138,9 +137,13 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
 
   return(
     <div className=" flex space-x-3">
+      {userRole === "supplier" ? (
         <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
         onClick={()=> navigate(`/supplier-dashboard/sCustomer/${_id}`)}
       >View</button>
+      ):(<button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
+        onClick={()=> navigate(`/admin-dashboard/sCustomer/${_id}`)}
+      >View</button>)}
       
       {userRole ==="supplier" &&(
         <>

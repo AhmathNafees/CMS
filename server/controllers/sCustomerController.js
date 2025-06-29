@@ -202,27 +202,26 @@ const deleteSCustomer = async (req, res) => {
     return res.status(500).json({ success: false, error: "Server error while deleting sCustomer" });
   }
 };
-// //for Main Admin
-// const getCustomersByBranchAdmin = async (req, res) => {
-//   try {
-//     const { branchAdminId } = req.params;
-//     const supplier = await Supplier.findById(branchAdminId);
+//for Main Admin
+const getSCustomersBySupplier = async (req, res) => {
+  try {
+    const { supplierId } = req.params;
+    const supplier = await Supplier.findById(supplierId);
 
-//     if (!supplier) {
-//       return res.status(404).json({ success: false, error: "Branch Admin not found" });
-//     }
+    if (!supplier) {
+      return res.status(404).json({ success: false, error: "Supplier not found" });
+    }
 
-//     const sCustomers = await SCustomer.find({ supplierId: supplier.supplierId })
-//       .populate("supplierId", { password: 0 })
-//       .populate("branchId");
+    const sCustomers = await SCustomer.find({ supplierId})
+      .populate("supplierId", { password: 0 })
 
-//     return res.status(200).json({ success: true, sCustomers });
+    return res.status(200).json({ success: true, sCustomers });
 
-//   } catch (error) {
-//     console.error("Error fetching sCustomers by branch admin:", error.message);
-//     res.status(500).json({ success: false, error: "Server Error" });
-//   }
-// };
+  } catch (error) {
+    console.error("Error fetching sCustomers by Supplier:", error.message);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
 
 
-export {addSCustomer, getSCustomers, getSCustomer, editSCustomer, deleteSCustomer}
+export {addSCustomer, getSCustomers, getSCustomer, editSCustomer, deleteSCustomer, getSCustomersBySupplier}

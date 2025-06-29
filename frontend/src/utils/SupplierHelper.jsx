@@ -75,6 +75,7 @@ export const SupplierButtons = ({ _id, onDelete}) => {
       >View</button>
       <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
         onClick={()=> navigate(`/admin-dashboard/supplier/edit/${_id}`)}>Edit</button>
+        <button className=" px-3 py-1 bg-blue-600 text-white rounded-md cursor-pointer" onClick={()=> navigate(`/admin-dashboard/sCustomers/${_id}`)} >Customers</button>
         <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button>
       
     </div>

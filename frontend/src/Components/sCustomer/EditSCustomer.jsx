@@ -153,7 +153,7 @@ const EditSCustomer = () => {
                 </div>
                 )}
                 <div>
-                    <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
+                    <label htmlFor="passportPdf" className=' block text-sm font-medium text-gray-700'>
                         Upload Passport By PDF
                     </label>
                     <input
@@ -173,7 +173,7 @@ const EditSCustomer = () => {
                 </div>
                 )}
                 <div>
-                    <label htmlFor="passportImage" className=' block text-sm font-medium text-gray-700'>
+                    <label htmlFor="cvPdf" className=' block text-sm font-medium text-gray-700'>
                         Upload CV By PDF
                     </label>
                     <input
