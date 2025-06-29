@@ -190,19 +190,19 @@ const deleteIndexCustomer = async (req, res) => {
       return res.status(404).json({ success: false, error: "indexCustomer not found" });
     }
 
-    // Delete profile image if exists
-    if (indexCustomer.profileImage) {
-      deleteImage("indexCustomers", indexCustomer.profileImage);
-    }
+    // // Delete profile image if exists
+    // if (indexCustomer.profileImage) {
+    //   deleteImage("indexCustomers", indexCustomer.profileImage);
+    // }
 
-    // Delete CV PDF if exists
-    if (indexCustomer.cvPdf) {
-      deleteImage("indexCustomerCV", indexCustomer.cvPdf);
-    }
-    // Delete Passports PDF if exists
-    if (indexCustomer.passportPdf) {
-      deleteImage("passports", indexCustomer.passportPdf);
-    }
+    // // Delete CV PDF if exists
+    // if (indexCustomer.cvPdf) {
+    //   deleteImage("indexCustomerCV", indexCustomer.cvPdf);
+    // }
+    // // Delete Passports PDF if exists
+    // if (indexCustomer.passportPdf) {
+    //   deleteImage("passports", indexCustomer.passportPdf);
+    // }
 
     // Delete customer from database
     await IndexCustomer.findByIdAndDelete(id);

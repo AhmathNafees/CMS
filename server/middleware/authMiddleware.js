@@ -32,7 +32,7 @@ const verifyUser = async (req, res, next) => {
     // Check role and fetch user accordingly
     let user = null;
 
-    if (decoded.role === "admin") {
+    if (["admin", "branchAdmin", "customerCare"].includes(decoded.role)) {
       user = await User.findById(decoded._id).select("-password");
     } else if (decoded.role === "supplier") {
       user = await Supplier.findById(decoded._id).select("-password");
