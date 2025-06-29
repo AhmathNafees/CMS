@@ -148,7 +148,7 @@ const getBranchAdminSummary=async(req,res)=>{
 
 const getSupplierSummary=async(req,res)=>{
     try{
-        const supplierId =req.supplier._id
+        const supplierId =req.user._id
 
         const totalCustomers = await Customer.countDocuments({
             supplierId

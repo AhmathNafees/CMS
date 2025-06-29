@@ -1,5 +1,3 @@
-import User from "../models/User.js";
-import Branch from "../models/BranchModel.js"
 import fs from "fs";
 import path from "path";
 import SCustomer from "../models/sCustomerModel.js";
@@ -24,8 +22,8 @@ const deleteImage = (folder, filename) => {
 
 const addSCustomer = async (req, res) => {
   try {
-    const supplierId = req.supplier.id; // from authMiddleware
-    console.log("REQ.USER:", req.supplier); // log user
+    const supplierId = req.user._id; // from authMiddleware
+    // console.log("REQ.USER:", req.supplier); // log user
     const supplier = await Supplier.findById(supplierId )
 
     if (!supplier) {
@@ -40,8 +38,8 @@ const addSCustomer = async (req, res) => {
     const passportPdf = req.files?.passportPdf?.[0]?.filename || "";
     const cvPdf = req.files?.cvPdf?.[0]?.filename || "";
     //  console.log("Uploaded Files:", req.files);
-    console.log("Received Body:", req.body);
-    console.log("Received Files:", req.files);
+    // console.log("Received Body:", req.body);
+    // console.log("Received Files:", req.files);
     const newSCustomer = new SCustomer({
       name,
       pno,
@@ -60,168 +58,150 @@ const addSCustomer = async (req, res) => {
     // console.log("Uploaded Files:", req.files);
     await newSCustomer.save();
     return res.status(201).json({ success: true, message: "SCustomer added successfully" });
+    
   } catch (error) {
     console.error("Add SCustomer Error:", error);
     return res.status(500).json({ success: false, error: "Server error" });
   }
 };
-// for see all customers
-// const getCustomers = async (req, res) => {
-//   try {
-//     const supplierId = req.supplier.id;
+//for see all sCustomers
+const getSCustomers = async (req, res) => {
+  try {
+    const supplierId = req.supplier?._id || req.user?._id;
+    const role = req.user?.role || req.supplier?.role;
 
-//     // Get the logged-in supplier
-//     const supplier = await User.findById(supplierId);
+    let sCustomers;
 
-//     if (!supplier) {
-//       return res.status(404).json({ success: false, error: "User not found" });
-//     }
+    if (role === "admin") {
+      // Admin sees all customers
+      sCustomers = await SCustomer.find().populate("supplierId", { password: 0 });
+    } else if (role === "supplier") {
+      // Supplier sees only their own customers
+      sCustomers = await SCustomer.find({ supplierId }).populate("supplierId", { password: 0 });
+    } else {
+      return res.status(403).json({ success: false, error: "Unauthorized role" });
+    }
 
-//     let customers;
+    return res.status(200).json({ success: true, sCustomers });
+  } catch (error) {
+    console.error("Get Customers Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server Error in getCustomers" });
+  }
+};
 
-//     if (supplier.role === "admin") {
-//       // ✅ Main Admin sees all customers
-//       customers = await SCustomer.find()
-//         .populate("supplierId", { password: 0 })
-//         .populate("branchId");
+//for single coustomer view
+const getSCustomer = async(req,res) =>{
+  const {id} = req.params;
+  try{
+      const sCustomer = await SCustomer.findById({_id:id}).populate('supplierId',{password:0}) //password 0 means not taken
+      return res.status(200).json({success:true, sCustomer})
+    }catch(error){
+      return res.status(500).json({success: false, error:"Server Error in get SCustomer"})
+    }
+}
 
-//     } else if (supplier.role === "supplier") {
-//       // ✅ Branch Admin sees only their customers
-//       const supplier = await Supplier.findOne({ supplierId });
+const editSCustomer = async (req, res) => {
+  try {
+    const { id } = req.params; // sCustomer ID
+    const supplierId = req.user.id; // authenticated supplier ID 
 
-//       if (!supplier) {
-//         return res.status(404).json({ success: false, error: "Branch Admin not found" });
-//       }
+    // Check supplier
+    const supplier = await Supplier.findOne({ supplierId });
+    if (!supplier) {
+      return res.status(404).json({ success: false, error: "Supplier not found" });
+    }
 
-//       customers = await SCustomer.find({ supplierId })
-//         .populate("supplierId", { password: 0 })
-//         .populate("branchId");
+    // Fetch existing sCustomer to get old image filenames
+    const sCustomer = await SCustomer.findById(id);
+    if (!sCustomer) {
+      return res.status(404).json({ success: false, error: "SCustomer not found" });
+    }
 
-//     } else {
-//       return res.status(403).json({ success: false, error: "Unauthorized role" });
-//     }
+    // Extract fields from request
+    const {
+      name, pno, email, homeAdd, nic, dob,
+      gender, maritalStatus, desc
+    } = req.body;
 
-//     return res.status(200).json({ success: true, customers });
+    const updatedFields = {
+      name,
+      pno,
+      email,
+      homeAdd,
+      nic,
+      dob,
+      gender,
+      maritalStatus,
+      desc,
+      supplierId,
+    };
 
-//   } catch (error) {
-//     console.error("Get Customers Error:", error.message);
-//     return res.status(500).json({ success: false, error: "Server Error in getCustomers" });
-//   }
-// };
-// // for single coustomer view
-// const getCustomer = async(req,res) =>{
-//   const {id} = req.params;
-//   try{
-//       const customer = await SCustomer.findById({_id:id}).populate('supplierId',{password:0}).populate('branchId') //password 0 means not taken
-//       return res.status(200).json({success:true, customer})
-//     }catch(error){
-//       return res.status(500).json({success: false, error:"Server Error in get SCustomer"})
-//     }
-// }
+    // Handle profile image update
+    if (req.files?.profileImage?.[0]) {
+      deleteImage("customers", sCustomer.profileImage); // delete old image
+      updatedFields.profileImage = req.files.profileImage[0].filename;
+    }
 
-// const editCustomer = async (req, res) => {
-//   try {
-//     const { id } = req.params; // customer ID
-//     const supplierId = req.supplier.id; // authenticated branch admin supplier ID
+    // Handle passport PDF update
+    if (req.files?.passportPdf?.[0]) {
+      deleteImage("passports", sCustomer.passportPdf); // delete old passport
+      updatedFields.passportPdf = req.files.passportPdf[0].filename;
+    }
 
-//     // Check branch admin
-//     const supplier = await Supplier.findOne({ supplierId });
-//     if (!supplier) {
-//       return res.status(404).json({ success: false, error: "Branch Admin not found" });
-//     }
+    // Handle CV PDF update
+    if (req.files?.cvPdf?.[0]) {
+      deleteImage("indexCustomerCV", sCustomer.cvPdf); // delete old passport
+      updatedFields.cvPdf = req.files.cvPdf[0].filename;
+    }
 
-//     // Fetch existing customer to get old image filenames
-//     const customer = await SCustomer.findById(id);
-//     if (!customer) {
-//       return res.status(404).json({ success: false, error: "SCustomer not found" });
-//     }
+    // Update the sCustomer in DB
+    const updatedCustomer = await SCustomer.findByIdAndUpdate(id, updatedFields, { new: true });
 
-//     // Extract fields from request
-//     const {
-//       name, pno, email, homeAdd, nic, dob,
-//       gender, maritalStatus, passport, desc
-//     } = req.body;
+    return res.status(200).json({
+      success: true,
+      message: "SCustomer updated successfully",
+      updatedCustomer
+    });
 
-//     const updatedFields = {
-//       name,
-//       pno,
-//       email,
-//       homeAdd,
-//       nic,
-//       dob,
-//       gender,
-//       maritalStatus,
-//       desc,
-//       supplierId,
-//       branchId: supplier.branch,
-//     };
+  } catch (error) {
+    console.error("Edit SCustomer Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server error while updating sCustomer" });
+  }
+};
 
-//     // Handle profile image update
-//     if (req.files?.profileImage?.[0]) {
-//       deleteImage("customers", customer.profileImage); // delete old image
-//       updatedFields.profileImage = req.files.profileImage[0].filename;
-//     }
+const deleteSCustomer = async (req, res) => {
+  try {
+    const { id } = req.params;
 
-//     // Handle passport PDF update
-//     if (req.files?.passportPdf?.[0]) {
-//       deleteImage("passports", customer.passportPdf); // delete old passport
-//       updatedFields.passportPdf = req.files.passportPdf[0].filename;
-//     }
+    const sCustomer = await SCustomer.findById(id);
+    if (!sCustomer) {
+      return res.status(404).json({ success: false, error: "SCustomer not found" });
+    }
 
-//     // Handle CV PDF update
-//     if (req.files?.cvPdf?.[0]) {
-//       deleteImage("indexCustomerCV", customer.cvPdf); // delete old passport
-//       updatedFields.cvPdf = req.files.cvPdf[0].filename;
-//     }
+    // Delete profile image if exists
+    if (sCustomer.profileImage) {
+      deleteImage("customers", sCustomer.profileImage);
+    }
 
-//     // Update the customer in DB
-//     const updatedCustomer = await SCustomer.findByIdAndUpdate(id, updatedFields, { new: true });
-
-//     return res.status(200).json({
-//       success: true,
-//       message: "SCustomer updated successfully",
-//       updatedCustomer
-//     });
-
-//   } catch (error) {
-//     console.error("Edit SCustomer Error:", error.message);
-//     return res.status(500).json({ success: false, error: "Server error while updating customer" });
-//   }
-// };
-
-// const deleteCustomer = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-
-//     const customer = await SCustomer.findById(id);
-//     if (!customer) {
-//       return res.status(404).json({ success: false, error: "SCustomer not found" });
-//     }
-
-//     // Delete profile image if exists
-//     if (customer.profileImage) {
-//       deleteImage("customers", customer.profileImage);
-//     }
-
-//     // Delete CV PDF if exists
-//     if (customer.cvPdf) {
-//       deleteImage("indexCustomerCV", customer.cvPdf);
-//     }
-//     // Delete Passports PDF if exists
-//     if (customer.passportPdf) {
-//       deleteImage("passports", customer.passportPdf);
-//     }
+    // Delete CV PDF if exists
+    if (sCustomer.cvPdf) {
+      deleteImage("indexCustomerCV", sCustomer.cvPdf);
+    }
+    // Delete Passports PDF if exists
+    if (sCustomer.passportPdf) {
+      deleteImage("passports", sCustomer.passportPdf);
+    }
 
 
-//     // Delete customer from database
-//     await SCustomer.findByIdAndDelete(id);
+    // Delete sCustomer from database
+    await SCustomer.findByIdAndDelete(id);
 
-//     return res.status(200).json({ success: true, message: "SCustomer deleted successfully" });
-//   } catch (error) {
-//     console.error("Delete SCustomer Error:", error.message);
-//     return res.status(500).json({ success: false, error: "Server error while deleting customer" });
-//   }
-// };
+    return res.status(200).json({ success: true, message: "SCustomer deleted successfully" });
+  } catch (error) {
+    console.error("Delete SCustomer Error:", error.message);
+    return res.status(500).json({ success: false, error: "Server error while deleting sCustomer" });
+  }
+};
 // //for Main Admin
 // const getCustomersByBranchAdmin = async (req, res) => {
 //   try {
@@ -232,14 +212,14 @@ const addSCustomer = async (req, res) => {
 //       return res.status(404).json({ success: false, error: "Branch Admin not found" });
 //     }
 
-//     const customers = await SCustomer.find({ supplierId: supplier.supplierId })
+//     const sCustomers = await SCustomer.find({ supplierId: supplier.supplierId })
 //       .populate("supplierId", { password: 0 })
 //       .populate("branchId");
 
-//     return res.status(200).json({ success: true, customers });
+//     return res.status(200).json({ success: true, sCustomers });
 
 //   } catch (error) {
-//     console.error("Error fetching customers by branch admin:", error.message);
+//     console.error("Error fetching sCustomers by branch admin:", error.message);
 //     res.status(500).json({ success: false, error: "Server Error" });
 //   }
 // };
@@ -252,17 +232,17 @@ const addSCustomer = async (req, res) => {
 //       return res.status(404).json({ success: false, error: "Branch not found" });
 //     }
 
-//     const customers = await SCustomer.find({ branchId})
+//     const sCustomers = await SCustomer.find({ branchId})
 //       .populate("supplierId", { password: 0 })
 //       .populate("branchId");
 
-//     return res.status(200).json({ success: true, customers });
+//     return res.status(200).json({ success: true, sCustomers });
 
 //   } catch (error) {
-//     console.error("Error fetching customers by branch admin:", error.message);
+//     console.error("Error fetching sCustomers by branch admin:", error.message);
 //     res.status(500).json({ success: false, error: "Server Error" });
 //   }
 // };
 
 
-export {addSCustomer}
+export {addSCustomer, getSCustomers, getSCustomer, editSCustomer, deleteSCustomer}

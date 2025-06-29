@@ -37,6 +37,8 @@ import SupplierDashboard from "./pages/SupplierDashboard";
 import SupplierSummary from "./Components/supplierDashboard/SupplierSummary";
 import ListSCustomer from "./Components/sCustomer/ListSCustomer";
 import AddSCustomer from "./Components/sCustomer/AddSCustomer";
+import ViewSCustomer from "./Components/sCustomer/ViewSCustomer";
+import EditSCustomer from "./Components/sCustomer/EditSCustomer";
 
 
 function App() {
@@ -154,8 +156,8 @@ function App() {
           <Route path="setting" element={<Setting />} />
           <Route path="scustomers" element={<ListSCustomer />} />
           <Route path="add-scustomer" element={<AddSCustomer/>} />
-          <Route path="customer/:id" element={<ViewCustomer />} />
-          <Route path="customer/edit/:id" element={<EditCustomer />} />
+          <Route path="sCustomer/:id" element={<ViewSCustomer />} />
+          <Route path="sCustomer/edit/:id" element={<EditSCustomer />} />
           <Route path="requests" element={<Requests />} />
 
         </Route>

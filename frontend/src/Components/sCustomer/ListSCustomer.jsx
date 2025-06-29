@@ -6,7 +6,7 @@ import { CustomerButtons,columns as customerColumns} from '../../utils/SCustomer
 
 
 const ListSCustomer = () => {
-  const [customers, setCustomers]= useState([]);
+  const [sCustomers, setSCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
   const [statusFilter, setStatusFilter] = useState("all");
@@ -23,10 +23,11 @@ const ListSCustomer = () => {
   const userRole = localStorage.getItem("userRole");  // "admin" or "branchAdmin"
   const userId = localStorage.getItem("userId");
   // console.log(userRole)
+  // console.log("Role:", userRole, "UserID:", userId);
 
   const handleStatusChange = async (customerId, newStatus) => {
     // Find the current status of the customer
-    const customer = customers.find(c => c._id === customerId);
+    const customer = sCustomers.find(c => c._id === customerId);
 
     // 🛑 Prevent API call if status is the same
     if (customer && customer.status === newStatus) {
@@ -35,7 +36,7 @@ const ListSCustomer = () => {
     }
     try {
       const res = await axios.patch(
-        `http://localhost:3000/api/customer/${customerId}/status`,
+        `http://localhost:3000/api/sCustomer/${customerId}/status`,
         { status: newStatus },
         {
           headers: {
@@ -46,7 +47,7 @@ const ListSCustomer = () => {
       // fetchCustomers();
 
       // Update state locally
-      setCustomers((prev) =>
+      setSCustomers((prev) =>
         prev.map((c) =>
           c._id === customerId ? { ...c, status: newStatus } : c
         )
@@ -74,18 +75,16 @@ const ListSCustomer = () => {
     try{
       let url = "";
 
-      if (userRole === "admin" && branchAdminId) {
-        // Main admin viewing a branch admin's customers
-        url = `http://localhost:3000/api/customer/byBranchAdmin/${branchAdminId}`;
-      } else if (userRole === "admin" && branchId ) {
-        // Main admin logged in; show Branch's customers
-        url = `http://localhost:3000/api/customer/byBranch/${branchId}`;
-      }else if (userRole === "branchAdmin") {
-        // Branch admin logged in; show their own Branch customers
-        url = `http://localhost:3000/api/customer/`;
+      if (userRole === "admin" && userId) {
+        // Main admin viewing a supplier's sCustomers
+        url = `http://localhost:3000/api/customer/bySupplier/${userId}`;
+
+      }else if (userRole === "supplier") {
+        // supplier logged in; show their own sCustomers
+        url = `http://localhost:3000/api/sCustomer/`;
       } else if (userRole === "admin") {
         // Main admin viewing all
-        url = `http://localhost:3000/api/customer/`;
+        url = `http://localhost:3000/api/sCustomer/`;
       }
       const response = await axios.get(url,{
         headers: {
@@ -94,9 +93,9 @@ const ListSCustomer = () => {
       })
       // console.log(response.data)
       if(response.data.success){
-        const sortedCustomers = response.data.customers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
+        const sortedCustomers = response.data.sCustomers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
           );
-        // console.log("💡 API Raw Customer", response.data.customers);
+        // console.log("💡 API Raw Customer", response.data.sCustomers);
         const data =sortedCustomers.map((customer, index)=>(
           {
             ...customer,
@@ -112,8 +111,7 @@ const ListSCustomer = () => {
             gender:customer.gender,
             maritalStatus:customer.maritalStatus,
             desc:customer.desc,
-            branch_name:customer.branchId.branch_name,
-            Admin_name:customer.userId.name,
+            Admin_name:customer.supplierId.name,
             profileImage:<img width={100} className=' rounded-full' src={`http://localhost:3000/${customer.profileImage}`}/>,
             cvPdf:<a href={`http://localhost:3000/${customer.cvPdf}`} target='_blank' rel="noopener noreferrer">Downlaod CV</a>,
             passportPdf:<a href={`http://localhost:3000/${customer.passportPdf}`} target='_blank' rel="noopener noreferrer">Downlaod Passport PDF</a>,
@@ -127,12 +125,10 @@ const ListSCustomer = () => {
               hour12: true,
             }),
             
-            
-            
             action: (<CustomerButtons _id={customer._id} onDelete={fetchCustomers} />),
           }
         ))
-        setCustomers(data)
+        setSCustomers(data)
         setFilteredCustomers(data)
       }
     }catch(error){
@@ -151,7 +147,7 @@ const ListSCustomer = () => {
   },[]);
 
   const applyAllFilters = (name = searchTerm, from = fromDate, to = toDate) => {
-    const filtered = customers.filter((cus) => {
+    const filtered = sCustomers.filter((cus) => {
       const matchName = cus.name.toLowerCase().includes(name.toLowerCase());
 
       const createdDate = new Date(cus.createdAt);
@@ -165,7 +161,7 @@ const ListSCustomer = () => {
     setFilteredCustomers(filtered);
   };
   const handleDateChange = () => {
-    const filtered = customers.filter((cus) => {
+    const filtered = sCustomers.filter((cus) => {
       const createdDate = new Date(cus.createdAt);
       return (
         (!fromDate || createdDate >= new Date(fromDate)) &&
@@ -177,13 +173,13 @@ const ListSCustomer = () => {
 
   // For Status Filter
   useEffect(() => {
-    const filtered = customers.filter((cus) => {
+    const filtered = sCustomers.filter((cus) => {
       const nameMatch = cus.name.toLowerCase().includes(searchTerm.toLowerCase());
       const statusMatch = statusFilter === "all" || cus.status === statusFilter;
       return nameMatch && statusMatch;
     });
     setFilteredCustomers(filtered);
-  }, [customers, searchTerm, statusFilter]);
+  }, [sCustomers, searchTerm, statusFilter]);
 
   const handleExportCSV = () => {
     const headers = [
@@ -200,7 +196,6 @@ const ListSCustomer = () => {
       "Gender": customer.gender,
       "Marital Status": customer.maritalStatus,
       "Address": customer.homeAdd,
-      "Branch": customer.branch_name,
       "Branch Admin": customer.Admin_name,
       "Status": customer.status,
       "Description": customer.desc,

@@ -27,15 +27,28 @@ const verifyUser = async (req, res, next) => {
         return res.status(401).json({ success: false, error: "Token Not Valid" });
       }
     }
-    // Find user and attach to request
-    const user = await User.findById(decoded._id).select("-password");
-    const supplier = await Supplier.findById(decoded._id).select("-password");
-    if (!user && !supplier) {
-      return res.status(404).json({ success: false, error: "User/Supplier Not Found" });
+
+    
+    // Check role and fetch user accordingly
+    let user = null;
+
+    if (decoded.role === "admin") {
+      user = await User.findById(decoded._id).select("-password");
+    } else if (decoded.role === "supplier") {
+      user = await Supplier.findById(decoded._id).select("-password");
     }
 
-    req.user = user;
-    req.supplier=supplier;
+    if (!user) {
+      return res.status(404).json({ success: false, error: "User/Supplier not found" });
+    }
+
+    // Attach the verified user
+    req.user = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: decoded.role,
+    };
     next(); // Go to next middleware or route handler
 
   } catch (error) {

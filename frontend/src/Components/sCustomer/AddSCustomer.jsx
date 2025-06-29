@@ -30,6 +30,9 @@ const AddSCustomer = () => {
         if(response.data.success){
             navigate("/supplier-dashboard/sCustomers")
         }
+        console.log("profileImage:", req.files?.profileImage?.[0]?.filename);
+        console.log("passportPdf:", req.files?.passportPdf?.[0]?.filename);
+        console.log("cvPdf:", req.files?.cvPdf?.[0]?.filename);
         }catch(error){
             if(error.response && !error.response.data.success){
                 alert(error.response.data.error)

@@ -3,7 +3,7 @@ import authMiddleware from '../middleware/authMiddleware.js'
 import multer from 'multer'
 import path from 'path'
 import SCustomer from '../models/sCustomerModel.js'
-import { addSCustomer } from '../controllers/sCustomerController.js'
+import { addSCustomer, getSCustomers,getSCustomer,editSCustomer,deleteSCustomer } from '../controllers/sCustomerController.js'
 
 const router =express.Router()
 // Set up Multer Dynamic storage
@@ -43,14 +43,14 @@ router.post('/add',authMiddleware,upload.fields([
     { name: 'passportPdf', maxCount: 1 },
     { name: 'cvPdf', maxCount: 1 }
   ]), addSCustomer)
-// router.get('/', authMiddleware, getCustomers);
-// router.get('/:id', authMiddleware, getCustomer);
-// router.put('/:id',authMiddleware,upload.fields([
-//     { name: 'profileImage', maxCount: 1 },
-//     { name: 'passportPdf', maxCount: 1 },
-//     { name: 'cvPdf', maxCount: 1 }
-//   ]), editCustomer)
-// router.delete("/:id", authMiddleware, deleteCustomer);
+router.get('/', authMiddleware, getSCustomers);
+router.get('/:id', authMiddleware, getSCustomer);
+router.put('/:id',authMiddleware,upload.fields([
+    { name: 'profileImage', maxCount: 1 },
+    { name: 'passportPdf', maxCount: 1 },
+    { name: 'cvPdf', maxCount: 1 }
+  ]), editSCustomer)
+router.delete("/:id", authMiddleware, deleteSCustomer);
 // router.get('/byBranchAdmin/:branchAdminId', authMiddleware, getCustomersByBranchAdmin);
 // router.get('/byBranch/:branchId', authMiddleware, getCustomersByBranch);
 

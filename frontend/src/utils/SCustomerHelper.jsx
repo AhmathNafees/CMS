@@ -30,7 +30,7 @@ export const columns = (handleStatusChange, userRole) =>{
       name: "Customer Name",//coloumn name
       selector: (row)=> row.name, //in the jsx file name given
       sortable : true,
-      width:"120px",
+      width:"140px",
     },
     {
       name: "Profile Image",
@@ -42,7 +42,7 @@ export const columns = (handleStatusChange, userRole) =>{
       name: "Status",
       selector: (row) => row.status,
       cell: (row) => {
-        if (userRole === "branchAdmin") {
+        if (userRole === "supplier") {
           // console.log("🧪 Row Status:", row.status); // 👈 Add this
           return (
             <CustomStatusDropdown
@@ -120,7 +120,7 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
     const confirmDelete = window.confirm("Do you really want to delete this Customer?");
     if(confirmDelete) {
       try {
-        const response = await axios.delete(`http://localhost:3000/api/customer/${_id}`, {
+        const response = await axios.delete(`http://localhost:3000/api/sCustomer/${_id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`
           }
@@ -144,13 +144,13 @@ export const CustomerButtons = ({ _id, onDelete, role}) => {
   return(
     <div className=" flex space-x-3">
         <button className=" px-3 py-1 bg-green-600 text-white rounded-md cursor-pointer"
-        onClick={()=> navigate(`/branchAdmin-dashboard/customer/${_id}`)}
+        onClick={()=> navigate(`/supplier-dashboard/sCustomer/${_id}`)}
       >View</button>
       
-      {userRole ==="branchAdmin" &&(
+      {userRole ==="supplier" &&(
         <>
         <button className=" px-3 py-1 bg-teal-600 text-white rounded-md cursor-pointer" 
-        onClick={()=> navigate(`/branchAdmin-dashboard/customer/edit/${_id}`)}>Edit</button>
+        onClick={()=> navigate(`/supplier-dashboard/sCustomer/edit/${_id}`)}>Edit</button>
         <button className=" px-3 py-1 bg-red-600 text-white rounded-md cursor-pointer" onClick={handleDelete} >Delete</button></>
       )}
       
