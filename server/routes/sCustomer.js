@@ -52,24 +52,23 @@ router.put('/:id',authMiddleware,upload.fields([
   ]), editSCustomer)
 router.delete("/:id", authMiddleware, deleteSCustomer);
 // router.get('/byBranchAdmin/:branchAdminId', authMiddleware, getCustomersByBranchAdmin);
-// router.get('/byBranch/:branchId', authMiddleware, getCustomersByBranch);
 
 // for Status Update
-// router.patch('/:id/status', authMiddleware, async (req, res) => {
-//   try {
-//     const { status } = req.body;
-//     const customer = await SCustomer.findByIdAndUpdate(
-//       req.params.id,
-//       { status, },
-//       { new: true } // ✅ return updated document
-//     );
-//     if (!customer) return res.status(404).json({ success: false, error: 'SCustomer not found' });
+router.patch('/:id/status', authMiddleware, async (req, res) => {
+  try {
+    const { status } = req.body;
+    const sCustomer = await SCustomer.findByIdAndUpdate(
+      req.params.id,
+      { status, },
+      { new: true } // ✅ return updated document
+    );
+    if (!sCustomer) return res.status(404).json({ success: false, error: 'SCustomer not found' });
 
-//     res.json({ success: true, message: 'Status updated', customer });
-//   } catch (error) {
-//     res.status(500).json({ success: false, error: 'Server Error' });
-//   }
-// });
+    res.json({ success: true, message: 'Status updated', sCustomer });
+  } catch (error) {
+    res.status(500).json({ success: false, error: 'Server Error' });
+  }
+});
 
 
 export default router

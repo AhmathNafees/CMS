@@ -39,6 +39,11 @@ const AdminSidebar = () => {
                 <FaUser/>
                 <span>Branch Admins</span>
             </NavLink>
+            <NavLink to="/admin-dashboard/sCustomers"
+            className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
+                <FaUsers/>
+                <span>Supplier's Customer</span>
+            </NavLink>
             <NavLink to="/admin-dashboard/supplier"
             className={({isActive})=> `${isActive ? "bg-teal-500" : ""} flex items-center space-x-4 py-2.5  px-4 rounded`}end>
                 <FaUser/>

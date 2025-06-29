@@ -74,7 +74,7 @@ const getSCustomers = async (req, res) => {
 
     if (role === "admin") {
       // Admin sees all customers
-      sCustomers = await SCustomer.find().populate("supplierId", { password: 0 });
+      sCustomers = await SCustomer.find().populate("supplierId", { password: 0 })
     } else if (role === "supplier") {
       // Supplier sees only their own customers
       sCustomers = await SCustomer.find({ supplierId }).populate("supplierId", { password: 0 });
@@ -213,26 +213,6 @@ const deleteSCustomer = async (req, res) => {
 //     }
 
 //     const sCustomers = await SCustomer.find({ supplierId: supplier.supplierId })
-//       .populate("supplierId", { password: 0 })
-//       .populate("branchId");
-
-//     return res.status(200).json({ success: true, sCustomers });
-
-//   } catch (error) {
-//     console.error("Error fetching sCustomers by branch admin:", error.message);
-//     res.status(500).json({ success: false, error: "Server Error" });
-//   }
-// };
-// //for Main Admin
-// const getCustomersByBranch = async (req, res) => {
-//   try {
-//     const { branchId } = req.params;
-
-//     if (!branchId) {
-//       return res.status(404).json({ success: false, error: "Branch not found" });
-//     }
-
-//     const sCustomers = await SCustomer.find({ branchId})
 //       .populate("supplierId", { password: 0 })
 //       .populate("branchId");
 

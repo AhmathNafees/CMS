@@ -8,7 +8,7 @@ import BranchAdmin from "../models/BranchAdminModel.js";
 const createRequest = async (req, res) => {
   try {
     const { indexCustomerId, branchId } = req.body;
-    const requestedBy = req.user.id; // From JWT token
+    const requestedBy = req.user._id; // From JWT token
     console.log(indexCustomerId); 
     console.log(branchId); 
     if (!indexCustomerId || !branchId) {
@@ -50,7 +50,7 @@ const createRequest = async (req, res) => {
 
 const getRequests = async (req, res) => {
   try {
-    const branchAdminId = req.user.id;
+    const branchAdminId = req.user._id;
 
     const branchAdmin = await User.findById(branchAdminId);
     if (!branchAdmin || branchAdmin.role !== "branchAdmin") {
@@ -88,7 +88,7 @@ const getRequests = async (req, res) => {
 
 const getMyRequests = async (req, res) => {
   try {
-    const requests = await Request.find({ requestedBy: req.user.id })
+    const requests = await Request.find({ requestedBy: req.user._id })
       .populate("indexCustomer")
       .populate("handledBy", "name")
       .populate("branch", "branch_name");
@@ -123,7 +123,7 @@ const updateRequestStatus = async (req, res) => {
     }
 
     request.status = status;
-    request.handledBy = req.user.id; // store who accepted/rejected
+    request.handledBy = req.user._id; // store who accepted/rejected
     await request.save();
 
     // If accepted, convert indexCustomer → customer
@@ -139,7 +139,7 @@ const updateRequestStatus = async (req, res) => {
         profileImage,
         passportPdf,
         cvPdf,
-        userId: req.user.id,// ✅ Save branch admin’s user ID here
+        userId: req.user._id,// ✅ Save branch admin’s user ID here
         branchId,
       });
     }
@@ -154,7 +154,7 @@ const updateRequestStatus = async (req, res) => {
 const getAllLogs = async (req, res) => {
   try {
     const userRole = req.user.role;
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     let filter = {};
 

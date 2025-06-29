@@ -6,6 +6,7 @@ import { CustomerButtons,columns as customerColumns} from '../../utils/SCustomer
 
 
 const ListSCustomer = () => {
+  const{supplierId}=useParams();
   const [sCustomers, setSCustomers]= useState([]);
   const [baLoading, setBaLoading] = useState(false)
   const [filteredCustomers, setFilteredCustomers] = useState([])
@@ -23,7 +24,7 @@ const ListSCustomer = () => {
   const userRole = localStorage.getItem("userRole");  // "admin" or "branchAdmin"
   const userId = localStorage.getItem("userId");
   // console.log(userRole)
-  // console.log("Role:", userRole, "UserID:", userId);
+  console.log("Role:", userRole, "UserID:", userId);
 
   const handleStatusChange = async (customerId, newStatus) => {
     // Find the current status of the customer
@@ -75,9 +76,9 @@ const ListSCustomer = () => {
     try{
       let url = "";
 
-      if (userRole === "admin" && userId) {
+      if (userRole === "admin" && supplierId) {
         // Main admin viewing a supplier's sCustomers
-        url = `http://localhost:3000/api/customer/bySupplier/${userId}`;
+        url = `http://localhost:3000/api/customer/bySupplier/${supplierId}`;
 
       }else if (userRole === "supplier") {
         // supplier logged in; show their own sCustomers
@@ -91,7 +92,7 @@ const ListSCustomer = () => {
           Authorization :`Bearer ${localStorage.getItem('accessToken')}`
         }
       })
-      // console.log(response.data)
+      console.log(response.data)
       if(response.data.success){
         const sortedCustomers = response.data.sCustomers.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt) // newest first
           );
@@ -214,7 +215,7 @@ const ListSCustomer = () => {
     const blob = new Blob([csvContent], { type: "text/csv" });
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = "Customers_full_details.csv";
+    link.download = "Supply_Customers_full_details.csv";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

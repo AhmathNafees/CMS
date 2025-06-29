@@ -24,7 +24,6 @@ const ListCustomer = () => {
   const userRole = localStorage.getItem("userRole");  // "admin" or "branchAdmin"
   const userId = localStorage.getItem("userId");
   // console.log(userRole)
-
   const handleStatusChange = async (customerId, newStatus) => {
     // Find the current status of the customer
     const customer = customers.find(c => c._id === customerId);

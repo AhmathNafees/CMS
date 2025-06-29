@@ -3,6 +3,7 @@ import Branch from "../models/BranchModel.js"
 import Customer from "../models/customerModel.js";
 import IndexCustomer from "../models/indexCustomerModel.js";
 import Request from "../models/requestModel.js";
+import SCustomer from "../models/sCustomerModel.js";
 import User from "../models/User.js";
 import mongoose from "mongoose";
 
@@ -150,11 +151,11 @@ const getSupplierSummary=async(req,res)=>{
     try{
         const supplierId =req.user._id
 
-        const totalCustomers = await Customer.countDocuments({
+        const totalCustomers = await SCustomer.countDocuments({
             supplierId
         });
 
-        const customerStatus = await Customer.aggregate([
+        const customerStatus = await SCustomer.aggregate([
             { $match: { supplierId: new mongoose.Types.ObjectId(supplierId) } },
             {
                 $group:{

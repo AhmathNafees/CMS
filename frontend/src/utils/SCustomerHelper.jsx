@@ -92,13 +92,8 @@ export const columns = (handleStatusChange, userRole) =>{
       selector: (row) => row.Admin_name,
       sortable: true,
       width: "130px",
-    }),
-    baseColumns.splice(6, 0, {
-      name: "Branch",
-      selector: (row) => row.branch_name,
-      sortable: true,
-      width: "100px",
-    });
+    })
+
   }
   // if (userRole === "branchAdmin") {
   //   baseColumns.splice(4, 0, {

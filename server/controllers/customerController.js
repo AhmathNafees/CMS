@@ -24,7 +24,7 @@ const deleteImage = (folder, filename) => {
 
 const addCustomer = async (req, res) => {
   try {
-    const userId = req.user.id; // from authMiddleware
+    const userId = req.user._id; // from authMiddleware
     const branchAdmin = await BranchAdmin.findOne({ userId }).populate("branch");
 
     if (!branchAdmin) {
@@ -67,7 +67,7 @@ const addCustomer = async (req, res) => {
 // for see all customers
 const getCustomers = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
 
     // Get the logged-in user
     const user = await User.findById(userId);
@@ -121,7 +121,7 @@ const getCustomer = async(req,res) =>{
 const editCustomer = async (req, res) => {
   try {
     const { id } = req.params; // customer ID
-    const userId = req.user.id; // authenticated branch admin user ID
+    const userId = req.user._id; // authenticated branch admin user ID
 
     // Check branch admin
     const branchAdmin = await BranchAdmin.findOne({ userId });

@@ -88,6 +88,7 @@ function App() {
             <Route path="supplier/add" element={<AddSupplier />} />
             <Route path="supplier/:id" element={<ViewSupplier />} />
             <Route path="supplier/edit/:id" element={<EditSupplier />} />
+            <Route path="sCustomers" element={<ListSCustomer />} />
         </Route>
         
         <Route
